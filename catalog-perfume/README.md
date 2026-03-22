@@ -1,73 +1,133 @@
-# React + TypeScript + Vite
+# 🌿 Perfume Catalog
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Aplicación web interactiva para explorar perfumes en formato tipo revista digital (flipbook), con filtros dinámicos, búsqueda en tiempo real y visualización de detalles.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Demo
 
-## React Compiler
+> (Agrega aquí tu link de Vercel / Netlify cuando lo tengas)
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 📸 Preview
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+![Preview](./public/vite.svg)
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+---
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+## ✨ Características
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+* 📖 Navegación tipo revista (flipbook)
+* 🔎 Búsqueda en tiempo real
+* 🎛️ Filtros por:
+
+  * Marca (perfumería)
+  * Familia olfativa
+* 📄 Navegación por páginas
+* 🧾 Modal con detalle del perfume
+* 📱 Diseño responsive
+* ⚡ Alto rendimiento con Vite
+
+---
+
+## 🛠️ Tecnologías
+
+* **React**
+* **TypeScript**
+* **Vite**
+* **TailwindCSS**
+* **Zustand** (estado global)
+* **Framer Motion** (animaciones)
+* **react-pageflip** (efecto revista)
+
+---
+
+## 📂 Estructura del proyecto
+
+```bash
+src/
+├── components/   # Componentes UI
+├── data/         # Base de datos y helpers
+├── pages/        # Páginas principales
+├── store/        # Estado global (Zustand)
+├── assets/       # Recursos estáticos
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+---
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+## ⚙️ Instalación
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Clonar repositorio
+git clone https://github.com/tu-usuario/perfume-catalog.git
+
+# Entrar al proyecto
+cd perfume-catalog
+
+# Instalar dependencias
+npm install
+
+# Ejecutar en desarrollo
+npm run dev
 ```
+
+---
+
+## 🏗️ Build
+
+```bash
+npm run build
+```
+
+---
+
+## 🧠 Cómo funciona
+
+1. Los perfumes se cargan desde una base de datos local (`src/data`)
+2. Los filtros y búsqueda se manejan con Zustand
+3. Los resultados se renderizan en formato flipbook
+4. El usuario puede:
+
+   * Navegar páginas
+   * Filtrar resultados
+   * Buscar perfumes
+   * Ver detalles en modal
+
+---
+
+## 📌 Roadmap
+
+* [ ] Conectar API real (backend)
+* [ ] Sistema de favoritos ❤️
+* [ ] Carrito de compras 🛒
+* [ ] Autenticación de usuarios 🔐
+* [ ] Recomendaciones inteligentes 🤖
+
+---
+
+## 🤝 Contribución
+
+1. Fork el proyecto
+2. Crea una rama (`git checkout -b feature/nueva-feature`)
+3. Haz commit (`git commit -m 'Agrega nueva feature'`)
+4. Push (`git push origin feature/nueva-feature`)
+5. Abre un Pull Request
+
+---
+
+## 📄 Licencia
+
+MIT License
+
+---
+
+## 👤 Autor
+
+* GitHub: [@xrhon0s](https://github.com/xrhon0s)
+
+---
+
+## ⭐ Si te gusta el proyecto
+
+¡Dale una estrella ⭐ en GitHub!
