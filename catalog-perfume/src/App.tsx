@@ -3,6 +3,7 @@ import Layout from "./components/layout/Layout"
 import Catalog from "./pages/Catalog"
 
 const Admin = lazy(() => import("./pages/Admin"))
+const FlipbookLab = lazy(() => import("./pages/FlipbookLab"))
 
 function getRoute() {
   return window.location.hash.replace(/^#/, "") || "/"
@@ -31,6 +32,20 @@ function App() {
     )
   }
 
+  if (route === "/lab/flipbook") {
+    return (
+      <Suspense
+        fallback={
+          <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
+            Cargando laboratorio...
+          </main>
+        }
+      >
+        <FlipbookLab />
+      </Suspense>
+    )
+  }
+
   return (
     <Layout>
       <Catalog />
@@ -39,4 +54,3 @@ function App() {
 }
 
 export default App
-
