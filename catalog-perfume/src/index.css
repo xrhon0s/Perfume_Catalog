@@ -2,3 +2,21 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+}
+
+.stf__item {
+  background: white;
+}
+
+.stf__item * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}

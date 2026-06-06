@@ -6,39 +6,38 @@ import { useFiltersStore } from "../../store/filterStore"
 const Header = () => {
   const toggleFilters = useUIStore((s) => s.toggleFilters)
 
-const pageIndex = useUIStore((s) => s.pageIndex)
-const totalPages = useUIStore((s) => s.totalPages)
-const requestJumpToPage = useUIStore((s) => s.requestJumpToPage)
+  const pageIndex = useUIStore((s) => s.pageIndex)
+  const totalPages = useUIStore((s) => s.totalPages)
+  const requestJumpToPage = useUIStore((s) => s.requestJumpToPage)
 
-const [pageInput, setPageInput] = useState("")
+  const [pageInput, setPageInput] = useState("")
 
 
   const query = useFiltersStore((s) => s.query)
   const setQuery = useFiltersStore((s) => s.setQuery)
-  const perfumeries = useFiltersStore((s) => s.brands)
+  const brands = useFiltersStore((s) => s.brands)
+  const families = useFiltersStore((s) => s.families)
 
   const inputRef = useRef<HTMLInputElement | null>(null)
 
   const activeFiltersCount = useMemo(() => {
     const q = query.trim().length > 0 ? 1 : 0
-    return perfumeries.length + q
-  }, [perfumeries.length, query])
+    return brands.length + families.length + q
+  }, [brands.length, families.length, query])
 
   const goToPage = () => {
-  if (!totalPages) return
+    if (!totalPages) return
 
-  const n = Number(pageInput)
-  if (!Number.isFinite(n)) return
+    const n = Number(pageInput)
+    if (!Number.isFinite(n)) return
 
-  // el usuario escribe 1..totalPages
-  const targetIndex = n - 1
+    const targetIndex = n - 1
 
-  // clamp para que no se salga
-  const safeIndex = Math.max(0, Math.min(targetIndex, totalPages - 1))
+    const safeIndex = Math.max(0, Math.min(targetIndex, totalPages - 1))
 
-  requestJumpToPage(safeIndex)
-  setPageInput("") // opcional: limpia el input
-}
+    requestJumpToPage(safeIndex)
+    setPageInput("")
+  }
 
 
   return (
@@ -220,6 +219,13 @@ const [pageInput, setPageInput] = useState("")
     </div>
 
     {/* Filtros */}
+    <a
+      href="#/admin"
+      className="hidden rounded-2xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/10 xl:block"
+    >
+      Admin
+    </a>
+
     <button
       onClick={toggleFilters}
       className="relative rounded-2xl bg-white/8 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 active:scale-[0.98] transition"

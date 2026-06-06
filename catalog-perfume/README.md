@@ -6,7 +6,7 @@ Aplicación web interactiva para explorar perfumes en formato tipo revista digit
 
 ## 🚀 Demo
 
-> (Agrega aquí tu link de Vercel / Netlify cuando lo tengas)
+
 
 ---
 

@@ -8,8 +8,12 @@ type Props = {
 
 export default function PerfumeDetailModal({ perfume, onClose }: Props) {
   const titleId = useId()
+  const notesGroups = [
+    { label: "Salida", values: perfume.notes?.top },
+    { label: "Corazón", values: perfume.notes?.heart },
+    { label: "Fondo", values: perfume.notes?.base },
+  ].filter((group) => group.values && group.values.length > 0)
 
-  // Cerrar con Escape + bloquear scroll
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
       if (e.key === "Escape") onClose()
@@ -28,28 +32,25 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
 
   return (
     <div className="fixed inset-0 z-[9998]">
-      {/* Fondo oscuro */}
       <button
         onClick={onClose}
         className="absolute inset-0 bg-black/50"
         aria-label="Cerrar detalle"
       />
 
-      {/* Caja */}
       <div
         role="dialog"
         aria-modal="true"
         aria-labelledby={titleId}
-        className="absolute left-1/2 top-1/2 w-[min(900px,92vw)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl bg-white shadow-xl"
+        className="absolute left-1/2 top-1/2 max-h-[92vh] w-[min(940px,92vw)] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-2xl bg-white shadow-xl"
       >
-        <div className="grid grid-cols-1 md:grid-cols-2">
-          {/* Imagen */}
-          <div className="bg-gray-100">
+        <div className="grid max-h-[92vh] grid-cols-1 overflow-y-auto md:grid-cols-[minmax(280px,0.9fr)_1.1fr]">
+          <div className="min-h-72 bg-gray-100 md:min-h-full">
             {perfume.image ? (
               <img
                 src={perfume.image}
                 alt={perfume.name}
-                className="h-full w-full object-cover"
+                className="h-full max-h-[48vh] w-full object-cover md:max-h-none"
                 loading="lazy"
               />
             ) : (
@@ -59,7 +60,6 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
             )}
           </div>
 
-          {/* Info */}
           <div className="p-6">
             <div className="flex items-start justify-between gap-4">
               <div>
@@ -67,16 +67,6 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
                 <h2 id={titleId} className="mt-1 text-2xl font-semibold">
                   {perfume.name}
                 </h2>
-
-                {/* Si tu tipo Perfume tiene campos extra, puedes descomentar */}
-                {/* {perfume.brand && (
-                  <p className="mt-1 text-sm text-gray-600">{perfume.brand}</p>
-                )}
-                {perfume.price && (
-                  <p className="mt-2 text-lg font-semibold text-slate-900">
-                    {perfume.price}
-                  </p>
-                )} */}
               </div>
 
               <button
@@ -87,24 +77,80 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
               </button>
             </div>
 
-            <div className="mt-6 space-y-3 text-sm text-gray-700">
-              <p>
-                Aquí pondremos más info del perfume (notas, familia olfativa,
-                duración, etc.). Por ahora es un detalle base.
+            <dl className="mt-6 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
+              {perfume.family && (
+                <div className="rounded-xl bg-gray-50 p-3">
+                  <dt className="text-xs text-gray-500">Familia</dt>
+                  <dd className="mt-1 font-semibold text-gray-900">
+                    {perfume.family}
+                  </dd>
+                </div>
+              )}
+
+              {perfume.concentration && (
+                <div className="rounded-xl bg-gray-50 p-3">
+                  <dt className="text-xs text-gray-500">Tipo</dt>
+                  <dd className="mt-1 font-semibold text-gray-900">
+                    {perfume.concentration}
+                  </dd>
+                </div>
+              )}
+
+              {perfume.gender && (
+                <div className="rounded-xl bg-gray-50 p-3">
+                  <dt className="text-xs text-gray-500">Género</dt>
+                  <dd className="mt-1 font-semibold text-gray-900">
+                    {perfume.gender}
+                  </dd>
+                </div>
+              )}
+
+              {perfume.year && (
+                <div className="rounded-xl bg-gray-50 p-3">
+                  <dt className="text-xs text-gray-500">Año</dt>
+                  <dd className="mt-1 font-semibold text-gray-900">
+                    {perfume.year}
+                  </dd>
+                </div>
+              )}
+            </dl>
+
+            {perfume.description && (
+              <p className="mt-6 text-sm leading-6 text-gray-700">
+                {perfume.description}
               </p>
+            )}
 
-              {/* Ejemplo si tienes descripción */}
-              {/* {perfume.description && <p>{perfume.description}</p>} */}
-            </div>
+            {notesGroups.length > 0 && (
+              <div className="mt-6 space-y-4">
+                <h3 className="text-sm font-semibold text-gray-900">Notas</h3>
+                <div className="grid gap-3 sm:grid-cols-3">
+                  {notesGroups.map((group) => (
+                    <div key={group.label} className="rounded-xl border p-3">
+                      <p className="text-xs font-medium text-gray-500">
+                        {group.label}
+                      </p>
+                      <p className="mt-2 text-sm text-gray-800">
+                        {group.values?.join(", ")}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
 
-            <div className="mt-8 flex flex-wrap gap-2">
-              <button className="rounded-xl bg-slate-900 px-5 py-3 text-sm font-semibold text-white hover:bg-slate-800">
-                Guardar / Favorito
-              </button>
-              <button className="rounded-xl bg-gray-100 px-5 py-3 text-sm font-semibold text-black hover:bg-gray-200">
-                Compartir
-              </button>
-            </div>
+            {perfume.tags && perfume.tags.length > 0 && (
+              <div className="mt-6 flex flex-wrap gap-2">
+                {perfume.tags.map((tag) => (
+                  <span
+                    key={tag}
+                    className="rounded-full bg-slate-100 px-3 py-1 text-xs font-medium text-slate-700"
+                  >
+                    {tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </div>

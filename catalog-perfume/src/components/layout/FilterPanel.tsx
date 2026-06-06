@@ -26,7 +26,7 @@ const FilterPanel = () => {
 
           {/* Panel */}
           <motion.aside
-            className="fixed top-0 right-0 z-[90] h-full w-[360px] bg-white shadow-2xl"
+            className="fixed top-0 right-0 z-[90] h-full w-full max-w-[360px] bg-white shadow-2xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -77,7 +77,6 @@ const FilterPanel = () => {
               </button>
             </div>
 
-            {/* Footer opcional */}
             <div className="absolute bottom-0 left-0 right-0 border-t px-6 py-4 text-xs text-gray-500">
               Tip: usa el buscador para encontrar rápido.
             </div>

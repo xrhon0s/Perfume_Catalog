@@ -1,0 +1,66 @@
+import { create } from "zustand"
+import type { Perfume } from "../data/types"
+import {
+  deletePerfume,
+  listAdminPerfumes,
+  listPerfumes,
+  savePerfume,
+  type PerfumeInput,
+  uploadPerfumeImage,
+} from "../services/perfumeRepository"
+
+type CatalogState = {
+  perfumes: Perfume[]
+  isLoading: boolean
+  error: string | null
+  loadPerfumes: () => Promise<void>
+  loadAdminPerfumes: () => Promise<void>
+  savePerfume: (perfume: PerfumeInput) => Promise<void>
+  deletePerfume: (id: string) => Promise<void>
+  uploadPerfumeImage: (file: File) => Promise<string>
+}
+
+export const useCatalogStore = create<CatalogState>((set, get) => ({
+  perfumes: [],
+  isLoading: false,
+  error: null,
+
+  loadPerfumes: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      set({ perfumes: await listPerfumes(), isLoading: false })
+    } catch (error) {
+      set({
+        error: error instanceof Error ? error.message : "No se pudo cargar el catálogo.",
+        isLoading: false,
+      })
+    }
+  },
+
+  loadAdminPerfumes: async () => {
+    set({ isLoading: true, error: null })
+    try {
+      set({ perfumes: await listAdminPerfumes(), isLoading: false })
+    } catch (error) {
+      set({
+        error:
+          error instanceof Error
+            ? error.message
+            : "No se pudo cargar el catálogo administrativo.",
+        isLoading: false,
+      })
+    }
+  },
+
+  savePerfume: async (perfume) => {
+    await savePerfume(perfume)
+    await get().loadAdminPerfumes()
+  },
+
+  deletePerfume: async (id) => {
+    await deletePerfume(id)
+    await get().loadAdminPerfumes()
+  },
+
+  uploadPerfumeImage,
+}))

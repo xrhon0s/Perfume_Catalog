@@ -6,14 +6,12 @@ interface UIState {
   closeFilters: () => void
   toggleFilters: () => void
   pageIndex: number
-totalPages: number
-setPageIndex: (index: number) => void
-setTotalPages: (total: number) => void
-
-jumpToPageRequest: number | null
-requestJumpToPage: (pageIndex0Based: number) => void
-consumeJumpToPage: () => void
-
+  totalPages: number
+  setPageIndex: (index: number) => void
+  setTotalPages: (total: number) => void
+  jumpToPageRequest: number | null
+  requestJumpToPage: (pageIndex0Based: number) => void
+  consumeJumpToPage: () => void
 }
 
 export const useUIStore = create<UIState>((set) => ({
@@ -23,12 +21,11 @@ export const useUIStore = create<UIState>((set) => ({
   toggleFilters: () =>
     set((state) => ({ isFilterOpen: !state.isFilterOpen })),
   pageIndex: 0,
-totalPages: 0,
-setPageIndex: (index) => set({ pageIndex: index }),
-setTotalPages: (total) => set({ totalPages: total }),
-
-jumpToPageRequest: null,
-requestJumpToPage: (pageIndex0Based) => set({ jumpToPageRequest: pageIndex0Based }),
-consumeJumpToPage: () => set({ jumpToPageRequest: null }),
-
+  totalPages: 0,
+  setPageIndex: (index) => set({ pageIndex: index }),
+  setTotalPages: (total) => set({ totalPages: total }),
+  jumpToPageRequest: null,
+  requestJumpToPage: (pageIndex0Based) =>
+    set({ jumpToPageRequest: pageIndex0Based }),
+  consumeJumpToPage: () => set({ jumpToPageRequest: null }),
 }))

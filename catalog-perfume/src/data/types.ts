@@ -20,7 +20,7 @@ export type Gender = "Masculino" | "Femenino" | "Unisex"
 export type Perfume = {
   id: string
   name: string
-  brand: string // antes: perfumerie
+  brand: string
   image?: string
 
   family?: OlfactiveFamily

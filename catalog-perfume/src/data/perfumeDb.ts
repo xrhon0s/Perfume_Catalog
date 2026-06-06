@@ -13,9 +13,9 @@ function toId(text: string) {
     .replace(/-+/g, "-")
 }
 
-function makePerfume(name: string, brand: string): Perfume {
+function makePerfume(name: string, brand: string, id?: string): Perfume {
   return {
-    id: toId(`${brand}-${name}`),
+    id: id ?? toId(`${brand}-${name}`),
     name: name.trim(),
     brand: brand.trim(),
   }
@@ -225,12 +225,12 @@ makePerfume("Bad Boy White", "Carolina Herrera"),
 // =========================
 // Ariana Grande
 // =========================
-makePerfume("Ariana Grande Cloud", "Ariana Grande"),
-makePerfume("Ariana Grande Cloud 2.0", "Ariana Grande"),
-makePerfume("Ariana Grande Cloud Pink", "Ariana Grande"),
+makePerfume("Cloud", "Ariana Grande"),
+makePerfume("Cloud 2.0", "Ariana Grande", "ariana-grande-cloud-2-0"),
+makePerfume("Cloud Pink", "Ariana Grande"),
 makePerfume("Thank U, Next", "Ariana Grande"),
-makePerfume("Ariana Grande Cloud Intense", "Ariana Grande"),
-makePerfume("Thank U, Next 2.0", "Ariana Grande"),
+makePerfume("Cloud Intense", "Ariana Grande"),
+makePerfume("Thank U, Next 2.0", "Ariana Grande", "ariana-grande-thank-u-next-2-0"),
 makePerfume("R.E.M", "Ariana Grande"),
 makePerfume("Sweet Like Candy", "Ariana Grande"),
 makePerfume("Ari", "Ariana Grande"),

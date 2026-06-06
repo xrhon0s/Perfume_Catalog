@@ -6,13 +6,19 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "check": "npm run lint && npm run validate:data && npm run build",
     "lint": "eslint .",
+    "migrate:catalog": "node scripts/migrate-catalog-to-supabase.mjs",
+    "seed:catalog": "node scripts/export-catalog-seed.mjs",
+    "validate:data": "node scripts/validate-catalog.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
     "framer-motion": "^12.24.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-pageflip": "^2.0.3",
     "zustand": "^5.0.9"
   },
   "devDependencies": {

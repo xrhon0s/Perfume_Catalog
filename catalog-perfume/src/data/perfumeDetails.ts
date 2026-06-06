@@ -1,5 +1,4 @@
 import type { Concentration, Gender, OlfactiveFamily } from "./types"
-import santiago from "../assets/imageUrl.jpg"
 
 /**
  * Guardamos SOLO los campos extra.

@@ -1,11 +1,20 @@
-import { getFamilies } from "../../data/perfumeDb.helpers"
 import { useFiltersStore } from "../../store/filterStore"
+import { useCatalogStore } from "../../store/catalogStore"
 
 export default function FamiliesFilter() {
   const selectedFamilies = useFiltersStore((s) => s.families)
   const toggleFamily = useFiltersStore((s) => s.toggleFamily)
+  const perfumes = useCatalogStore((s) => s.perfumes)
 
-  const families = getFamilies()
+  const families = Array.from(
+    new Set(
+      perfumes
+        .map((p) => p.family)
+        .filter((family): family is NonNullable<typeof family> =>
+          Boolean(family),
+        ),
+    ),
+  ).sort((a, b) => a.localeCompare(b))
 
   return (
     <div className="flex flex-wrap gap-2">
