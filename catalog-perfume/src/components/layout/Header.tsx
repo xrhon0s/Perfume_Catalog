@@ -219,13 +219,6 @@ const Header = () => {
     </div>
 
     {/* Filtros */}
-    <a
-      href="#/admin"
-      className="hidden rounded-2xl bg-white/5 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 transition hover:bg-white/10 xl:block"
-    >
-      Admin
-    </a>
-
     <button
       onClick={toggleFilters}
       className="relative rounded-2xl bg-white/8 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 active:scale-[0.98] transition"
