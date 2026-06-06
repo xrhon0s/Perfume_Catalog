@@ -8,6 +8,12 @@ type Props = {
 
 export default function PerfumeDetailModal({ perfume, onClose }: Props) {
   const titleId = useId()
+  const profile = [
+    perfume.family,
+    perfume.concentration,
+    perfume.gender,
+    perfume.year,
+  ].filter(Boolean)
   const notesGroups = [
     { label: "Salida", values: perfume.notes?.top },
     { label: "Corazón", values: perfume.notes?.heart },
@@ -54,8 +60,21 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
                 loading="lazy"
               />
             ) : (
-              <div className="flex h-72 w-full items-center justify-center text-gray-400 md:h-full">
-                Sin imagen
+              <div className="relative flex h-72 w-full items-end overflow-hidden bg-gradient-to-br from-slate-200 via-white to-zinc-100 p-6 md:h-full">
+                <div className="absolute inset-x-6 top-6 h-px bg-slate-950/15" />
+                <div className="absolute inset-x-6 bottom-6 h-px bg-slate-950/15" />
+                <div className="absolute right-6 top-6 h-[calc(100%-3rem)] w-2 bg-slate-950" />
+                <div className="relative max-w-[80%] text-slate-950">
+                  <p className="text-sm font-semibold uppercase">{perfume.brand}</p>
+                  <p className="mt-2 text-4xl font-semibold leading-tight">
+                    {perfume.name}
+                  </p>
+                  {profile.length > 0 && (
+                    <p className="mt-4 text-sm leading-6 text-slate-600">
+                      {profile.join(" · ")}
+                    </p>
+                  )}
+                </div>
               </div>
             )}
           </div>
@@ -79,7 +98,7 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
 
             <dl className="mt-6 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               {perfume.family && (
-                <div className="rounded-xl bg-gray-50 p-3">
+                <div className="rounded-lg bg-gray-50 p-3">
                   <dt className="text-xs text-gray-500">Familia</dt>
                   <dd className="mt-1 font-semibold text-gray-900">
                     {perfume.family}
@@ -88,7 +107,7 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
               )}
 
               {perfume.concentration && (
-                <div className="rounded-xl bg-gray-50 p-3">
+                <div className="rounded-lg bg-gray-50 p-3">
                   <dt className="text-xs text-gray-500">Tipo</dt>
                   <dd className="mt-1 font-semibold text-gray-900">
                     {perfume.concentration}
@@ -97,7 +116,7 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
               )}
 
               {perfume.gender && (
-                <div className="rounded-xl bg-gray-50 p-3">
+                <div className="rounded-lg bg-gray-50 p-3">
                   <dt className="text-xs text-gray-500">Género</dt>
                   <dd className="mt-1 font-semibold text-gray-900">
                     {perfume.gender}
@@ -106,7 +125,7 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
               )}
 
               {perfume.year && (
-                <div className="rounded-xl bg-gray-50 p-3">
+                <div className="rounded-lg bg-gray-50 p-3">
                   <dt className="text-xs text-gray-500">Año</dt>
                   <dd className="mt-1 font-semibold text-gray-900">
                     {perfume.year}
@@ -126,7 +145,7 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
                 <h3 className="text-sm font-semibold text-gray-900">Notas</h3>
                 <div className="grid gap-3 sm:grid-cols-3">
                   {notesGroups.map((group) => (
-                    <div key={group.label} className="rounded-xl border p-3">
+                    <div key={group.label} className="rounded-lg border p-3">
                       <p className="text-xs font-medium text-gray-500">
                         {group.label}
                       </p>

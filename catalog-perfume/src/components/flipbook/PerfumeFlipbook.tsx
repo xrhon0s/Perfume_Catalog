@@ -132,9 +132,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
                 {p ? (
                   <MagazinePage
                     side={idx % 2 === 0 ? "left" : "right"}
-                    title={p.name}
-                    subtitle={p.brand}
-                    imageUrl={p.image}
+                    perfume={p}
                     onView={() => onViewPerfume(p)}
                   />
                 ) : (
