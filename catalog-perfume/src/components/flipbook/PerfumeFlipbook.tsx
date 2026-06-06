@@ -124,16 +124,17 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           minHeight={420}
           maxHeight={900}
           drawShadow={true}
-          flippingTime={100}
+          flippingTime={850}
           usePortrait={true}
           startZIndex={0}
           autoSize={true}
-          maxShadowOpacity={0.15}
+          maxShadowOpacity={0.35}
           showCover={false}
           mobileScrollSupport={true}
           clickEventForward={true}
           useMouseEvents={true}
           swipeDistance={30}
+          renderOnlyPageLengthChange={true}
           onFlip={(e: FlipEvent) => {
             setPageIndex(e.data)
             setPageIndexGlobal(e.data)
