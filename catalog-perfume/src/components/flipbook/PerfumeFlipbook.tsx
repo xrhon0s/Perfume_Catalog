@@ -43,6 +43,11 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   }, [pages.length, setTotalPages])
 
   useEffect(() => {
+    setPageIndexGlobal(0)
+    bookRef.current?.pageFlip().flip(0)
+  }, [items, setPageIndexGlobal])
+
+  useEffect(() => {
     if (jumpToPageRequest === null) return
 
     const api = bookRef.current?.pageFlip()
@@ -57,6 +62,16 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target
+      const isTyping =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLButtonElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+
+      if (isTyping) return
+
       if (e.key === "ArrowRight") {
         bookRef.current?.pageFlip().flipNext()
       }
