@@ -14,11 +14,9 @@ body {
 
 .stf__item {
   background: white;
-  overflow: hidden;
-  will-change: transform, clip-path;
 }
 
-.stf__item > div {
-  background: white;
-  transform: translateZ(0);
+.stf__item * {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
 }

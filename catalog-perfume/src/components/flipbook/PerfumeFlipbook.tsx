@@ -43,12 +43,6 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   }, [pages.length, setTotalPages])
 
   useEffect(() => {
-    setPageIndexGlobal(0)
-    const api = bookRef.current?.pageFlip()
-    api?.flip(0)
-  }, [items, setPageIndexGlobal])
-
-  useEffect(() => {
     if (jumpToPageRequest === null) return
 
     const api = bookRef.current?.pageFlip()
@@ -63,16 +57,6 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
-      const target = e.target
-      const isTyping =
-        target instanceof HTMLInputElement ||
-        target instanceof HTMLTextAreaElement ||
-        target instanceof HTMLSelectElement ||
-        target instanceof HTMLButtonElement ||
-        (target instanceof HTMLElement && target.isContentEditable)
-
-      if (isTyping) return
-
       if (e.key === "ArrowRight") {
         bookRef.current?.pageFlip().flipNext()
       }
@@ -92,14 +76,14 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
       <div className="absolute left-4 top-4 z-[80] hidden gap-2 md:flex">
         <button
           onClick={() => bookRef.current?.pageFlip().flipPrev()}
-          className="rounded-xl bg-black/40 backdrop-blur px-3 py-2 text-xs text-white"
+          className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
         >
           ← Anterior
         </button>
 
         <button
           onClick={() => bookRef.current?.pageFlip().flipNext()}
-          className="rounded-xl bg-black/40 backdrop-blur px-3 py-2 text-xs text-white"
+          className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
         >
           Siguiente →
         </button>
@@ -111,7 +95,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
         </div>
       )}
 
-      <div className="h-full w-full flex items-center justify-center">
+      <div className="flex h-full w-full items-center justify-center">
         <HTMLFlipBook
           ref={bookRef}
           className="shadow-2xl"
@@ -125,17 +109,16 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           minHeight={420}
           maxHeight={900}
           drawShadow={true}
-          flippingTime={520}
+          flippingTime={100}
           usePortrait={true}
           startZIndex={0}
           autoSize={true}
-          maxShadowOpacity={0.35}
+          maxShadowOpacity={0.15}
           showCover={false}
           mobileScrollSupport={true}
           clickEventForward={true}
           useMouseEvents={true}
           swipeDistance={30}
-          renderOnlyPageLengthChange={true}
           onFlip={(e: FlipEvent) => {
             setPageIndex(e.data)
             setPageIndexGlobal(e.data)
@@ -144,12 +127,14 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           disableFlipByClick={false}
         >
           {pages.map((p, idx) => (
-            <div key={idx} className="h-full w-full bg-white relative overflow-hidden">
+            <div key={idx} className="relative h-full w-full overflow-hidden bg-white">
               <div className="relative h-full w-full">
                 {p ? (
                   <MagazinePage
                     side={idx % 2 === 0 ? "left" : "right"}
-                    perfume={p}
+                    title={p.name}
+                    subtitle={p.brand}
+                    imageUrl={p.image}
                     onView={() => onViewPerfume(p)}
                   />
                 ) : (
