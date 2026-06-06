@@ -58,10 +58,10 @@ const Header = () => {
               {/* Textos: los dejamos, pero discretos para móvil */}
               <div className="flex flex-col leading-none">
                 <span className="text-sm font-semibold text-white/90">
-                  Catálogo de Perfumes
+                  Catálogo de perfumes
                 </span>
                 <span className="text-[11px] text-white/50">
-                  Explora y filtra tu aroma ideal
+                  Explora por marca, familia y notas
                 </span>
               </div>
             </div>
@@ -103,7 +103,7 @@ const Header = () => {
               <input
                 ref={inputRef}
                 type="text"
-                placeholder="Buscar perfumes, perfumerías..."
+                placeholder="Buscar perfumes, marcas, notas..."
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
                 className="w-full rounded-2xl bg-white/10 px-10 py-2.5 text-sm text-white placeholder:text-white/50 outline-none ring-1 ring-white/10 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
@@ -138,10 +138,10 @@ const Header = () => {
 
     <div className="flex flex-col leading-none">
       <span className="text-lg font-semibold text-white/90">
-        Catálogo de Perfumes
+        Catálogo de perfumes
       </span>
       <span className="text-xs text-white/50">
-        Explora y filtra tu aroma ideal
+        Explora por marca, familia y notas
       </span>
     </div>
   </div>
@@ -169,7 +169,7 @@ const Header = () => {
       <input
         ref={inputRef}
         type="text"
-        placeholder="Buscar perfumes, perfumerías..."
+        placeholder="Buscar perfumes, marcas, notas..."
         value={query}
         onChange={(e) => setQuery(e.target.value)}
         className="w-full rounded-2xl bg-white/10 px-10 py-2.5 text-sm text-white placeholder:text-white/50 outline-none ring-1 ring-white/10 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
