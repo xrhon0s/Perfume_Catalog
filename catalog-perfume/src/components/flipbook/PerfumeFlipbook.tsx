@@ -44,7 +44,8 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
   useEffect(() => {
     setPageIndexGlobal(0)
-    bookRef.current?.pageFlip().flip(0)
+    const api = bookRef.current?.pageFlip()
+    api?.flip(0)
   }, [items, setPageIndexGlobal])
 
   useEffect(() => {
