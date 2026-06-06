@@ -104,15 +104,30 @@ export default function MagazinePage({
   return (
     <div
       className={[
-        "relative h-full w-full overflow-hidden bg-cover bg-center",
-        perfume?.image ? "bg-gray-200" : `bg-gradient-to-br ${theme.bg}`,
+        "relative h-full w-full overflow-hidden",
+        `bg-gradient-to-br ${theme.bg}`,
       ].join(" ")}
-      style={{
-        ...(perfume?.image ? { backgroundImage: `url(${perfume.image})` } : {}),
-      }}
     >
       {perfume?.image ? (
-        <div className="absolute inset-0 bg-gradient-to-t from-black/75 via-black/20 to-transparent" />
+        <>
+          <div className="absolute inset-x-8 top-8 h-px bg-slate-950/15" />
+          <div className="absolute inset-x-8 bottom-8 h-px bg-slate-950/15" />
+          <div
+            className={[
+              "absolute top-8 h-[calc(100%-4rem)] w-2",
+              theme.accent,
+              isLeft ? "right-8" : "left-8",
+            ].join(" ")}
+          />
+          <div className="absolute inset-0 flex items-center justify-center px-12 pb-32 pt-20">
+            <img
+              src={perfume.image}
+              alt={perfume.name}
+              className="max-h-full max-w-[82%] object-contain drop-shadow-2xl"
+              loading="lazy"
+            />
+          </div>
+        </>
       ) : (
         <>
           <div className="absolute inset-x-8 top-8 h-px bg-slate-950/15" />
@@ -131,7 +146,7 @@ export default function MagazinePage({
       <div
         className={[
           "absolute inset-x-0 z-10",
-          perfume?.image ? "bottom-10 sm:bottom-28 md:bottom-32" : "bottom-10 sm:bottom-16",
+          perfume?.image ? "bottom-10 sm:bottom-12" : "bottom-10 sm:bottom-16",
           isLeft
             ? "pl-6 pr-16 text-left sm:pl-10 sm:pr-24"
             : "pl-16 pr-6 text-right sm:pl-24 sm:pr-10",
@@ -140,7 +155,7 @@ export default function MagazinePage({
         <div
           className={[
             "inline-block max-w-[78%]",
-            perfume?.image ? "text-white" : theme.text,
+            theme.text,
           ].join(" ")}
         >
           {perfume?.brand && (
@@ -159,7 +174,7 @@ export default function MagazinePage({
             <p
               className={[
                 "mt-4 text-sm leading-6",
-                perfume?.image ? "text-white/80" : "text-slate-700",
+                "text-slate-700",
               ].join(" ")}
             >
               {profile.join(" · ")}
@@ -179,41 +194,40 @@ export default function MagazinePage({
             </div>
           )}
 
-          {onView && (
-            <div
-              className="mt-6 inline-block"
-              onPointerDownCapture={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-              onMouseDownCapture={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-              onTouchStartCapture={(e) => {
-                e.preventDefault()
-                e.stopPropagation()
-              }}
-            >
-              <button
-                type="button"
-                onClick={(e) => {
-                  e.stopPropagation()
-                  onView()
-                }}
-                className={[
-                  "rounded-lg px-6 py-3 text-sm font-semibold shadow transition",
-                  perfume?.image
-                    ? "bg-white text-slate-950 hover:bg-gray-100"
-                    : "bg-slate-950 text-white hover:bg-slate-800",
-                ].join(" ")}
-              >
-                Ver detalle
-              </button>
-            </div>
-          )}
         </div>
       </div>
+
+      {onView && (
+        <div
+          className={[
+            "absolute top-10 z-20",
+            isLeft ? "left-10" : "right-10",
+          ].join(" ")}
+          onPointerDownCapture={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onMouseDownCapture={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+          onTouchStartCapture={(e) => {
+            e.preventDefault()
+            e.stopPropagation()
+          }}
+        >
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onView()
+            }}
+            className="rounded-lg bg-slate-950 px-5 py-2.5 text-sm font-semibold text-white shadow transition hover:bg-slate-800"
+          >
+            Ver detalle
+          </button>
+        </div>
+      )}
     </div>
   )
 }
