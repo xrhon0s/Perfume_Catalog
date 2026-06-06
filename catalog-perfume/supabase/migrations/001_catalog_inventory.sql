@@ -68,6 +68,85 @@ create table if not exists public.stock_movements (
   created_at timestamptz not null default now()
 );
 
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'perfumes_family_check'
+  ) then
+    alter table public.perfumes
+      add constraint perfumes_family_check
+      check (
+        family in (
+          'Cítrico',
+          'Floral',
+          'Amaderado',
+          'Oriental',
+          'Aromático',
+          'Fougère',
+          'Gourmand',
+          'Acuático',
+          'Chipre',
+          'Cuero',
+          'Ámbar',
+          'Frutal',
+          'Especiado'
+        )
+      );
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'perfumes_concentration_check'
+  ) then
+    alter table public.perfumes
+      add constraint perfumes_concentration_check
+      check (concentration in ('EDT', 'EDP', 'Parfum', 'Extrait'));
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'perfumes_gender_check'
+  ) then
+    alter table public.perfumes
+      add constraint perfumes_gender_check
+      check (gender in ('Masculino', 'Femenino', 'Unisex'));
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'perfumes_year_check'
+  ) then
+    alter table public.perfumes
+      add constraint perfumes_year_check
+      check (year is null or year between 1900 and extract(year from now())::integer + 1);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'perfumes_notes_object_check'
+  ) then
+    alter table public.perfumes
+      add constraint perfumes_notes_object_check
+      check (jsonb_typeof(notes) = 'object');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'inventory_items_size_ml_check'
+  ) then
+    alter table public.inventory_items
+      add constraint inventory_items_size_ml_check
+      check (size_ml is null or size_ml > 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'inventory_items_prices_check'
+  ) then
+    alter table public.inventory_items
+      add constraint inventory_items_prices_check
+      check (
+        (cost_price is null or cost_price >= 0)
+        and (sale_price is null or sale_price >= 0)
+      );
+  end if;
+end;
+$$;
+
 insert into storage.buckets (id, name, public)
 values ('perfume-images', 'perfume-images', true)
 on conflict (id) do update set public = excluded.public;
