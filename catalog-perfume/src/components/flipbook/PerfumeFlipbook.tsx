@@ -57,11 +57,21 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
+      const target = e.target
+      const isTyping =
+        target instanceof HTMLInputElement ||
+        target instanceof HTMLTextAreaElement ||
+        target instanceof HTMLSelectElement ||
+        target instanceof HTMLButtonElement ||
+        (target instanceof HTMLElement && target.isContentEditable)
+
+      if (isTyping) return
+
       if (e.key === "ArrowRight") {
-        bookRef.current?.pageFlip().flipNext()
+        bookRef.current?.pageFlip()?.flipNext()
       }
       if (e.key === "ArrowLeft") {
-        bookRef.current?.pageFlip().flipPrev()
+        bookRef.current?.pageFlip()?.flipPrev()
       }
     }
 
@@ -75,14 +85,14 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
     <div className="relative h-full w-full">
       <div className="absolute left-4 top-4 z-[80] hidden gap-2 md:flex">
         <button
-          onClick={() => bookRef.current?.pageFlip().flipPrev()}
+          onClick={() => bookRef.current?.pageFlip()?.flipPrev()}
           className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
         >
           ← Anterior
         </button>
 
         <button
-          onClick={() => bookRef.current?.pageFlip().flipNext()}
+          onClick={() => bookRef.current?.pageFlip()?.flipNext()}
           className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
         >
           Siguiente →
@@ -109,11 +119,11 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           minHeight={420}
           maxHeight={900}
           drawShadow={true}
-          flippingTime={100}
+          flippingTime={360}
           usePortrait={true}
           startZIndex={0}
           autoSize={true}
-          maxShadowOpacity={0.15}
+          maxShadowOpacity={0.28}
           showCover={false}
           mobileScrollSupport={true}
           clickEventForward={true}
