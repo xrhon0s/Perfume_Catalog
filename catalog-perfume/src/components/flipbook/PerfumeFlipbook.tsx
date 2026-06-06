@@ -125,7 +125,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           minHeight={420}
           maxHeight={900}
           drawShadow={true}
-          flippingTime={850}
+          flippingTime={520}
           usePortrait={true}
           startZIndex={0}
           autoSize={true}

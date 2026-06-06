@@ -8,6 +8,7 @@ values
   ('Ariana Grande', 'ariana-grande'),
   ('Armaf', 'armaf'),
   ('Attar Collection', 'attar-collection'),
+  ('Bond No.9', 'bond-no9'),
   ('Carolina Herrera', 'carolina-herrera'),
   ('Hawas', 'hawas'),
   ('Lattafa', 'lattafa'),
@@ -3588,6 +3589,110 @@ select
   null, null, true
 from public.brands b
 where b.slug = 'ariana-grande'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'bond-no9-hamptons-bond-no-9', b.id, 'Hamptons Bond No 9', 'hamptons-bond-no-9',
+  'Aromático', 'EDP', 'Unisex', 2005,
+  null, array['fresco', 'floral', 'playa', 'almizclado']::text[], '{"top":["Lima","Bergamota"],"heart":["Jazmín","Magnolia"],"base":["Ámbar","Sándalo","Almizcle"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'bond-no9'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'bond-no9-bleecker-street-bond-no-9', b.id, 'Bleecker Street Bond No 9', 'bleecker-street-bond-no-9',
+  'Oriental', 'EDP', 'Unisex', 2005,
+  null, array['verde', 'gourmand', 'amaderado', 'nocturno']::text[], '{"top":["Hoja de violeta","Cassis","Tomillo"],"heart":["Jazmín","Canela","Cedro"],"base":["Musgo","Patchouli","Vainilla","Caramelo"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'bond-no9'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'bond-no9-chinatown-bond-no-9', b.id, 'Chinatown Bond No 9', 'chinatown-bond-no-9',
+  'Floral', 'EDP', 'Unisex', 2005,
+  null, array['floral', 'especiado', 'dulce', 'urbano']::text[], '{"top":["Flor de durazno"],"heart":["Gardenia","Peonía","Tuberosa"],"base":["Cardamomo","Maderas especiadas"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'bond-no9'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'bond-no9-brooklyn-bond-no-9', b.id, 'Brooklyn Bond No 9', 'brooklyn-bond-no-9',
+  'Amaderado', 'EDP', 'Unisex', 2008,
+  null, array['amaderado', 'cítrico', 'cuero', 'urbano']::text[], '{"top":["Toronja","Cardamomo"],"heart":["Geranio","Enebro","Ciprés"],"base":["Cedro","Cuero","Guayaco"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'bond-no9'
 on conflict (legacy_id) do update set
   brand_id = excluded.brand_id,
   name = excluded.name,

@@ -1327,4 +1327,58 @@ image: "https://disfragancias.com/cdn/shop/files/Lattafa-Oud-for-glory-2.png?v=1
   notes: { top: ["Frutas"], heart: ["Flores"], base: ["Almizcle", "Maderas"] },
 },
 
+// BOND NO.9 - imágenes temporales para prueba visual del flipbook
+"bond-no9-hamptons-bond-no-9": {
+  image: "https://www.bondno9.com/cdn/shop/files/HAMPTONS.png?v=1751906272&width=1200",
+  family: "Aromático",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2005,
+  tags: ["fresco", "floral", "playa", "almizclado"],
+  notes: {
+    top: ["Lima", "Bergamota"],
+    heart: ["Jazmín", "Magnolia"],
+    base: ["Ámbar", "Sándalo", "Almizcle"],
+  },
+},
+"bond-no9-bleecker-street-bond-no-9": {
+  image: "https://www.bondno9.com/cdn/shop/files/BLEECKER-STREET.png?v=1750172302&width=1200",
+  family: "Oriental",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2005,
+  tags: ["verde", "gourmand", "amaderado", "nocturno"],
+  notes: {
+    top: ["Hoja de violeta", "Cassis", "Tomillo"],
+    heart: ["Jazmín", "Canela", "Cedro"],
+    base: ["Musgo", "Patchouli", "Vainilla", "Caramelo"],
+  },
+},
+"bond-no9-chinatown-bond-no-9": {
+  image: "https://www.bondno9.com/cdn/shop/files/CHINATOWN.png?v=1750711947&width=1200",
+  family: "Floral",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2005,
+  tags: ["floral", "especiado", "dulce", "urbano"],
+  notes: {
+    top: ["Flor de durazno"],
+    heart: ["Gardenia", "Peonía", "Tuberosa"],
+    base: ["Cardamomo", "Maderas especiadas"],
+  },
+},
+"bond-no9-brooklyn-bond-no-9": {
+  image: "https://www.bondno9.com/cdn/shop/files/BROOKLYN.png?v=1751906273&width=1200",
+  family: "Amaderado",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2008,
+  tags: ["amaderado", "cítrico", "cuero", "urbano"],
+  notes: {
+    top: ["Toronja", "Cardamomo"],
+    heart: ["Geranio", "Enebro", "Ciprés"],
+    base: ["Cedro", "Cuero", "Guayaco"],
+  },
+},
+
 }

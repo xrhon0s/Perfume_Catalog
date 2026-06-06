@@ -1740,23 +1740,8 @@
     "brand": "Cartier"
   },
   {
-    "id": "bond-no9-hamptons-bond-no-9",
-    "name": "Hamptons Bond No 9",
-    "brand": "Bond No.9"
-  },
-  {
     "id": "bond-no9-nolita-bond-no-9",
     "name": "Nolita Bond No 9",
-    "brand": "Bond No.9"
-  },
-  {
-    "id": "bond-no9-bleecker-street-bond-no-9",
-    "name": "Bleecker Street Bond No 9",
-    "brand": "Bond No.9"
-  },
-  {
-    "id": "bond-no9-chinatown-bond-no-9",
-    "name": "Chinatown Bond No 9",
     "brand": "Bond No.9"
   },
   {
@@ -1772,11 +1757,6 @@
   {
     "id": "bond-no9-new-york-amber-bond-no-9",
     "name": "New York Amber Bond No 9",
-    "brand": "Bond No.9"
-  },
-  {
-    "id": "bond-no9-brooklyn-bond-no-9",
-    "name": "Brooklyn Bond No 9",
     "brand": "Bond No.9"
   },
   {
