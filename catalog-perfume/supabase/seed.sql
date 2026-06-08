@@ -25,7 +25,7 @@ select
   'lattafa-badee-al-oud-amethyst', b.id, 'Bade''e Al Oud Amethyst', 'badee-al-oud-amethyst',
   'Oriental', 'EDP', 'Unisex', 2021,
   null, array['rosa', 'oud', 'ambar', 'intenso']::text[], '{"top":["Rosa","Especias"],"heart":["Oud","Flores"],"base":["Ámbar","Vainilla"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/Lattafa-oud-for-glory-amethyst-2.png?v=1702610695', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -51,7 +51,7 @@ select
   'lattafa-badee-al-oud-sublime', b.id, 'Bade’e Al Oud Sublime', 'badee-al-oud-sublime',
   'Frutal', 'EDP', 'Unisex', 2023,
   null, array['frutal', 'dulce', 'fresco']::text[], '{"top":["Frutas"],"heart":["Flores"],"base":["Vainilla","Maderas"]}'::jsonb,
-  null, null, true
+  'https://prebel.vtexassets.com/arquivos/ids/185500/image-c9698a197c524a59a0c947bdaa34c7ef.jpg?v=638567594586000000', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -77,7 +77,7 @@ select
   'lattafa-badee-al-oud-honor-glory', b.id, 'Bade’e Al Oud Honor & Glory', 'badee-al-oud-honor-glory',
   'Gourmand', 'EDP', 'Unisex', 2023,
   null, array['gourmand', 'dulce', 'vainilla', 'especiado']::text[], '{"top":["Dulce","Fruta"],"heart":["Especias"],"base":["Vainilla","Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/honor_2.png?v=1725723876', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -103,7 +103,7 @@ select
   'lattafa-oud-for-glory-badee-al-oud', b.id, 'Oud for Glory (Bade’e Al Oud)', 'oud-for-glory-badee-al-oud',
   'Amaderado', 'EDP', 'Unisex', 2020,
   null, array['oud', 'amaderado', 'especiado', 'nocturno']::text[], '{"top":["Especias"],"heart":["Oud"],"base":["Patchouli","Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/Lattafa-Oud-for-glory-2.png?v=1705443394', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -129,7 +129,7 @@ select
   'lattafa-noble-bush', b.id, 'Noble Bush', 'noble-bush',
   'Amaderado', 'EDP', 'Unisex', 2022,
   null, array['maderas', 'ambar', 'elegante']::text[], '{"top":["Cítricos"],"heart":["Maderas"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Lattafa-Noble-Blush.jpg?v=1736634422&width=1946', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -155,7 +155,7 @@ select
   'lattafa-asad-bourbon', b.id, 'Asad Bourbon', 'asad-bourbon',
   'Oriental', 'EDP', 'Masculino', 2023,
   null, array['vainilla', 'ambar', 'especiado', 'dulce']::text[], '{"top":["Especias"],"heart":["Vainilla"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://fraganceroscolombia.com.co/wp-content/uploads/2025/01/Asad-Bourbon-lattafa.jpeg', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -181,7 +181,7 @@ select
   'lattafa-asad', b.id, 'Asad', 'asad',
   'Oriental', 'EDP', 'Masculino', 2021,
   null, array['especiado', 'ambar', 'vainilla', 'intenso']::text[], '{"top":["Especias"],"heart":["Aromático"],"base":["Ámbar","Vainilla"]}'::jsonb,
-  null, null, true
+  'https://dunoys.com/cdn/shop/files/lattafa-asad-2-1.webp?v=1764258841', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -207,7 +207,7 @@ select
   'lattafa-asad-zanzibar', b.id, 'Asad Zanzibar', 'asad-zanzibar',
   'Aromático', 'EDP', 'Masculino', 2023,
   null, array['fresco', 'nocturno']::text[], '{"top":["Bergamota"],"heart":["Lavanda"],"base":["Ámbar"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Lattafa-Asad-Zanzibar.jpg?v=1712763603', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -233,7 +233,7 @@ select
   'lattafa-yara-candy', b.id, 'Yara Candy', 'yara-candy',
   'Gourmand', 'EDP', 'Femenino', 2023,
   null, array['dulce', 'caramelo', 'frutal']::text[], '{"top":["Frutas"],"heart":["Caramelo"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://i0.wp.com/amore.com.gt/wp-content/uploads/2025/10/yara-candy.webp?fit=1080%2C1080&ssl=1 ', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -259,7 +259,7 @@ select
   'lattafa-yara-tous', b.id, 'Yara Tous', 'yara-tous',
   'Frutal', 'EDP', 'Femenino', 2023,
   null, array['tropical', 'frutal', 'dulce']::text[], '{"top":["Frutas tropicales"],"heart":["Flores"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://silkperfumes.cl/cdn/shop/files/lattafa-yara-tous-edp-100ml-Silk-Perfumes.png?v=1748029008', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -285,7 +285,7 @@ select
   'lattafa-yara-mois', b.id, 'Yara Mois', 'yara-mois',
   'Floral', 'EDP', 'Femenino', 2023,
   null, array['floral', 'cremoso', 'dulce']::text[], '{"top":["Flores"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/Yara-moi-2.jpg?v=1705447091', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -311,7 +311,7 @@ select
   'lattafa-yara', b.id, 'Yara', 'yara',
   'Gourmand', 'EDP', 'Femenino', 2020,
   null, array['vainilla', 'dulce', 'almizclado']::text[], '{"top":["Frutas"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://cdnx.jumpseller.com/sairam/image/38112539/thumb/1500/1500?1690646055', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -337,7 +337,7 @@ select
   'lattafa-khamrah', b.id, 'Khamrah', 'khamrah',
   'Oriental', 'EDP', 'Unisex', 2022,
   null, array['dulce', 'especiado', 'vainilla', 'nocturno']::text[], '{"top":["Canela","Especias"],"heart":["Dulce","Resinas"],"base":["Vainilla","Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://medipielsa.vtexassets.com/arquivos/ids/195385/perfume-khamrah-edp-unisex-lattafa.jpg?v=638648910294700000', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -363,7 +363,7 @@ select
   'lattafa-khamrah-qahwa', b.id, 'Khamrah Qahwa', 'khamrah-qahwa',
   'Oriental', 'EDP', 'Unisex', 2023,
   null, array['café', 'dulce', 'especiado']::text[], '{"top":["Especias"],"heart":["Dulce"],"base":["Café","Vainilla","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Lattafa-Khamrah-Qahwa.jpg?v=1704290382', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -389,7 +389,7 @@ select
   'lattafa-khamrah-dunkhan', b.id, 'Khamrah Dunkhan', 'khamrah-dunkhan',
   'Oriental', 'EDP', 'Unisex', 2024,
   null, array['incienso', 'ahumado', 'ambar', 'intenso']::text[], '{"top":["Ahumado"],"heart":["Resinas"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://media.falabella.com/falabellaCO/143940006_02/w=1500,h=1500,fit=cover', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -415,7 +415,7 @@ select
   'lattafa-eclaire', b.id, 'Eclaire', 'eclaire',
   'Gourmand', 'EDP', 'Unisex', 2024,
   null, array['vainilla', 'cremoso', 'dulce']::text[], '{"top":["Dulce"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://larak.co/wp-content/uploads/2025/10/PERFUMES-ARABES-EN-CALI-LATTAFA-ECLAIRE-EDP-SP-100ML.jpg', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -441,7 +441,7 @@ select
   'lattafa-emeer', b.id, 'Emeer', 'emeer',
   'Amaderado', 'EDP', 'Unisex', 2023,
   null, array['maderas', 'ambar', 'especiado']::text[], '{"top":["Cítricos"],"heart":["Especias"],"base":["Maderas","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Lattafa-Emeer.jpg?v=1707336716', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -467,7 +467,7 @@ select
   'lattafa-fakhar-rose', b.id, 'Fakhar Rose', 'fakhar-rose',
   'Floral', 'EDP', 'Femenino', 2022,
   null, array['rosa', 'floral', 'dulce']::text[], '{"top":["Rosa","Frutas"],"heart":["Flores"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://media.falabella.com/falabellaCO/128018411_03/w=1500,h=1500,fit=cover', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -493,7 +493,7 @@ select
   'lattafa-fakhar-black', b.id, 'Fakhar Black', 'fakhar-black',
   'Aromático', 'EDP', 'Masculino', 2021,
   null, array['fresco', 'aromático', 'amaderado']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://sensationsstore.com/cdn/shop/products/image_b082ae0b-1f7b-4afa-bdcd-7ba924c4db36_1200x1200.webp?v=1668207200', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -519,7 +519,7 @@ select
   'lattafa-fakhar-extrait', b.id, 'Fakhar Extrait', 'fakhar-extrait',
   'Oriental', 'EDP', 'Unisex', 2023,
   null, array['intenso', 'ambar', 'especiado']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://assets.encargomio.com/img/products/Lattafa_Fakhar_Gold_/17377342875.jpg', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -545,7 +545,7 @@ select
   'lattafa-ajwad-pink-to-pink', b.id, 'Ajwad Pink to pink', 'ajwad-pink-to-pink',
   'Floral', 'EDP', 'Femenino', 2023,
   null, array['rosa', 'frutal', 'dulce']::text[], '{"top":["Frutas"],"heart":["Rosa","Flores"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://exdtvcqvfop.exactdn.com/wp-content/uploads/Ajwad-Pink-to-Pink-de-Lattafa-mujer-flyer.jpg?strip=all', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -571,7 +571,7 @@ select
   'lattafa-ajwad', b.id, 'Ajwad', 'ajwad',
   'Frutal', 'EDP', 'Unisex', 2021,
   null, array['frutal', 'ambar', 'dulce']::text[], '{"top":["Frutas"],"heart":["Flores"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://cosmeticosenlinea.com/cdn/shop/files/AJWAD_60ML_Lattafa_perfumeria_arabe.jpg?v=1758292814&width=416', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -597,7 +597,7 @@ select
   'lattafa-mayar', b.id, 'Mayar', 'mayar',
   'Floral', 'EDP', 'Femenino', 2022,
   null, array['floral', 'frutal', 'fresco']::text[], '{"top":["Frutas","Cítricos"],"heart":["Flores"],"base":["Almizcle","Maderas"]}'::jsonb,
-  null, null, true
+  'https://i0.wp.com/tersapell.com/wp-content/uploads/2024/12/77542313.webp?fit=1024%2C1024&ssl=1', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -623,7 +623,7 @@ select
   'lattafa-mayar-natural-intense', b.id, 'Mayar Natural Intense', 'mayar-natural-intense',
   'Floral', 'EDP', 'Femenino', 2023,
   null, array['intenso', 'floral', 'almizclado']::text[], '{"top":["Frutas"],"heart":["Flores"],"base":["Almizcle","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Lattafa-Mayar-Natural-Intense_grande.jpg?v=1707337777', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -649,7 +649,7 @@ select
   'lattafa-her-confession', b.id, 'Her Confession', 'her-confession',
   'Floral', 'EDP', 'Femenino', 2024,
   null, array['floral', 'cremoso', 'dulce']::text[], '{"top":["Cítricos"],"heart":["Flores blancas"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Her-Confession.jpg?v=1730478869', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -675,7 +675,7 @@ select
   'lattafa-his-confession', b.id, 'His Confession', 'his-confession',
   'Amaderado', 'EDP', 'Masculino', 2024,
   null, array['amaderado', 'aromático', 'ambar']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://zaoud.it/cdn/shop/files/lattafa-his-confession-perfume-bottle-with-box-against-white-background.jpg?v=1730149539&width=1946', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -701,7 +701,7 @@ select
   'lattafa-emaan', b.id, 'Emaan', 'emaan',
   'Oriental', 'EDP', 'Unisex', 2022,
   null, array['ambar', 'especiado', 'dulce']::text[], '{"top":["Especias"],"heart":["Resinas"],"base":["Ámbar","Vainilla"]}'::jsonb,
-  null, null, true
+  'https://fraganciascolombia.com/cdn/shop/files/lattafa-emaan-2.webp?v=1746648162', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -727,7 +727,7 @@ select
   'lattafa-haya', b.id, 'Haya', 'haya',
   'Floral', 'EDP', 'Femenino', 2022,
   null, array['floral', 'fresco', 'almizclado']::text[], '{"top":["Cítricos"],"heart":["Flores"],"base":["Almizcle","Maderas"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/LATTAFA-HAYA-EDP-100ML-FOR-WOMEN.png?v=1685981224', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -753,7 +753,7 @@ select
   'lattafa-musamam', b.id, 'Musamam', 'musamam',
   'Amaderado', 'EDP', 'Unisex', 2023,
   null, array['maderas', 'oud', 'ambar']::text[], '{"top":["Especias"],"heart":["Maderas","Oud"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://perfumesimperial.com.co/cdn/shop/files/MUSAMA2.webp?crop=center&height=800&v=1740603159&width=800', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -779,7 +779,7 @@ select
   'lattafa-musamam-white-intense', b.id, 'Musamam White Intense', 'musamam-white-intense',
   'Amaderado', 'EDP', 'Unisex', 2024,
   null, array['limpio', 'maderas', 'almizclado']::text[], '{"top":["Cítricos"],"heart":["Maderas claras"],"base":["Almizcle","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://www.zafiroperfumeria.com/wp-content/uploads/2024/02/Musamam-White-Intense-Lattafa.png', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -805,7 +805,7 @@ select
   'lattafa-shaheen-silver', b.id, 'Shaheen Silver', 'shaheen-silver',
   'Aromático', 'EDP', 'Masculino', 2022,
   null, array['fresco', 'aromático', 'cítrico']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://perfumeland.co.za/wp-content/uploads/2023/08/shaheensilver4.webp', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -831,7 +831,7 @@ select
   'lattafa-shaheen-gold', b.id, 'Shaheen Gold', 'shaheen-gold',
   'Oriental', 'EDP', 'Masculino', 2022,
   null, array['ambar', 'dulce', 'especiado']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Vainilla","Maderas"]}'::jsonb,
-  null, null, true
+  'https://envioacasa.co/cdn/shop/files/Perfume_Shaheen_Gold_Lattafa_envioacasa.com_envio_a_casa_1.jpg?v=1733684880&width=1920', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -857,7 +857,7 @@ select
   'lattafa-maahir', b.id, 'Maahir', 'maahir',
   'Oriental', 'EDP', 'Unisex', 2020,
   null, array['ambar', 'especiado', 'nocturno']::text[], '{"top":["Especias"],"heart":["Resinas"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://www.tawakkalperfumes.co.uk/cdn/shop/products/maahirgold.jpg?v=1718121562', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -883,7 +883,7 @@ select
   'lattafa-maahir-black-edition', b.id, 'Maahir Black Edition', 'maahir-black-edition',
   'Amaderado', 'EDP', 'Masculino', 2021,
   null, array['amaderado', 'intenso', 'ambar']::text[], '{"top":["Especias"],"heart":["Maderas"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://perfugroupar.vtexassets.com/arquivos/ids/213478/6291108730362_2.jpg?v=638696080903900000', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -909,7 +909,7 @@ select
   'lattafa-maahir-legacy', b.id, 'Maahir Legacy', 'maahir-legacy',
   'Aromático', 'EDP', 'Masculino', 2023,
   null, array['fresco', 'cítrico', 'aromático']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://aromatica.cr/cdn/shop/files/Decant-Maahir-Legacy-EDP-unisex-Arom_tica-CR-367137593.jpg?v=1742425051&width=1946', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -935,7 +935,7 @@ select
   'lattafa-qaed-al-fursan', b.id, 'Qaed al Fursan', 'qaed-al-fursan',
   'Gourmand', 'EDP', 'Unisex', 2021,
   null, array['piña', 'dulce', 'ambar']::text[], '{"top":["Fruta"],"heart":["Dulce"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://www.eliteperfumes-distribuidor.cl/cdn/shop/files/lattafa-lattafa-qaed-al-fursan-unisex-edp-90-u-31589143674916_699cd251-ef08-46de-8446-1c884de1f7d7.jpg?v=1750956844&width=1214', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -961,7 +961,7 @@ select
   'lattafa-hayaati-florence', b.id, 'Hayaati Florence', 'hayaati-florence',
   'Floral', 'EDP', 'Femenino', 2022,
   null, array['floral', 'fresco', 'cítrico']::text[], '{"top":["Cítricos"],"heart":["Flores"],"base":["Almizcle","Maderas"]}'::jsonb,
-  null, null, true
+  'https://silkperfumes.cl/cdn/shop/files/lattafa-hayaati-florence-edp-100ml-Silk-Perfumes.png?v=1748021940', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -987,7 +987,7 @@ select
   'lattafa-hayaati-al-maleky', b.id, 'Hayaati Al Maleky', 'hayaati-al-maleky',
   'Amaderado', 'EDP', 'Masculino', 2021,
   null, array['ambar', 'amaderado', 'especiado']::text[], '{"top":["Especias"],"heart":["Maderas"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://www.lattafa-usa.com/cdn/shop/files/Hayaati-Al-Maleky-2_497a5eb7-bfa6-4661-a230-b30fb6e80739.png?v=1747415752&width=1500', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -1013,7 +1013,7 @@ select
   'lattafa-hayaati', b.id, 'Hayaati', 'hayaati',
   'Aromático', 'EDP', 'Masculino', 2020,
   null, array['fresco', 'aromático', 'amaderado']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://www.perfumenetwork.in/cdn/shop/products/HayatiBlack_1_2048x.png?v=1666174091', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -1039,7 +1039,7 @@ select
   'lattafa-hayaati-gold-elixir', b.id, 'Hayaati Gold Elixir', 'hayaati-gold-elixir',
   'Oriental', 'EDP', 'Masculino', 2022,
   null, array['ambar', 'dulce', 'vainilla']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Vainilla","Maderas"]}'::jsonb,
-  null, null, true
+  'https://media.falabella.com/falabellaCL/128706700_01/w=1004,h=1500,fit=pad', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -1065,7 +1065,7 @@ select
   'lattafa-oud-mood', b.id, 'Oud Mood', 'oud-mood',
   'Oriental', 'EDP', 'Unisex', 2019,
   null, array['oud', 'ambar', 'resinoso']::text[], '{"top":["Especias"],"heart":["Oud"],"base":["Ámbar","Resinas"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/products/Lattafa-Oud-mood.jpg?v=1699807752', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -1091,7 +1091,7 @@ select
   'lattafa-ameerat-al-arab-prive-rose', b.id, 'Ameerat al Arab prive Rose', 'ameerat-al-arab-prive-rose',
   'Floral', 'EDP', 'Femenino', 2023,
   null, array['rosa', 'floral', 'almizclado']::text[], '{"top":["Rosa","Cítricos"],"heart":["Flores"],"base":["Almizcle","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://smileeurope.co.uk/cdn/shop/files/Ameerat-Al-Arab-Prive-Rose-Eau-De-Parfum-100ml-Asdaaf-Asdaaf-31951559.jpg?v=1728558281&width=1946', null, true
 from public.brands b
 where b.slug = 'lattafa'
 on conflict (legacy_id) do update set
@@ -1117,7 +1117,7 @@ select
   'attar-collection-hayati', b.id, 'Hayati', 'hayati',
   'Oriental', 'EDP', 'Unisex', 2018,
   null, array['dulce', 'ambar', 'frutal']::text[], '{"top":["Frutas"],"heart":["Dulce"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://www.aromak.no/125-superlarge_default_2x/attar-collection-hayati-edp.jpg', null, true
 from public.brands b
 where b.slug = 'attar-collection'
 on conflict (legacy_id) do update set
@@ -1143,7 +1143,7 @@ select
   'armaf-odyssey-mandarin-sky', b.id, 'Odyssey Mandarin Sky', 'odyssey-mandarin-sky',
   'Cítrico', 'EDP', 'Masculino', 2023,
   null, array['mandarina', 'fresco', 'aromático']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://comprarenchile.cl/cdn/shop/files/Armaf-Odyssey-Mandarin-Sky-CHILE-min.jpg?v=1706925550', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1169,7 +1169,7 @@ select
   'armaf-odyssey-candee', b.id, 'Odyssey Candee', 'odyssey-candee',
   'Gourmand', 'EDP', 'Unisex', 2024,
   null, array['dulce', 'caramelo', 'vainilla']::text[], '{"top":["Dulce"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://acdn-us.mitiendanube.com/stores/002/708/808/products/arabe-2025-04-04t194038-232-49892fec166b5342d517438094979653-1024-1024.webp', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1195,7 +1195,7 @@ select
   'armaf-odyssey-spectra-rainbow-edition', b.id, 'Odyssey Spectra Rainbow Edition', 'odyssey-spectra-rainbow-edition',
   'Aromático', 'EDP', 'Unisex', 2024,
   null, array['moderno', 'fresco', 'amaderado']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Odyssey-Spectra.jpg?v=1730929285', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1221,7 +1221,7 @@ select
   'armaf-odyssey-dubia-chocolat', b.id, 'Odyssey Dubia Chocolat', 'odyssey-dubia-chocolat',
   'Gourmand', 'EDP', 'Unisex', 2024,
   null, array['chocolate', 'dulce', 'vainilla']::text[], '{"top":["Cacao"],"heart":["Dulce"],"base":["Vainilla","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://noirperfumeria.co/cdn/shop/files/ArmafOdysseyChocolat100mlEDPHombre.png?v=1744300057', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1247,7 +1247,7 @@ select
   'armaf-odyssey-limoni', b.id, 'Odyssey Limoni', 'odyssey-limoni',
   'Cítrico', 'EDP', 'Unisex', 2024,
   null, array['limón', 'fresco', 'verano']::text[], '{"top":["Limón","Cítricos"],"heart":["Aromático"],"base":["Almizcle"]}'::jsonb,
-  null, null, true
+  'https://cdnx.jumpseller.com/joyperfumes1/image/70442455/ODYSSEY-LIMONI.png?1765000727', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1273,7 +1273,7 @@ select
   'armaf-odyssey-mandarin-sky-elixir', b.id, 'Odyssey Mandarin Sky Elixir', 'odyssey-mandarin-sky-elixir',
   'Cítrico', 'EDP', 'Masculino', 2024,
   null, array['cítrico', 'ambar', 'intenso']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Ámbar","Maderas"]}'::jsonb,
-  null, null, true
+  'https://www.luksusimportedstore.com/cdn/shop/files/0C9ACD02-D3BD-46C5-AEF2-F9F49BAF2427.jpg?v=1754242753', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1299,7 +1299,7 @@ select
   'armaf-odyssey-artisto', b.id, 'Odyssey Artisto', 'odyssey-artisto',
   'Amaderado', 'EDP', 'Unisex', 2024,
   null, array['amaderado', 'elegante', 'ambar']::text[], '{"top":["Cítricos"],"heart":["Maderas"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://perfumeriacristlaurent.com/wp-content/uploads/2025/06/Perfume-Armaf-Odyssey-Artisto-Edp-Hombre-100ml-2.webp', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1325,7 +1325,7 @@ select
   'armaf-odyssey-wild-one', b.id, 'Odyssey Wild One', 'odyssey-wild-one',
   'Aromático', 'EDP', 'Masculino', 2024,
   null, array['fresco', 'aromático', 'sport']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://dapperindustries.shop/cdn/shop/files/armaf-odyssey-wild-one-100ml-dapper-industries-5248282.webp?v=1764465066', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1351,7 +1351,7 @@ select
   'armaf-odyssey-homme', b.id, 'Odyssey Homme', 'odyssey-homme',
   'Amaderado', 'EDP', 'Masculino', 2023,
   null, array['amaderado', 'ambar', 'elegante']::text[], '{"top":["Cítricos"],"heart":["Especias"],"base":["Maderas","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://agaval.vtexassets.com/arquivos/ids/2195977-800-600?v=638693640326270000&width=800&height=600&aspect=true', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1377,7 +1377,7 @@ select
   'armaf-odyssey-tryant', b.id, 'Odyssey Tryant', 'odyssey-tryant',
   'Oriental', 'EDP', 'Masculino', 2024,
   null, array['ambar', 'especiado', 'intenso']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://fragrancewholesalerusa.com/cdn/shop/files/7_d07f094b-72e2-4c45-ac8f-5bf1952c4a4b.png?v=1746562367&width=2048', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1403,7 +1403,7 @@ select
   'armaf-odyssey-mega', b.id, 'Odyssey Mega', 'odyssey-mega',
   'Aromático', 'EDP', 'Masculino', 2024,
   null, array['fresco', 'cítrico', 'aromático']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Almizcle","Maderas"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Armaf-Odyssey-_Mega-100ml-EDP-_Hombre.jpg?v=1725938043', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1429,7 +1429,7 @@ select
   'armaf-odyssey-marshmallow', b.id, 'Odyssey Marshmallow', 'odyssey-marshmallow',
   'Gourmand', 'EDP', 'Unisex', 2024,
   null, array['malvavisco', 'dulce', 'vainilla']::text[], '{"top":["Dulce"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Armaf-Odyssey-Marshmallow.webp?v=1761777418', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1455,7 +1455,7 @@ select
   'armaf-odyssey-go-mango', b.id, 'Odyssey Go Mango', 'odyssey-go-mango',
   'Frutal', 'EDP', 'Unisex', 2024,
   null, array['mango', 'tropical', 'dulce']::text[], '{"top":["Mango","Frutas tropicales"],"heart":["Flores"],"base":["Almizcle"]}'::jsonb,
-  null, null, true
+  'https://fraganceroscolombia.com.co/wp-content/uploads/2025/10/Armaf-Odyssey-Go-Mango.jpg', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1481,7 +1481,7 @@ select
   'armaf-odyssey-spectra-blu-edition', b.id, 'Odyssey Spectra Blu Edition', 'odyssey-spectra-blu-edition',
   'Aromático', 'EDP', 'Unisex', 2024,
   null, array['fresco', 'acuático', 'amaderado']::text[], '{"top":["Acuático","Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://fraganceroscolombia.com.co/wp-content/uploads/2025/11/ArMaf-Odyssey-Spectra-Blue-Edition.webp', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1507,7 +1507,7 @@ select
   'armaf-odyssey-eau-de-montagne', b.id, 'Odyssey Eau de Montagne', 'odyssey-eau-de-montagne',
   'Aromático', 'EDP', 'Unisex', 2024,
   null, array['fresco', 'verde', 'montaña']::text[], '{"top":["Verde","Cítricos"],"heart":["Aromático"],"base":["Maderas"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/Armaf_Odyssey_Eau_de_montagne_4fcfc564-3330-45fe-a625-eae89a0df446.png?v=1752610102', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1533,7 +1533,7 @@ select
   'armaf-club-de-nuit-intense-man', b.id, 'Club de Nuit Intense Man', 'club-de-nuit-intense-man',
   'Aromático', 'EDP', 'Masculino', 2015,
   null, array['cítrico', 'amaderado', 'nocturno']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://m.media-amazon.com/images/I/517KoN9DUQL._SL1000_.jpg', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1559,7 +1559,7 @@ select
   'armaf-club-de-nuit-untold', b.id, 'Club de Nuit Untold', 'club-de-nuit-untold',
   'Ámbar', 'EDP', 'Unisex', 2022,
   null, array['ambar', 'dulce', 'nocturno']::text[], '{"top":["Azafrán"],"heart":["Ámbar"],"base":["Resinas","Maderas"]}'::jsonb,
-  null, null, true
+  'https://telotengocompany.com/cdn/shop/files/46_575bb758-f5c7-44f6-9974-511a32218ca4.webp?v=1747343521&width=1946', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1585,7 +1585,7 @@ select
   'armaf-club-de-nuit-urban-man-elixir', b.id, 'Club de Nuit Urban Man Elixir', 'club-de-nuit-urban-man-elixir',
   'Aromático', 'EDP', 'Masculino', 2022,
   null, array['fresco', 'aromático', 'amaderado']::text[], '{"top":["Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Armaf-club-de-nuit-urban-man-elixir.webp?v=1692291382', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1611,7 +1611,7 @@ select
   'armaf-club-de-nuit-milestone', b.id, 'Club de Nuit Milestone', 'club-de-nuit-milestone',
   'Acuático', 'EDP', 'Unisex', 2019,
   null, array['marino', 'fresco', 'salado']::text[], '{"top":["Marino","Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://disfragancias.com/cdn/shop/files/Club-de-nuit-milestone-600x600.jpg?v=1704738406', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1637,7 +1637,7 @@ select
   'armaf-club-de-nuit-maleka', b.id, 'Club de Nuit Maleka', 'club-de-nuit-maleka',
   'Floral', 'EDP', 'Femenino', 2023,
   null, array['floral', 'dulce', 'ambar']::text[], '{"top":["Frutas"],"heart":["Flores"],"base":["Ámbar","Vainilla"]}'::jsonb,
-  null, null, true
+  'https://princesscosmeticsqa.com/cdn/shop/files/armaf-club-de-nuit-maleka-100ml-nady-armaf-dy-noy-mlk-5224432.jpg?v=1758717250', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1663,7 +1663,7 @@ select
   'armaf-club-de-nuit-lionheart', b.id, 'Club de Nuit Lionheart', 'club-de-nuit-lionheart',
   'Amaderado', 'EDP', 'Unisex', 2024,
   null, array['amaderado', 'ambar', 'elegante']::text[], '{"top":["Cítricos"],"heart":["Maderas"],"base":["Ámbar","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://pemastore.co/wp-content/uploads/2025/04/Armaf-Club-de-Nuit-Lionheart-Woman-100-ml-1.png', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1689,7 +1689,7 @@ select
   'armaf-club-de-nuit-woman', b.id, 'Club de Nuit Woman', 'club-de-nuit-woman',
   'Floral', 'EDP', 'Femenino', 2010,
   null, array['floral', 'dulce', 'almizclado']::text[], '{"top":["Frutas","Cítricos"],"heart":["Flores"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://kaboddistribucionesplus.com/wp-content/uploads/1-80.png', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1715,7 +1715,7 @@ select
   'armaf-yum-yum', b.id, 'Yum Yum', 'yum-yum',
   'Gourmand', 'EDP', 'Unisex', 2024,
   null, array['dulce', 'vainilla', 'caramelo']::text[], '{"top":["Dulce"],"heart":["Cremoso"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://media.falabella.com/falabellaCO/73244429_2/w=1500,h=1500,fit=cover', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1741,7 +1741,7 @@ select
   'armaf-bliss-island', b.id, 'Bliss Island', 'bliss-island',
   'Frutal', 'EDP', 'Unisex', 2024,
   null, array['tropical', 'fresco', 'verano']::text[], '{"top":["Frutas tropicales"],"heart":["Flores"],"base":["Almizcle"]}'::jsonb,
-  null, null, true
+  'https://attoperfumes.com.co/cdn/shop/files/Armaf-Island-Bliss.jpg?v=1741045338', null, true
 from public.brands b
 where b.slug = 'armaf'
 on conflict (legacy_id) do update set
@@ -1767,7 +1767,7 @@ select
   'orientica-amber-rouge', b.id, 'Amber Rouge', 'amber-rouge',
   'Ámbar', 'EDP', 'Unisex', 2021,
   null, array['ambar', 'dulce', 'intenso']::text[], '{"top":["Azafrán"],"heart":["Ámbar"],"base":["Resinas","Maderas"]}'::jsonb,
-  null, null, true
+  'https://perfumesreal.com/cdn/shop/files/OrienticaAmberRouge_1.png?v=1706910012&width=1200', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1793,7 +1793,7 @@ select
   'orientica-velvet-gold', b.id, 'Velvet Gold', 'velvet-gold',
   'Oriental', 'EDP', 'Unisex', 2021,
   null, array['ambar', 'vainilla', 'elegante']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Vainilla","Maderas"]}'::jsonb,
-  null, null, true
+  'https://perfumesreal.com/cdn/shop/files/FOTOSPAGINAWEB-2025-06-15T130432.653.png?v=1750010689&width=1200', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1819,7 +1819,7 @@ select
   'orientica-royal-amber', b.id, 'Royal Amber', 'royal-amber',
   'Ámbar', 'EDP', 'Unisex', 2020,
   null, array['ambar', 'resinoso', 'nocturno']::text[], '{"top":["Resinas"],"heart":["Ámbar"],"base":["Maderas"]}'::jsonb,
-  null, null, true
+  'https://perfumesreal.com/cdn/shop/files/Disenosintitulo_52.png?v=1702928461&width=1200', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1845,7 +1845,7 @@ select
   'orientica-dania', b.id, 'Dania', 'dania',
   'Floral', 'EDP', 'Femenino', 2021,
   null, array['floral', 'dulce', 'almizclado']::text[], '{"top":["Cítricos"],"heart":["Flores"],"base":["Vainilla","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://rosestick.com/cdn/shop/files/WhatsAppImage2025-07-18at7.53.26AM_1_273838d2-e4da-4366-8103-23cd94085301.jpg?v=1752873091', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1871,7 +1871,7 @@ select
   'orientica-amber-noir', b.id, 'Amber noir', 'amber-noir',
   'Ámbar', 'EDP', 'Unisex', 2020,
   null, array['ambar', 'oscuro', 'intenso']::text[], '{"top":["Especias"],"heart":["Ámbar"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://lmd.com.co/cdn/shop/files/ambernoirorientica.jpg?v=1716620465', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1897,7 +1897,7 @@ select
   'orientica-royal-bleu', b.id, 'Royal bleu', 'royal-bleu',
   'Aromático', 'EDP', 'Unisex', 2021,
   null, array['fresco', 'aromático', 'acuático']::text[], '{"top":["Acuático","Cítricos"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://fraganciascolombia.com/cdn/shop/files/81093w_grande_6aa5c4a0-5337-4d1e-9d32-aa7895d101c5.jpg?v=1759977561', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1923,7 +1923,7 @@ select
   'orientica-azure-fantasy', b.id, 'Azure fantasy', 'azure-fantasy',
   'Acuático', 'EDP', 'Unisex', 2021,
   null, array['acuático', 'fresco', 'verano']::text[], '{"top":["Marino","Cítricos"],"heart":["Aromático"],"base":["Almizcle"]}'::jsonb,
-  null, null, true
+  'https://media.falabella.com/falabellaCO/142104788_01/w=1500,h=1500,fit=cover', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1949,7 +1949,7 @@ select
   'orientica-oud-saffron', b.id, 'Oud saffron', 'oud-saffron',
   'Amaderado', 'EDP', 'Unisex', 2019,
   null, array['oud', 'azafrán', 'intenso']::text[], '{"top":["Azafrán"],"heart":["Oud"],"base":["Maderas","Ámbar"]}'::jsonb,
-  null, null, true
+  'https://cdn.valmara.co/58292-large_default/perfume-unisex-orientica-oud-safron-de-al-haramain-100-ml-edp.webp', null, true
 from public.brands b
 where b.slug = 'orientica'
 on conflict (legacy_id) do update set
@@ -1975,7 +1975,7 @@ select
   'carolina-herrera-212-men-nyc', b.id, '212 Men NYC', '212-men-nyc',
   'Aromático', 'EDT', 'Masculino', 1999,
   null, array['fresco', 'verde', 'clásico']::text[], '{"top":["Cítricos","Verde"],"heart":["Aromático"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://paguemenos.vtexassets.com/arquivos/ids/1074136/Perfume-Carolina-Herrera---212-Nyc-Eau-de-Toilette-Masculino---100ml.png?v=638944164986930000', null, true
 from public.brands b
 where b.slug = 'carolina-herrera'
 on conflict (legacy_id) do update set
@@ -2001,7 +2001,7 @@ select
   'carolina-herrera-212-nyc', b.id, '212 NYC', '212-nyc',
   'Floral', 'EDT', 'Femenino', 1997,
   null, array['floral', 'fresco', 'clásico']::text[], '{"top":["Cítricos"],"heart":["Flores"],"base":["Maderas","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://cdn11.bigcommerce.com/s-2vt02okold/images/stencil/1280x1280/products/2951/6916/M212__62646.1731099887.jpg?c=1', null, true
 from public.brands b
 where b.slug = 'carolina-herrera'
 on conflict (legacy_id) do update set
@@ -3613,7 +3613,7 @@ select
   'bond-no9-hamptons-bond-no-9', b.id, 'Hamptons Bond No 9', 'hamptons-bond-no-9',
   'Aromático', 'EDP', 'Unisex', 2005,
   null, array['fresco', 'floral', 'playa', 'almizclado']::text[], '{"top":["Lima","Bergamota"],"heart":["Jazmín","Magnolia"],"base":["Ámbar","Sándalo","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://www.bondno9.com/cdn/shop/files/HAMPTONS.png?v=1751906272&width=1200', null, true
 from public.brands b
 where b.slug = 'bond-no9'
 on conflict (legacy_id) do update set
@@ -3639,7 +3639,7 @@ select
   'bond-no9-bleecker-street-bond-no-9', b.id, 'Bleecker Street Bond No 9', 'bleecker-street-bond-no-9',
   'Oriental', 'EDP', 'Unisex', 2005,
   null, array['verde', 'gourmand', 'amaderado', 'nocturno']::text[], '{"top":["Hoja de violeta","Cassis","Tomillo"],"heart":["Jazmín","Canela","Cedro"],"base":["Musgo","Patchouli","Vainilla","Caramelo"]}'::jsonb,
-  null, null, true
+  'https://www.bondno9.com/cdn/shop/files/BLEECKER-STREET.png?v=1750172302&width=1200', null, true
 from public.brands b
 where b.slug = 'bond-no9'
 on conflict (legacy_id) do update set
@@ -3665,7 +3665,7 @@ select
   'bond-no9-chinatown-bond-no-9', b.id, 'Chinatown Bond No 9', 'chinatown-bond-no-9',
   'Floral', 'EDP', 'Unisex', 2005,
   null, array['floral', 'especiado', 'dulce', 'urbano']::text[], '{"top":["Flor de durazno"],"heart":["Gardenia","Peonía","Tuberosa"],"base":["Cardamomo","Maderas especiadas"]}'::jsonb,
-  null, null, true
+  'https://www.bondno9.com/cdn/shop/files/CHINATOWN.png?v=1750711947&width=1200', null, true
 from public.brands b
 where b.slug = 'bond-no9'
 on conflict (legacy_id) do update set
@@ -3691,7 +3691,7 @@ select
   'bond-no9-brooklyn-bond-no-9', b.id, 'Brooklyn Bond No 9', 'brooklyn-bond-no-9',
   'Amaderado', 'EDP', 'Unisex', 2008,
   null, array['amaderado', 'cítrico', 'cuero', 'urbano']::text[], '{"top":["Toronja","Cardamomo"],"heart":["Geranio","Enebro","Ciprés"],"base":["Cedro","Cuero","Guayaco"]}'::jsonb,
-  null, null, true
+  'https://www.bondno9.com/cdn/shop/files/BROOKLYN.png?v=1751906273&width=1200', null, true
 from public.brands b
 where b.slug = 'bond-no9'
 on conflict (legacy_id) do update set
@@ -3717,7 +3717,7 @@ select
   'afnan-9pm', b.id, '9PM', '9pm',
   'Oriental', 'EDP', 'Masculino', 2020,
   null, array['dulce', 'vainilla', 'nocturno', 'especiado']::text[], '{"top":["Manzana","Canela","Bergamota"],"heart":["Lavanda","Azahar"],"base":["Vainilla","Ámbar","Tonka"]}'::jsonb,
-  null, null, true
+  'https://us.afnan.com/cdn/shop/files/9PM-Product-01_ac1d61da-68bc-4cf8-8086-8cdc3accfbdf.jpg?v=1775552887&width=1080', null, true
 from public.brands b
 where b.slug = 'afnan'
 on conflict (legacy_id) do update set
@@ -3743,7 +3743,59 @@ select
   'afnan-9am-dive', b.id, '9AM Dive', '9am-dive',
   'Acuático', 'EDP', 'Unisex', 2022,
   null, array['fresco', 'acuático', 'cítrico', 'diario']::text[], '{"top":["Limón","Menta","Pimienta rosa"],"heart":["Manzana","Incienso","Cedro"],"base":["Jengibre","Sándalo","Patchouli"]}'::jsonb,
-  null, null, true
+  'https://us.afnan.com/cdn/shop/files/9AM-Dive-01_d4bc61ac-c620-48b5-984b-c18d267d8e82.jpg?v=1775552891&width=1080', null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9am-pour-femme', b.id, '9AM pour femme', '9am-pour-femme',
+  'Frutal', 'EDP', 'Femenino', 2022,
+  null, array['fresco', 'frutal', 'femenino', 'diario']::text[], '{"top":["Mandarina","Bergamota","Toronja"],"heart":["Grosella negra","Frambuesa"],"base":["Almizcle","Naranja","Ámbar"]}'::jsonb,
+  'https://afnan.com/cdn/shop/files/9AM-01_1.jpg?v=1727708698&width=1080', null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9pm-pour-femme', b.id, '9PM pour Femme', '9pm-pour-femme',
+  'Floral', 'EDP', 'Femenino', 2022,
+  null, array['floral', 'frutal', 'amaderado', 'nocturno']::text[], '{"top":["Frambuesa","Manzana","Violeta","Naranja"],"heart":["Rosa","Peonía","Iris","Jazmín"],"base":["Cedro","Ciprés","Pino","Ámbar"]}'::jsonb,
+  'https://afnan.com/cdn/shop/files/9PM-01_1.jpg?v=1727708684&width=1080', null, true
 from public.brands b
 where b.slug = 'afnan'
 on conflict (legacy_id) do update set
@@ -3769,7 +3821,33 @@ select
   'afnan-9pm-rebel', b.id, '9PM Rebel', '9pm-rebel',
   'Frutal', 'EDP', 'Unisex', 2024,
   null, array['frutal', 'amaderado', 'dulce', 'moderno']::text[], '{"top":["Piña","Manzana","Mandarina"],"heart":["Cedro","Vainilla","Musgo"],"base":["Ámbar","Caramelo","Almizcle"]}'::jsonb,
-  null, null, true
+  'https://us.afnan.com/cdn/shop/files/Untitled_design_51.png?v=1775219148&width=1080', null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9am', b.id, '9AM', '9am',
+  'Aromático', 'EDP', 'Unisex', 2021,
+  null, array['fresco', 'amaderado', 'cítrico', 'diario']::text[], '{"top":["Mandarina","Cedrat","Cardamomo","Pimienta rosa"],"heart":["Lavanda","Azahar","Rosa","Manzana verde"],"base":["Cedro","Musgo","Patchouli","Almizcle"]}'::jsonb,
+  'https://us.afnan.com/cdn/shop/files/9AM-Product-01_1705e829-06de-41a2-9e8d-559bdacd86f4.jpg?v=1775552893&width=1080', null, true
 from public.brands b
 where b.slug = 'afnan'
 on conflict (legacy_id) do update set
@@ -3795,7 +3873,7 @@ select
   'afnan-9pm-elixir', b.id, '9PM Elixir', '9pm-elixir',
   'Ámbar', 'Extrait', 'Unisex', 2025,
   null, array['especiado', 'ambar', 'cuero', 'intenso']::text[], '{"top":["Nuez moscada","Elemí","Cardamomo"],"heart":["Lavandín","Cuero","Pimento"],"base":["Labdanum","Patchouli","Vainilla"]}'::jsonb,
-  null, null, true
+  'https://us.afnan.com/cdn/shop/files/9PM_ELIXIR-1.png?v=1775218857&width=2000', null, true
 from public.brands b
 where b.slug = 'afnan'
 on conflict (legacy_id) do update set

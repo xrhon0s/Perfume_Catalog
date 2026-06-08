@@ -132,7 +132,7 @@ for (const perfume of perfumes) {
     `  ${sql(perfume.description)}, ${sqlArray(perfume.tags)}, ${sqlJson(
       perfume.notes,
     )},`,
-    "  null, null, true",
+    `  ${sql(perfume.image)}, null, true`,
     "from public.brands b",
     `where b.slug = ${sql(brandSlug)}`,
     "on conflict (legacy_id) do update set",

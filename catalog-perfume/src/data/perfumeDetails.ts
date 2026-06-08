@@ -1408,6 +1408,32 @@ image: "https://disfragancias.com/cdn/shop/files/Lattafa-Oud-for-glory-2.png?v=1
     base: ["Jengibre", "Sándalo", "Patchouli"],
   },
 },
+"afnan-9am-pour-femme": {
+  image: "https://afnan.com/cdn/shop/files/9AM-01_1.jpg?v=1727708698&width=1080",
+  family: "Frutal",
+  concentration: "EDP",
+  gender: "Femenino",
+  year: 2022,
+  tags: ["fresco", "frutal", "femenino", "diario"],
+  notes: {
+    top: ["Mandarina", "Bergamota", "Toronja"],
+    heart: ["Grosella negra", "Frambuesa"],
+    base: ["Almizcle", "Naranja", "Ámbar"],
+  },
+},
+"afnan-9pm-pour-femme": {
+  image: "https://afnan.com/cdn/shop/files/9PM-01_1.jpg?v=1727708684&width=1080",
+  family: "Floral",
+  concentration: "EDP",
+  gender: "Femenino",
+  year: 2022,
+  tags: ["floral", "frutal", "amaderado", "nocturno"],
+  notes: {
+    top: ["Frambuesa", "Manzana", "Violeta", "Naranja"],
+    heart: ["Rosa", "Peonía", "Iris", "Jazmín"],
+    base: ["Cedro", "Ciprés", "Pino", "Ámbar"],
+  },
+},
 "afnan-9pm-rebel": {
   image: "https://us.afnan.com/cdn/shop/files/Untitled_design_51.png?v=1775219148&width=1080",
   family: "Frutal",
@@ -1419,6 +1445,19 @@ image: "https://disfragancias.com/cdn/shop/files/Lattafa-Oud-for-glory-2.png?v=1
     top: ["Piña", "Manzana", "Mandarina"],
     heart: ["Cedro", "Vainilla", "Musgo"],
     base: ["Ámbar", "Caramelo", "Almizcle"],
+  },
+},
+"afnan-9am": {
+  image: "https://us.afnan.com/cdn/shop/files/9AM-Product-01_1705e829-06de-41a2-9e8d-559bdacd86f4.jpg?v=1775552893&width=1080",
+  family: "Aromático",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2021,
+  tags: ["fresco", "amaderado", "cítrico", "diario"],
+  notes: {
+    top: ["Mandarina", "Cedrat", "Cardamomo", "Pimienta rosa"],
+    heart: ["Lavanda", "Azahar", "Rosa", "Manzana verde"],
+    base: ["Cedro", "Musgo", "Patchouli", "Almizcle"],
   },
 },
 "afnan-9pm-elixir": {
