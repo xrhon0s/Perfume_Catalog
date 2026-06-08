@@ -8,7 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <FilterPanel />
 
       {/* CONTENIDO */}
-      <div className="h-[calc(100vh-4rem)] w-screen">
+      <div className="h-[calc(100vh-5rem)] w-screen md:h-[calc(100vh-4rem)]">
         {children}
       </div>
     </div>
