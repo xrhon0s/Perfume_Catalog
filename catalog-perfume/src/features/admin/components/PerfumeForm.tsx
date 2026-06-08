@@ -13,7 +13,10 @@ type PerfumeFormProps = {
   saving: boolean
   onSubmit: (event: FormEvent) => void
   onReset: () => void
-  onFieldChange: (field: keyof PerfumeFormState, value: string) => void
+  onFieldChange: <Field extends keyof PerfumeFormState>(
+    field: Field,
+    value: PerfumeFormState[Field],
+  ) => void
 }
 
 export default function PerfumeForm({
@@ -70,6 +73,19 @@ export default function PerfumeForm({
             placeholder="https://..."
           />
         </label>
+        <div className="overflow-hidden rounded-lg border bg-slate-50">
+          {form.image ? (
+            <img
+              alt=""
+              className="h-44 w-full object-cover"
+              src={form.image}
+            />
+          ) : (
+            <div className="flex h-28 items-center justify-center text-sm font-medium text-slate-400">
+              Sin imagen
+            </div>
+          )}
+        </div>
 
         <div className="grid grid-cols-2 gap-3">
           <label className="block text-sm font-medium">
@@ -157,6 +173,23 @@ export default function PerfumeForm({
           />
         </label>
 
+        <label className="flex items-center justify-between gap-4 rounded-lg border px-3 py-3 text-sm font-medium">
+          <span>
+            Visible en catálogo
+            <span className="block text-xs font-normal text-slate-500">
+              Desactívalo para ocultar el perfume sin borrarlo.
+            </span>
+          </span>
+          <input
+            checked={form.isActive}
+            className="h-4 w-4 accent-slate-950"
+            type="checkbox"
+            onChange={(event) =>
+              onFieldChange("isActive", event.target.checked)
+            }
+          />
+        </label>
+
         <div className="grid gap-3">
           <p className="text-sm font-medium">Notas olfativas</p>
           <input
@@ -197,4 +230,3 @@ export default function PerfumeForm({
     </form>
   )
 }
-

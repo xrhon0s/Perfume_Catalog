@@ -36,4 +36,5 @@ export type Perfume = {
 
   description?: string
   tags?: string[] // para IA o búsqueda rápida
+  isActive?: boolean
 }

@@ -15,6 +15,7 @@ export function mapCatalogRow(row: CatalogPerfumeRow): Perfume {
     description: row.description ?? undefined,
     tags: row.tags ?? undefined,
     notes: row.notes ?? undefined,
+    isActive: row.is_active,
   }
 }
 
@@ -35,4 +36,3 @@ export function toPerfumePayload(input: PerfumeInput, brandId: string) {
     is_active: input.isActive ?? true,
   }
 }
-

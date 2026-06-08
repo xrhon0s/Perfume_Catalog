@@ -15,6 +15,8 @@ import { validatePerfumeForm } from "../features/admin/lib/validatePerfumeForm"
 import { isSupabaseConfigured, supabase } from "../lib/supabase"
 import { useCatalogStore } from "../store/catalogStore"
 
+type StatusFilter = "active" | "inactive" | "all"
+
 export default function Admin() {
   const perfumes = useCatalogStore((s) => s.perfumes)
   const isLoading = useCatalogStore((s) => s.isLoading)
@@ -33,6 +35,7 @@ export default function Admin() {
   const [saving, setSaving] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
+  const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
 
   useEffect(() => {
     if (!supabase) return
@@ -58,14 +61,24 @@ export default function Admin() {
 
   const filtered = useMemo(() => {
     const normalized = search.trim().toLowerCase()
-    if (!normalized) return perfumes
+    return perfumes.filter((perfume) => {
+      const matchesStatus =
+        statusFilter === "all" ||
+        (statusFilter === "active"
+          ? perfume.isActive !== false
+          : perfume.isActive === false)
 
-    return perfumes.filter((perfume) =>
-      `${perfume.name} ${perfume.brand}`.toLowerCase().includes(normalized),
-    )
-  }, [perfumes, search])
+      if (!matchesStatus) return false
+      if (!normalized) return true
 
-  const updateField = (field: keyof PerfumeFormState, value: string) => {
+      return `${perfume.name} ${perfume.brand}`.toLowerCase().includes(normalized)
+    })
+  }, [perfumes, search, statusFilter])
+
+  const updateField = <Field extends keyof PerfumeFormState>(
+    field: Field,
+    value: PerfumeFormState[Field],
+  ) => {
     setForm((current) => ({ ...current, [field]: value }))
   }
 
@@ -122,17 +135,17 @@ export default function Admin() {
     const perfume = perfumes.find((item) => item.id === id)
     const label = perfume ? `${perfume.brand} ${perfume.name}` : "este perfume"
 
-    if (!window.confirm(`¿Desactivar ${label}?`)) {
+    if (!window.confirm(`¿Eliminar ${label} del catálogo público?`)) {
       return
     }
 
-    setStatus("Desactivando perfume...")
+    setStatus("Eliminando perfume del catálogo...")
     setDeletingId(id)
 
     try {
       await deletePerfume(id)
       if (form.id === id) setForm(emptyPerfumeForm)
-      setStatus("Perfume desactivado.")
+      setStatus("Perfume eliminado del catálogo.")
     } catch (deleteError) {
       setStatus(
         deleteError instanceof Error
@@ -172,8 +185,10 @@ export default function Admin() {
           status={status}
           error={error}
           search={search}
+          statusFilter={statusFilter}
           deletingId={deletingId}
           onSearchChange={setSearch}
+          onStatusFilterChange={setStatusFilter}
           onEdit={(perfume) => setForm(perfumeToForm(perfume))}
           onDelete={(id) => void handleDelete(id)}
         />
@@ -190,4 +205,3 @@ export default function Admin() {
     </main>
   )
 }
-

@@ -15,6 +15,7 @@ export type PerfumeFormState = {
   topNotes: string
   heartNotes: string
   baseNotes: string
+  isActive: boolean
 }
 
 export const emptyPerfumeForm: PerfumeFormState = {
@@ -31,6 +32,7 @@ export const emptyPerfumeForm: PerfumeFormState = {
   topNotes: "",
   heartNotes: "",
   baseNotes: "",
+  isActive: true,
 }
 
 function joinValues(values?: string[]) {
@@ -59,6 +61,7 @@ export function perfumeToForm(perfume: Perfume): PerfumeFormState {
     topNotes: joinValues(perfume.notes?.top),
     heartNotes: joinValues(perfume.notes?.heart),
     baseNotes: joinValues(perfume.notes?.base),
+    isActive: perfume.isActive ?? true,
   }
 }
 
@@ -80,7 +83,6 @@ export function formToPerfumeInput(form: PerfumeFormState): PerfumeInput {
       heart: splitValues(form.heartNotes),
       base: splitValues(form.baseNotes),
     },
-    isActive: true,
+    isActive: form.isActive,
   }
 }
-
