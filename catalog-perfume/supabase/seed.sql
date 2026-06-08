@@ -5,6 +5,7 @@ begin;
 
 insert into public.brands (name, slug)
 values
+  ('Afnan', 'afnan'),
   ('Ariana Grande', 'ariana-grande'),
   ('Armaf', 'armaf'),
   ('Attar Collection', 'attar-collection'),
@@ -3693,6 +3694,110 @@ select
   null, null, true
 from public.brands b
 where b.slug = 'bond-no9'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9pm', b.id, '9PM', '9pm',
+  'Oriental', 'EDP', 'Masculino', 2020,
+  null, array['dulce', 'vainilla', 'nocturno', 'especiado']::text[], '{"top":["Manzana","Canela","Bergamota"],"heart":["Lavanda","Azahar"],"base":["Vainilla","Ámbar","Tonka"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9am-dive', b.id, '9AM Dive', '9am-dive',
+  'Acuático', 'EDP', 'Unisex', 2022,
+  null, array['fresco', 'acuático', 'cítrico', 'diario']::text[], '{"top":["Limón","Menta","Pimienta rosa"],"heart":["Manzana","Incienso","Cedro"],"base":["Jengibre","Sándalo","Patchouli"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9pm-rebel', b.id, '9PM Rebel', '9pm-rebel',
+  'Frutal', 'EDP', 'Unisex', 2024,
+  null, array['frutal', 'amaderado', 'dulce', 'moderno']::text[], '{"top":["Piña","Manzana","Mandarina"],"heart":["Cedro","Vainilla","Musgo"],"base":["Ámbar","Caramelo","Almizcle"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'afnan'
+on conflict (legacy_id) do update set
+  brand_id = excluded.brand_id,
+  name = excluded.name,
+  slug = excluded.slug,
+  family = excluded.family,
+  concentration = excluded.concentration,
+  gender = excluded.gender,
+  year = excluded.year,
+  description = excluded.description,
+  tags = excluded.tags,
+  notes = excluded.notes,
+  primary_image_url = excluded.primary_image_url,
+  primary_image_path = excluded.primary_image_path,
+  is_active = excluded.is_active;
+
+insert into public.perfumes (
+  legacy_id, brand_id, name, slug, family, concentration, gender, year,
+  description, tags, notes, primary_image_url, primary_image_path, is_active
+)
+select
+  'afnan-9pm-elixir', b.id, '9PM Elixir', '9pm-elixir',
+  'Ámbar', 'Extrait', 'Unisex', 2025,
+  null, array['especiado', 'ambar', 'cuero', 'intenso']::text[], '{"top":["Nuez moscada","Elemí","Cardamomo"],"heart":["Lavandín","Cuero","Pimento"],"base":["Labdanum","Patchouli","Vainilla"]}'::jsonb,
+  null, null, true
+from public.brands b
+where b.slug = 'afnan'
 on conflict (legacy_id) do update set
   brand_id = excluded.brand_id,
   name = excluded.name,

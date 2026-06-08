@@ -1381,4 +1381,58 @@ image: "https://disfragancias.com/cdn/shop/files/Lattafa-Oud-for-glory-2.png?v=1
   },
 },
 
+// AFNAN - imágenes temporales para prueba visual del catálogo
+"afnan-9pm": {
+  image: "https://us.afnan.com/cdn/shop/files/9PM-Product-01_ac1d61da-68bc-4cf8-8086-8cdc3accfbdf.jpg?v=1775552887&width=1080",
+  family: "Oriental",
+  concentration: "EDP",
+  gender: "Masculino",
+  year: 2020,
+  tags: ["dulce", "vainilla", "nocturno", "especiado"],
+  notes: {
+    top: ["Manzana", "Canela", "Bergamota"],
+    heart: ["Lavanda", "Azahar"],
+    base: ["Vainilla", "Ámbar", "Tonka"],
+  },
+},
+"afnan-9am-dive": {
+  image: "https://us.afnan.com/cdn/shop/files/9AM-Dive-01_d4bc61ac-c620-48b5-984b-c18d267d8e82.jpg?v=1775552891&width=1080",
+  family: "Acuático",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2022,
+  tags: ["fresco", "acuático", "cítrico", "diario"],
+  notes: {
+    top: ["Limón", "Menta", "Pimienta rosa"],
+    heart: ["Manzana", "Incienso", "Cedro"],
+    base: ["Jengibre", "Sándalo", "Patchouli"],
+  },
+},
+"afnan-9pm-rebel": {
+  image: "https://us.afnan.com/cdn/shop/files/Untitled_design_51.png?v=1775219148&width=1080",
+  family: "Frutal",
+  concentration: "EDP",
+  gender: "Unisex",
+  year: 2024,
+  tags: ["frutal", "amaderado", "dulce", "moderno"],
+  notes: {
+    top: ["Piña", "Manzana", "Mandarina"],
+    heart: ["Cedro", "Vainilla", "Musgo"],
+    base: ["Ámbar", "Caramelo", "Almizcle"],
+  },
+},
+"afnan-9pm-elixir": {
+  image: "https://us.afnan.com/cdn/shop/files/9PM_ELIXIR-1.png?v=1775218857&width=2000",
+  family: "Ámbar",
+  concentration: "Extrait",
+  gender: "Unisex",
+  year: 2025,
+  tags: ["especiado", "ambar", "cuero", "intenso"],
+  notes: {
+    top: ["Nuez moscada", "Elemí", "Cardamomo"],
+    heart: ["Lavandín", "Cuero", "Pimento"],
+    base: ["Labdanum", "Patchouli", "Vainilla"],
+  },
+},
+
 }
