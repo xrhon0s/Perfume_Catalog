@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import type { Session } from "@supabase/supabase-js"
+import AdminAlert from "../features/admin/components/AdminAlert"
+import AdminForbidden from "../features/admin/components/AdminForbidden"
 import AdminHeader from "../features/admin/components/AdminHeader"
 import AdminLogin from "../features/admin/components/AdminLogin"
 import AdminUnavailable from "../features/admin/components/AdminUnavailable"
@@ -13,9 +15,14 @@ import {
 } from "../features/admin/lib/perfumeForm"
 import { validatePerfumeForm } from "../features/admin/lib/validatePerfumeForm"
 import { isSupabaseConfigured, supabase } from "../lib/supabase"
+import { isCurrentUserAdmin } from "../services/adminAuth"
 import { useCatalogStore } from "../store/catalogStore"
 
 type StatusFilter = "active" | "inactive" | "all"
+type Notice = {
+  message: string
+  tone: "success" | "error" | "info"
+}
 
 export default function Admin() {
   const perfumes = useCatalogStore((s) => s.perfumes)
@@ -26,11 +33,13 @@ export default function Admin() {
   const deletePerfume = useCatalogStore((s) => s.deletePerfume)
 
   const [session, setSession] = useState<Session | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
+  const [checkingAdmin, setCheckingAdmin] = useState(true)
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [authError, setAuthError] = useState<string | null>(null)
   const [form, setForm] = useState<PerfumeFormState>(emptyPerfumeForm)
-  const [status, setStatus] = useState<string | null>(null)
+  const [notice, setNotice] = useState<Notice | null>(null)
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
@@ -54,8 +63,43 @@ export default function Admin() {
   }, [])
 
   useEffect(() => {
-    if (session) {
-      void loadAdminPerfumes()
+    let cancelled = false
+
+    async function loadAdmin() {
+      if (!session) {
+        setIsAdmin(false)
+        setCheckingAdmin(false)
+        return
+      }
+
+      setCheckingAdmin(true)
+      try {
+        const allowed = await isCurrentUserAdmin()
+        if (cancelled) return
+
+        setIsAdmin(allowed)
+        if (allowed) {
+          await loadAdminPerfumes()
+        }
+      } catch (adminError) {
+        if (cancelled) return
+        setIsAdmin(false)
+        setNotice({
+          tone: "error",
+          message:
+            adminError instanceof Error
+              ? adminError.message
+              : "No se pudo verificar el permiso admin.",
+        })
+      } finally {
+        if (!cancelled) setCheckingAdmin(false)
+      }
+    }
+
+    void loadAdmin()
+
+    return () => {
+      cancelled = true
     }
   }, [loadAdminPerfumes, session])
 
@@ -112,20 +156,29 @@ export default function Admin() {
 
     if (validationErrors.length > 0) {
       setFormErrors(validationErrors)
-      setStatus(null)
+      setNotice({
+        tone: "error",
+        message: "Revisa el formulario antes de guardar.",
+      })
       return
     }
 
     setFormErrors([])
-    setStatus("Guardando perfume...")
+    setNotice({ tone: "info", message: "Guardando perfume..." })
     setSaving(true)
 
     try {
       await savePerfume(formToPerfumeInput(form))
       setForm(emptyPerfumeForm)
-      setStatus("Perfume guardado.")
+      setNotice({ tone: "success", message: "Perfume guardado correctamente." })
     } catch (saveError) {
-      setStatus(saveError instanceof Error ? saveError.message : "No se pudo guardar.")
+      setNotice({
+        tone: "error",
+        message:
+          saveError instanceof Error
+            ? saveError.message
+            : "No se pudo guardar el perfume.",
+      })
     } finally {
       setSaving(false)
     }
@@ -139,19 +192,24 @@ export default function Admin() {
       return
     }
 
-    setStatus("Eliminando perfume del catálogo...")
+    setNotice({ tone: "info", message: "Eliminando perfume del catálogo..." })
     setDeletingId(id)
 
     try {
       await deletePerfume(id)
       if (form.id === id) setForm(emptyPerfumeForm)
-      setStatus("Perfume eliminado del catálogo.")
+      setNotice({
+        tone: "success",
+        message: "Perfume eliminado del catálogo público.",
+      })
     } catch (deleteError) {
-      setStatus(
-        deleteError instanceof Error
-          ? deleteError.message
-          : "No se pudo desactivar el perfume.",
-      )
+      setNotice({
+        tone: "error",
+        message:
+          deleteError instanceof Error
+            ? deleteError.message
+            : "No se pudo eliminar el perfume.",
+      })
     } finally {
       setDeletingId(null)
     }
@@ -174,15 +232,38 @@ export default function Admin() {
     )
   }
 
+  if (checkingAdmin) {
+    return (
+      <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
+        Verificando permisos...
+      </main>
+    )
+  }
+
+  if (!isAdmin) {
+    return (
+      <AdminForbidden
+        email={session.user.email}
+        onLogout={() => void handleLogout()}
+      />
+    )
+  }
+
   return (
     <main className="min-h-screen bg-slate-100 text-slate-950">
       <AdminHeader onLogout={handleLogout} />
 
       <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_420px]">
+        {notice && (
+          <div className="lg:col-span-2">
+            <AdminAlert message={notice.message} tone={notice.tone} />
+          </div>
+        )}
+
         <PerfumeTable
           perfumes={filtered}
           isLoading={isLoading}
-          status={status}
+          status={null}
           error={error}
           search={search}
           statusFilter={statusFilter}

@@ -13,7 +13,11 @@ export async function getOrCreateBrandId(name: string) {
     .single()
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(
+      error.code === "42501"
+        ? "No tienes permisos de administrador para guardar marcas."
+        : error.message,
+    )
   }
 
   return data.id as string

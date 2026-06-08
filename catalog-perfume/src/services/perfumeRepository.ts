@@ -23,7 +23,11 @@ export async function listPerfumes(): Promise<Perfume[]> {
     .order("name", { ascending: true })
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(
+      error.code === "42501"
+        ? "No tienes permisos para cargar el catálogo."
+        : error.message,
+    )
   }
 
   return (data as CatalogPerfumeRow[]).map(mapCatalogRow)
@@ -68,7 +72,11 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
   const { error } = await request
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(
+      error.code === "42501"
+        ? "No tienes permisos de administrador para guardar perfumes."
+        : error.message,
+    )
   }
 }
 
@@ -86,7 +94,11 @@ export async function deletePerfume(id: string): Promise<void> {
   const { error } = await request
 
   if (error) {
-    throw new Error(error.message)
+    throw new Error(
+      error.code === "42501"
+        ? "No tienes permisos de administrador para eliminar perfumes."
+        : error.message,
+    )
   }
 }
 
