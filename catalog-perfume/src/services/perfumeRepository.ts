@@ -1,69 +1,12 @@
 import type { Perfume } from "../data/types"
 import { getPerfumes as getLocalPerfumes } from "../data/getPerfumes"
-import { isUuid, toSlug } from "../shared/utils/text"
+import { isUuid } from "../shared/utils/text"
+import { getOrCreateBrandId } from "./brandRepository"
+import { mapCatalogRow, toPerfumePayload } from "./perfumeMapper"
+import type { CatalogPerfumeRow, PerfumeInput } from "./perfumeTypes"
+import { hasSupabaseConfig, getSupabaseClient } from "./supabaseClient"
 
-const supabaseUrl = import.meta.env.VITE_SUPABASE_URL as string | undefined
-const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as
-  | string
-  | undefined
-const hasSupabaseConfig = Boolean(supabaseUrl && supabaseAnonKey)
-
-type CatalogPerfumeRow = {
-  id: string
-  legacy_id: string | null
-  name: string
-  brand: string
-  image: string | null
-  family: Perfume["family"] | null
-  concentration: Perfume["concentration"] | null
-  gender: Perfume["gender"] | null
-  year: number | null
-  description: string | null
-  tags: string[] | null
-  notes: Perfume["notes"] | null
-  is_active: boolean
-}
-
-export type PerfumeInput = {
-  id?: string
-  name: string
-  brand: string
-  image?: string
-  family?: Perfume["family"]
-  concentration?: Perfume["concentration"]
-  gender?: Perfume["gender"]
-  year?: number
-  description?: string
-  tags?: string[]
-  notes?: Perfume["notes"]
-  isActive?: boolean
-}
-
-function mapCatalogRow(row: CatalogPerfumeRow): Perfume {
-  return {
-    id: row.legacy_id ?? row.id,
-    name: row.name,
-    brand: row.brand,
-    image: row.image ?? undefined,
-    family: row.family ?? undefined,
-    concentration: row.concentration ?? undefined,
-    gender: row.gender ?? undefined,
-    year: row.year ?? undefined,
-    description: row.description ?? undefined,
-    tags: row.tags ?? undefined,
-    notes: row.notes ?? undefined,
-  }
-}
-
-async function getSupabaseClient() {
-  const { supabase } = await import("../lib/supabase")
-
-  if (!supabase) {
-    throw new Error("Supabase no está configurado.")
-  }
-
-  return supabase
-}
+export type { PerfumeInput } from "./perfumeTypes"
 
 export async function listPerfumes(): Promise<Perfume[]> {
   if (!hasSupabaseConfig) {
@@ -112,35 +55,8 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
   }
 
   const supabase = await getSupabaseClient()
-
-  const brandName = input.brand.trim()
-  const brandSlug = toSlug(brandName)
-
-  const { data: brand, error: brandError } = await supabase
-    .from("brands")
-    .upsert({ name: brandName, slug: brandSlug }, { onConflict: "slug" })
-    .select("id")
-    .single()
-
-  if (brandError) {
-    throw new Error(brandError.message)
-  }
-
-  const payload = {
-    legacy_id: input.id && !isUuid(input.id) ? input.id : null,
-    brand_id: brand.id as string,
-    name: input.name.trim(),
-    slug: toSlug(input.name),
-    family: input.family || null,
-    concentration: input.concentration || null,
-    gender: input.gender || null,
-    year: input.year || null,
-    description: input.description || null,
-    tags: input.tags ?? [],
-    notes: input.notes ?? {},
-    primary_image_url: input.image || null,
-    is_active: input.isActive ?? true,
-  }
+  const brandId = await getOrCreateBrandId(input.brand)
+  const payload = toPerfumePayload(input, brandId)
 
   const request =
     input.id && isUuid(input.id)
@@ -174,36 +90,4 @@ export async function deletePerfume(id: string): Promise<void> {
   }
 }
 
-export async function uploadPerfumeImage(file: File): Promise<string> {
-  if (!hasSupabaseConfig) {
-    throw new Error("Supabase no está configurado para subir imágenes.")
-  }
-
-  const supabase = await getSupabaseClient()
-
-  const extension = file.name.split(".").pop() ?? "jpg"
-  const safeName = file.name
-    .replace(/\.[^/.]+$/, "")
-    .trim()
-    .toLowerCase()
-    .normalize("NFD")
-    .replace(/[\u0300-\u036f]/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "")
-  const path = `${Date.now()}-${safeName || "perfume"}.${extension}`
-
-  const { error } = await supabase.storage
-    .from("perfume-images")
-    .upload(path, file, {
-      cacheControl: "31536000",
-      upsert: false,
-    })
-
-  if (error) {
-    throw new Error(error.message)
-  }
-
-  const { data } = supabase.storage.from("perfume-images").getPublicUrl(path)
-
-  return data.publicUrl
-}
+export { uploadPerfumeImage } from "./perfumeImageStorage"
