@@ -25,12 +25,14 @@ type FlipEvent = {
 
 export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   const bookRef = useRef<FlipBookRef | null>(null)
+  const isDev = import.meta.env.DEV
   const isFilterOpen = useUIStore((s) => s.isFilterOpen)
   const setPageIndexGlobal = useUIStore((s) => s.setPageIndex)
   const setTotalPages = useUIStore((s) => s.setTotalPages)
   const jumpToPageRequest = useUIStore((s) => s.jumpToPageRequest)
   const consumeJumpToPage = useUIStore((s) => s.consumeJumpToPage)
   const [pageIndex, setPageIndex] = useState(0)
+  const [flipDuration, setFlipDuration] = useState(360)
 
   const pages = useMemo(() => {
     return items.length % 2 === 0
@@ -99,6 +101,26 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
         </button>
       </div>
 
+      {isDev && (
+        <div className="absolute left-4 top-16 z-[80] hidden items-center gap-2 rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur md:flex">
+          <span className="text-white/70">Flip</span>
+          {[260, 320, 360, 420].map((duration) => (
+            <button
+              key={duration}
+              className={[
+                "rounded-lg px-2 py-1 font-semibold transition",
+                flipDuration === duration
+                  ? "bg-white text-slate-950"
+                  : "bg-white/10 text-white hover:bg-white/20",
+              ].join(" ")}
+              onClick={() => setFlipDuration(duration)}
+            >
+              {duration}
+            </button>
+          ))}
+        </div>
+      )}
+
       {!isFilterOpen && (
         <div className="absolute right-6 top-6 z-[80] rounded-lg bg-black/50 px-3 py-2 text-xs text-white">
           Página {visiblePageIndex + 1}
@@ -107,6 +129,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
       <div className="flex h-full w-full items-center justify-center">
         <HTMLFlipBook
+          key={flipDuration}
           ref={bookRef}
           className="shadow-2xl"
           style={{}}
@@ -119,7 +142,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           minHeight={420}
           maxHeight={900}
           drawShadow={true}
-          flippingTime={360}
+          flippingTime={flipDuration}
           usePortrait={true}
           startZIndex={0}
           autoSize={true}
