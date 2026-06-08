@@ -39,7 +39,7 @@ const Header = () => {
   }
 
   return (
-    <header className="sticky top-0 z-[60] w-full border-b border-white/10 bg-slate-950/88 shadow-[0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl">
+    <header className="sticky top-0 z-[60] w-full border-b border-white/10 bg-slate-950/90 shadow-[0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl">
       <div className="mx-auto flex min-h-20 w-full max-w-7xl flex-col justify-center gap-3 px-4 py-3 md:min-h-16 md:flex-row md:items-center md:gap-5 md:py-0">
         <div className="flex min-w-0 items-center justify-between gap-4 md:w-[330px] md:justify-start">
           <a className="flex min-w-0 items-center gap-3" href="#" aria-label="Éter catálogo">
@@ -48,7 +48,7 @@ const Header = () => {
               <span className="block truncate text-base font-semibold leading-5 text-white md:text-lg">
                 Catálogo de perfumes
               </span>
-              <span className="block truncate text-xs text-white/48">
+              <span className="block truncate text-xs text-white/50">
                 Explora por marca, familia y notas
               </span>
             </span>
@@ -56,7 +56,7 @@ const Header = () => {
 
           <button
             onClick={toggleFilters}
-            className="relative shrink-0 rounded-lg border border-white/12 bg-white/[0.06] px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/[0.11] active:scale-[0.98] md:hidden"
+            className="relative shrink-0 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98] md:hidden"
           >
             Filtros
             {activeFiltersCount > 0 && (
@@ -68,7 +68,7 @@ const Header = () => {
         </div>
 
         <div className="relative flex-1 md:max-w-2xl">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/45">
+          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -91,7 +91,7 @@ const Header = () => {
             placeholder="Buscar perfumes, marcas, notas..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            className="h-11 w-full rounded-xl border border-white/10 bg-white/[0.07] px-10 text-sm text-white outline-none transition placeholder:text-white/38 focus:border-white/25 focus:bg-white/[0.1]"
+            className="h-11 w-full rounded-xl border border-white/10 bg-white/10 px-10 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-white/30 focus:bg-white/15"
           />
 
           {query.trim().length > 0 && (
@@ -108,8 +108,8 @@ const Header = () => {
         </div>
 
         <div className="hidden shrink-0 items-center justify-end gap-2 md:flex">
-          <div className="hidden items-center gap-2 rounded-xl border border-white/10 bg-white/[0.045] px-3 py-2 lg:flex">
-            <span className="whitespace-nowrap text-xs text-white/56">
+          <div className="hidden items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 lg:flex">
+            <span className="whitespace-nowrap text-xs text-white/60">
               {hasPages ? (
                 <>
                   Pág. <b className="font-semibold text-white/90">{pageIndex + 1}</b>{" "}
@@ -128,7 +128,7 @@ const Header = () => {
               }}
               placeholder="Ir a"
               disabled={!hasPages}
-              className="h-8 w-16 rounded-lg border border-white/10 bg-white/[0.07] px-2 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-white/25 disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-8 w-16 rounded-lg border border-white/10 bg-white/10 px-2 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-white/30 disabled:cursor-not-allowed disabled:opacity-40"
             />
 
             <button
@@ -146,7 +146,7 @@ const Header = () => {
               "relative rounded-lg border px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98]",
               activeFiltersCount > 0
                 ? "border-white bg-white text-slate-950"
-                : "border-white/12 bg-white/[0.06] text-white hover:bg-white/[0.11]",
+                : "border-white/10 bg-white/10 text-white hover:bg-white/15",
             ].join(" ")}
           >
             Filtros
