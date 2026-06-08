@@ -39,16 +39,16 @@ const Header = () => {
   }
 
   return (
-    <header className="sticky top-0 z-[60] w-full border-b border-white/10 bg-slate-950/90 shadow-[0_1px_0_rgba(255,255,255,0.04)] backdrop-blur-xl">
-      <div className="mx-auto flex min-h-20 w-full max-w-7xl flex-col justify-center gap-3 px-4 py-3 md:min-h-16 md:flex-row md:items-center md:gap-5 md:py-0">
-        <div className="flex min-w-0 items-center justify-between gap-4 md:w-[330px] md:justify-start">
-          <a className="flex min-w-0 items-center gap-3" href="#" aria-label="Éter catálogo">
-            <img src={logo} alt="" className="h-9 w-auto shrink-0 object-contain" />
+    <header className="sticky top-0 z-[60] w-full border-b border-white/10 bg-gradient-to-b from-slate-950 to-slate-900 shadow-[0_1px_0_rgba(255,255,255,0.04)]">
+      <div className="mx-auto flex min-h-20 w-full max-w-[1500px] flex-col justify-center gap-3 px-5 py-3 md:min-h-16 md:flex-row md:items-center md:gap-6 md:px-6 md:py-0">
+        <div className="flex min-w-0 items-center justify-between gap-4 md:w-[365px] md:justify-start">
+          <a className="flex min-w-0 items-center gap-4" href="#" aria-label="Éter catálogo">
+            <img src={logo} alt="" className="h-11 w-auto shrink-0 object-contain" />
             <span className="min-w-0">
               <span className="block truncate text-base font-semibold leading-5 text-white md:text-lg">
                 Catálogo de perfumes
               </span>
-              <span className="block truncate text-xs text-white/50">
+              <span className="mt-0.5 block truncate text-xs text-white/55">
                 Explora por marca, familia y notas
               </span>
             </span>
@@ -56,7 +56,7 @@ const Header = () => {
 
           <button
             onClick={toggleFilters}
-            className="relative shrink-0 rounded-lg border border-white/10 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98] md:hidden"
+            className="relative shrink-0 rounded-lg border border-white/15 bg-white/10 px-3 py-2 text-sm font-semibold text-white transition hover:bg-white/15 active:scale-[0.98] md:hidden"
           >
             Filtros
             {activeFiltersCount > 0 && (
@@ -67,8 +67,8 @@ const Header = () => {
           </button>
         </div>
 
-        <div className="relative flex-1 md:max-w-2xl">
-          <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/50">
+        <div className="relative flex-1 md:max-w-3xl">
+          <span className="pointer-events-none absolute left-4 top-1/2 -translate-y-1/2 text-white/55">
             <svg
               xmlns="http://www.w3.org/2000/svg"
               width="18"
@@ -91,14 +91,14 @@ const Header = () => {
             placeholder="Buscar perfumes, marcas, notas..."
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            className="h-11 w-full rounded-xl border border-white/10 bg-white/10 px-10 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-white/30 focus:bg-white/15"
+            className="h-11 w-full rounded-xl border border-white/15 bg-white/10 px-11 text-sm text-white outline-none transition placeholder:text-white/45 focus:border-white/40 focus:bg-white/15"
           />
 
           {query.trim().length > 0 && (
             <button
               type="button"
               onClick={clearSearch}
-              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-sm text-white/60 transition hover:bg-white/10 hover:text-white"
+              className="absolute right-2 top-1/2 -translate-y-1/2 rounded-lg px-2.5 py-1.5 text-sm text-white/65 transition hover:bg-white/10 hover:text-white"
               aria-label="Limpiar búsqueda"
               title="Limpiar"
             >
@@ -108,8 +108,8 @@ const Header = () => {
         </div>
 
         <div className="hidden shrink-0 items-center justify-end gap-2 md:flex">
-          <div className="hidden items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 py-2 lg:flex">
-            <span className="whitespace-nowrap text-xs text-white/60">
+          <div className="hidden h-11 items-center gap-2 rounded-xl border border-white/10 bg-white/5 px-3 lg:flex">
+            <span className="whitespace-nowrap text-xs text-white/65">
               {hasPages ? (
                 <>
                   Pág. <b className="font-semibold text-white/90">{pageIndex + 1}</b>{" "}
@@ -128,13 +128,13 @@ const Header = () => {
               }}
               placeholder="Ir a"
               disabled={!hasPages}
-              className="h-8 w-16 rounded-lg border border-white/10 bg-white/10 px-2 text-sm text-white outline-none transition placeholder:text-white/40 focus:border-white/30 disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-8 w-14 rounded-lg border border-white/10 bg-white/10 px-2 text-sm text-white outline-none transition placeholder:text-white/45 focus:border-white/40 disabled:cursor-not-allowed disabled:opacity-40"
             />
 
             <button
               onClick={goToPage}
               disabled={!hasPages}
-              className="h-8 rounded-lg bg-white px-3 text-sm font-semibold text-slate-950 transition hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
+              className="h-8 rounded-lg bg-white px-3.5 text-sm font-semibold text-slate-950 transition hover:bg-white/90 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-40"
             >
               Ir
             </button>
@@ -143,10 +143,10 @@ const Header = () => {
           <button
             onClick={toggleFilters}
             className={[
-              "relative rounded-lg border px-4 py-2.5 text-sm font-semibold transition active:scale-[0.98]",
+              "relative h-11 rounded-lg border px-4 text-sm font-semibold transition active:scale-[0.98]",
               activeFiltersCount > 0
                 ? "border-white bg-white text-slate-950"
-                : "border-white/10 bg-white/10 text-white hover:bg-white/15",
+                : "border-white/15 bg-white/10 text-white hover:bg-white/15",
             ].join(" ")}
           >
             Filtros
