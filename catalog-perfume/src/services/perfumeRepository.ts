@@ -1,5 +1,5 @@
 import type { Perfume } from "../data/types"
-import { getPerfumes as getLocalPerfumes } from "../data/getPerfumes"
+import { getPerfumes as getLocalPerfumes } from "../data/legacy/getPerfumes"
 import { isUuid } from "../shared/utils/text"
 import { getOrCreateBrandId } from "./brandRepository"
 import { mapCatalogRow, toPerfumePayload } from "./perfumeMapper"

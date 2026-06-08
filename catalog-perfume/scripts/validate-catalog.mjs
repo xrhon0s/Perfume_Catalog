@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs"
 
-const dbSource = readFileSync("src/data/perfumeDb.ts", "utf8")
-const detailsSource = readFileSync("src/data/perfumeDetails.ts", "utf8")
+const dbSource = readFileSync("src/data/legacy/perfumeDb.ts", "utf8")
+const detailsSource = readFileSync("src/data/legacy/perfumeDetails.ts", "utf8")
 
 function toId(text) {
   return text

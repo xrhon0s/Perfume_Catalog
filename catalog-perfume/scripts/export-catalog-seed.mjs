@@ -59,8 +59,8 @@ function loadTsModule(filePath) {
   return exports
 }
 
-const { perfumeDb } = loadTsModule(resolve("src/data/perfumeDb.ts"))
-const { perfumeDetails } = loadTsModule(resolve("src/data/perfumeDetails.ts"))
+const { perfumeDb } = loadTsModule(resolve("src/data/legacy/perfumeDb.ts"))
+const { perfumeDetails } = loadTsModule(resolve("src/data/legacy/perfumeDetails.ts"))
 const perfumeBaseById = new Map(perfumeDb.map((perfume) => [perfume.id, perfume]))
 const missingBasePerfumes = Object.keys(perfumeDetails).filter(
   (id) => !perfumeBaseById.has(id),

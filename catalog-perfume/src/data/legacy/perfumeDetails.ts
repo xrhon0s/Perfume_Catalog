@@ -1,4 +1,4 @@
-import type { Concentration, Gender, OlfactiveFamily } from "./types"
+import type { Concentration, Gender, OlfactiveFamily } from "../types"
 
 /**
  * Guardamos SOLO los campos extra.
@@ -6,7 +6,7 @@ import type { Concentration, Gender, OlfactiveFamily } from "./types"
  */
 
 
-// src/data/perfumeDetails.ts
+// Legacy catalog details used for local fallback and seed generation.
 export type PerfumeDetails = {
   image?: string
   family?: OlfactiveFamily

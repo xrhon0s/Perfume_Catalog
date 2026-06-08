@@ -1,4 +1,4 @@
-import type { Perfume } from "./types"
+import type { Perfume } from "../types"
 
 
 function toId(text: string) {

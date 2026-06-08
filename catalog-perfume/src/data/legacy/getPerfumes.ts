@@ -1,4 +1,4 @@
-import type { Perfume } from "./types"
+import type { Perfume } from "../types"
 import { perfumeDb } from "./perfumeDb"
 import { perfumeDetails } from "./perfumeDetails"
 

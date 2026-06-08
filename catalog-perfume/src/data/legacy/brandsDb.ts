@@ -1,4 +1,4 @@
-// src/data/brandsDb.ts
+// Legacy brand list used for local fallback data.
 
 export type Brand = {
   id: string
