@@ -1,9 +1,16 @@
 type AdminForbiddenProps = {
   email?: string
+  userId: string
   onLogout: () => void
 }
 
-export default function AdminForbidden({ email, onLogout }: AdminForbiddenProps) {
+export default function AdminForbidden({
+  email,
+  userId,
+  onLogout,
+}: AdminForbiddenProps) {
+  const sql = `insert into public.admin_users (user_id)\nvalues ('${userId}')\non conflict (user_id) do nothing;`
+
   return (
     <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
       <div className="mx-auto max-w-xl">
@@ -16,10 +23,12 @@ export default function AdminForbidden({ email, onLogout }: AdminForbiddenProps)
           está autorizado para crear, editar o eliminar perfumes.
         </p>
         <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">
-          <p>Agrega el UID de este usuario en Supabase:</p>
+          <p>Agrega este usuario como admin en Supabase:</p>
+          <p className="mt-3 break-all text-xs text-white/55">
+            UID: {userId}
+          </p>
           <pre className="mt-3 overflow-x-auto rounded-lg bg-black/30 p-3">
-            insert into public.admin_users (user_id){"\n"}
-            values ('USER_UID');
+            {sql}
           </pre>
         </div>
         <button
@@ -32,4 +41,3 @@ export default function AdminForbidden({ email, onLogout }: AdminForbiddenProps)
     </main>
   )
 }
-

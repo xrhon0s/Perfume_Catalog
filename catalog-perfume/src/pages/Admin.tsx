@@ -244,6 +244,7 @@ export default function Admin() {
     return (
       <AdminForbidden
         email={session.user.email}
+        userId={session.user.id}
         onLogout={() => void handleLogout()}
       />
     )
