@@ -21,6 +21,7 @@ export type PerfumeInput = {
   name: string
   brand: string
   image?: string
+  imagePath?: string
   family?: Perfume["family"]
   concentration?: Perfume["concentration"]
   gender?: Perfume["gender"]
@@ -30,4 +31,3 @@ export type PerfumeInput = {
   notes?: Perfume["notes"]
   isActive?: boolean
 }
-

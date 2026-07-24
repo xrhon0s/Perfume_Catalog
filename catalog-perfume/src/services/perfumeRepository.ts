@@ -7,6 +7,7 @@ import type { CatalogPerfumeRow, PerfumeInput } from "./perfumeTypes"
 import { hasSupabaseConfig, getSupabaseClient } from "./supabaseClient"
 
 export type { PerfumeInput } from "./perfumeTypes"
+export type { UploadedPerfumeImage } from "./perfumeImageStorage"
 
 export async function listPerfumes(): Promise<Perfume[]> {
   if (!hasSupabaseConfig) {

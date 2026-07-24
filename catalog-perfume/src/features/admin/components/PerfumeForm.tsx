@@ -11,21 +11,25 @@ type PerfumeFormProps = {
   form: PerfumeFormState
   errors: string[]
   saving: boolean
+  uploadingImage: boolean
   onSubmit: (event: FormEvent) => void
   onReset: () => void
   onFieldChange: <Field extends keyof PerfumeFormState>(
     field: Field,
     value: PerfumeFormState[Field],
   ) => void
+  onImageUpload: (file: File) => void
 }
 
 export default function PerfumeForm({
   form,
   errors,
   saving,
+  uploadingImage,
   onSubmit,
   onReset,
   onFieldChange,
+  onImageUpload,
 }: PerfumeFormProps) {
   return (
     <form className="rounded-lg bg-white p-4 shadow-sm" onSubmit={onSubmit}>
@@ -63,29 +67,58 @@ export default function PerfumeForm({
           />
         </label>
 
-        <label className="block text-sm font-medium">
-          Imagen
-          <input
-            className="mt-1 w-full rounded-lg border px-3 py-2 font-normal outline-none focus:border-slate-400"
-            type="url"
-            value={form.image}
-            onChange={(event) => onFieldChange("image", event.target.value)}
-            placeholder="https://..."
-          />
-        </label>
-        <div className="overflow-hidden rounded-lg border bg-slate-50">
-          {form.image ? (
-            <img
-              alt=""
-              className="h-44 w-full object-cover"
-              src={form.image}
-            />
-          ) : (
-            <div className="flex h-28 items-center justify-center text-sm font-medium text-slate-400">
-              Sin imagen
+        <section className="rounded-lg border bg-slate-50 p-3">
+          <div className="flex items-center justify-between gap-3">
+            <div>
+              <h3 className="text-sm font-semibold">Imagen principal</h3>
+              <p className="text-xs text-slate-500">
+                Sube una imagen liviana o pega una URL existente.
+              </p>
             </div>
-          )}
-        </div>
+            <label className="cursor-pointer rounded-lg bg-slate-950 px-3 py-2 text-xs font-semibold text-white transition hover:bg-slate-800">
+              {uploadingImage ? "Subiendo..." : "Subir imagen"}
+              <input
+                className="sr-only"
+                type="file"
+                accept="image/*"
+                disabled={uploadingImage}
+                onChange={(event) => {
+                  const file = event.target.files?.[0]
+                  event.target.value = ""
+                  if (file) onImageUpload(file)
+                }}
+              />
+            </label>
+          </div>
+
+          <div className="mt-3 overflow-hidden rounded-lg border bg-white">
+            {form.image ? (
+              <img
+                alt=""
+                className="h-44 w-full object-cover"
+                src={form.image}
+              />
+            ) : (
+              <div className="flex h-32 items-center justify-center text-sm font-medium text-slate-400">
+                Sin imagen
+              </div>
+            )}
+          </div>
+
+          <label className="mt-3 block text-xs font-medium text-slate-600">
+            URL de imagen
+            <input
+              className="mt-1 w-full rounded-lg border bg-white px-3 py-2 text-sm font-normal text-slate-950 outline-none focus:border-slate-400"
+              type="url"
+              value={form.image}
+              onChange={(event) => {
+                onFieldChange("image", event.target.value)
+                onFieldChange("imagePath", "")
+              }}
+              placeholder="https://..."
+            />
+          </label>
+        </section>
 
         <div className="grid grid-cols-2 gap-3">
           <label className="block text-sm font-medium">
@@ -222,7 +255,7 @@ export default function PerfumeForm({
 
         <button
           className="w-full rounded-xl bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-          disabled={saving}
+          disabled={saving || uploadingImage}
         >
           {saving ? "Guardando..." : "Guardar perfume"}
         </button>

@@ -31,6 +31,7 @@ export default function Admin() {
   const loadAdminPerfumes = useCatalogStore((s) => s.loadAdminPerfumes)
   const savePerfume = useCatalogStore((s) => s.savePerfume)
   const deletePerfume = useCatalogStore((s) => s.deletePerfume)
+  const uploadPerfumeImage = useCatalogStore((s) => s.uploadPerfumeImage)
 
   const [session, setSession] = useState<Session | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -42,6 +43,7 @@ export default function Admin() {
   const [notice, setNotice] = useState<Notice | null>(null)
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
+  const [uploadingImage, setUploadingImage] = useState(false)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
@@ -184,6 +186,31 @@ export default function Admin() {
     }
   }
 
+  const handleImageUpload = async (file: File) => {
+    setUploadingImage(true)
+    setNotice({ tone: "info", message: "Subiendo imagen..." })
+
+    try {
+      const uploaded = await uploadPerfumeImage(file)
+      setForm((current) => ({
+        ...current,
+        image: uploaded.publicUrl,
+        imagePath: uploaded.path,
+      }))
+      setNotice({ tone: "success", message: "Imagen subida correctamente." })
+    } catch (uploadError) {
+      setNotice({
+        tone: "error",
+        message:
+          uploadError instanceof Error
+            ? uploadError.message
+            : "No se pudo subir la imagen.",
+      })
+    } finally {
+      setUploadingImage(false)
+    }
+  }
+
   const handleDelete = async (id: string) => {
     const perfume = perfumes.find((item) => item.id === id)
     const label = perfume ? `${perfume.brand} ${perfume.name}` : "este perfume"
@@ -279,9 +306,11 @@ export default function Admin() {
           form={form}
           errors={formErrors}
           saving={saving}
+          uploadingImage={uploadingImage}
           onSubmit={handleSave}
           onReset={() => setForm(emptyPerfumeForm)}
           onFieldChange={updateField}
+          onImageUpload={(file) => void handleImageUpload(file)}
         />
       </div>
     </main>

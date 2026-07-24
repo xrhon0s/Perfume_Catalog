@@ -6,6 +6,7 @@ export type PerfumeFormState = {
   name: string
   brand: string
   image: string
+  imagePath: string
   family: string
   concentration: string
   gender: string
@@ -23,6 +24,7 @@ export const emptyPerfumeForm: PerfumeFormState = {
   name: "",
   brand: "",
   image: "",
+  imagePath: "",
   family: "",
   concentration: "",
   gender: "",
@@ -52,6 +54,7 @@ export function perfumeToForm(perfume: Perfume): PerfumeFormState {
     name: perfume.name,
     brand: perfume.brand,
     image: perfume.image ?? "",
+    imagePath: "",
     family: perfume.family ?? "",
     concentration: perfume.concentration ?? "",
     gender: perfume.gender ?? "",
@@ -71,6 +74,7 @@ export function formToPerfumeInput(form: PerfumeFormState): PerfumeInput {
     name: form.name,
     brand: form.brand,
     image: form.image || undefined,
+    imagePath: form.imagePath || undefined,
     family: (form.family || undefined) as PerfumeInput["family"],
     concentration: (form.concentration ||
       undefined) as PerfumeInput["concentration"],

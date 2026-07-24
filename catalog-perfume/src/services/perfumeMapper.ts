@@ -33,6 +33,7 @@ export function toPerfumePayload(input: PerfumeInput, brandId: string) {
     tags: input.tags ?? [],
     notes: input.notes ?? {},
     primary_image_url: input.image || null,
+    ...(input.imagePath ? { primary_image_path: input.imagePath } : {}),
     is_active: input.isActive ?? true,
   }
 }

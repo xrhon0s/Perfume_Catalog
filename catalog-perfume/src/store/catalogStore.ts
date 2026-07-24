@@ -6,6 +6,7 @@ import {
   listPerfumes,
   savePerfume,
   type PerfumeInput,
+  type UploadedPerfumeImage,
   uploadPerfumeImage,
 } from "../services/perfumeRepository"
 
@@ -17,7 +18,7 @@ type CatalogState = {
   loadAdminPerfumes: () => Promise<void>
   savePerfume: (perfume: PerfumeInput) => Promise<void>
   deletePerfume: (id: string) => Promise<void>
-  uploadPerfumeImage: (file: File) => Promise<string>
+  uploadPerfumeImage: (file: File) => Promise<UploadedPerfumeImage>
 }
 
 export const useCatalogStore = create<CatalogState>((set, get) => ({
