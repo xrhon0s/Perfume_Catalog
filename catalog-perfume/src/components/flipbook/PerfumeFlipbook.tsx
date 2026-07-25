@@ -137,7 +137,10 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           disableFlipByClick={false}
         >
           {pages.map((p, idx) => (
-            <div key={idx} className="relative h-full w-full overflow-hidden bg-white">
+            <div
+              key={idx}
+              className="absolute h-full w-full overflow-hidden bg-white"
+            >
               <div className="relative h-full w-full">
                 {p ? (
                   <MagazinePage
