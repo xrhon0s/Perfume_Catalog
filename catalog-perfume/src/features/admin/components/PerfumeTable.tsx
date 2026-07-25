@@ -110,16 +110,16 @@ export default function PerfumeTable({
               {isLoading ? "Actualizando catálogo..." : `${perfumes.length} resultados`}
             </p>
           </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+          <div className="flex w-full flex-col gap-3 sm:flex-row sm:items-center lg:w-auto">
             <div
               aria-label="Filtrar por estado"
-              className="grid h-10 grid-cols-3 rounded-md border border-slate-200 bg-slate-50 p-1"
+              className="flex h-10 w-full shrink-0 rounded-md border border-slate-200 bg-slate-50 p-1 sm:w-[220px]"
               role="group"
             >
               {STATUS_OPTIONS.map((option) => (
                 <button
                   className={[
-                    "rounded px-3 text-xs font-semibold transition",
+                    "min-w-0 flex-1 whitespace-nowrap rounded px-2 text-xs font-semibold transition",
                     statusFilter === option.value
                       ? "bg-white text-slate-950 shadow-sm"
                       : "text-slate-500 hover:text-slate-800",
@@ -132,7 +132,7 @@ export default function PerfumeTable({
                 </button>
               ))}
             </div>
-            <label className="relative block sm:w-72">
+            <label className="relative block w-full sm:w-72">
               <Search
                 aria-hidden="true"
                 className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
@@ -163,12 +163,12 @@ export default function PerfumeTable({
         <table className="w-full table-fixed text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50/70 text-[11px] uppercase text-slate-500">
             <tr>
-              <th className="w-[30%] px-4 py-3 font-semibold">Perfume</th>
+              <th className="w-[27%] px-4 py-3 font-semibold">Perfume</th>
               <th className="w-[17%] px-3 py-3 font-semibold">Marca</th>
               <th className="w-[16%] px-3 py-3 font-semibold">Familia</th>
               <th className="w-[19%] px-3 py-3 font-semibold">Perfil</th>
               <th className="w-[10%] px-3 py-3 font-semibold">Estado</th>
-              <th className="w-[8%] px-4 py-3 text-right font-semibold">
+              <th className="w-[11%] px-4 py-3 text-right font-semibold">
                 Acciones
               </th>
             </tr>
