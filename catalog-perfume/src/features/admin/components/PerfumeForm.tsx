@@ -6,6 +6,7 @@ import {
 } from "../../../shared/constants/perfumeOptions"
 import type { PerfumeFormState } from "../lib/perfumeForm"
 import { currentCatalogYear } from "../lib/validatePerfumeForm"
+import PerfumeTextInterpreter from "./PerfumeTextInterpreter"
 
 type PerfumeFormProps = {
   form: PerfumeFormState
@@ -49,6 +50,8 @@ export default function PerfumeForm({
       </div>
 
       <div className="mt-4 space-y-4">
+        <PerfumeTextInterpreter form={form} onFieldChange={onFieldChange} />
+
         <label className="block text-sm font-medium">
           Nombre
           <input
