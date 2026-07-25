@@ -5,7 +5,7 @@ const PERFUME_IMAGE_BUCKET = "perfume-images"
 const MAX_DIRECT_UPLOAD_BYTES = 3 * 1024 * 1024
 const MAX_OPTIMIZER_UPLOAD_BYTES = 8 * 1024 * 1024
 const IMAGE_OPTIMIZER_URL = (
-  import.meta.env.VITE_IMAGE_OPTIMIZER_URL as string | undefined
+  (import.meta.env.VITE_IMAGE_OPTIMIZER_URL as string | undefined) || "/api/optimize-image"
 )?.replace(/\/$/, "")
 const IMAGE_OPTIMIZER_STORAGE = import.meta.env.VITE_IMAGE_OPTIMIZER_STORAGE as
   | string
@@ -58,7 +58,11 @@ async function uploadWithOptimizer(file: File): Promise<UploadedPerfumeImage> {
     : { data: { session: null } }
   const accessToken = sessionData.session?.access_token
 
-  const response = await fetch(`${IMAGE_OPTIMIZER_URL}/optimize?${params.toString()}`, {
+  const endpoint = IMAGE_OPTIMIZER_URL.startsWith("/")
+    ? IMAGE_OPTIMIZER_URL
+    : `${IMAGE_OPTIMIZER_URL}/optimize`
+
+  const response = await fetch(`${endpoint}?${params.toString()}`, {
     method: "POST",
     headers: accessToken
       ? {

@@ -82,27 +82,28 @@ npm run build
 
 ## 🖼️ Imágenes
 
-El admin puede subir imágenes de dos formas:
+El admin sube imágenes a una función serverless dentro de este mismo proyecto:
 
-* Sin optimizador: el frontend sube directo a Supabase Storage y acepta imágenes de hasta 3 MB.
-* Con optimizador: define `VITE_IMAGE_OPTIMIZER_URL`, el frontend manda la imagen al microservicio, se convierte a WebP y luego se guarda donde el servicio tenga configurado.
-
-Para desarrollo local con el optimizador:
-
-```bash
-cd ../image-optimizer-service
-npm install
-npm run dev
+```text
+/api/optimize-image
 ```
 
-Luego en `catalog-perfume/.env.local`:
+La función valida que el usuario sea admin en Supabase, convierte la imagen a WebP con `sharp`, la comprime y la guarda en Supabase Storage.
+
+Variables de entorno necesarias en producción:
 
 ```env
-VITE_IMAGE_OPTIMIZER_URL=http://localhost:8787
+VITE_IMAGE_OPTIMIZER_URL=/api/optimize-image
 VITE_IMAGE_OPTIMIZER_STORAGE=
+SUPABASE_URL=https://tu-proyecto.supabase.co
+SUPABASE_SERVICE_ROLE_KEY=tu-service-role-key
+SUPABASE_BUCKET=perfume-images
+MAX_UPLOAD_MB=8
+DEFAULT_MAX_WIDTH=1200
+DEFAULT_WEBP_QUALITY=78
 ```
 
-Para produccion, `VITE_IMAGE_OPTIMIZER_URL` debe ser la URL publica del microservicio desplegado. El microservicio decide el destino de almacenamiento con `STORAGE_DRIVER=supabase` y valida el token admin de Supabase. No pongas la `service_role` key en este proyecto.
+La `SUPABASE_SERVICE_ROLE_KEY` es privada del hosting. No debe exponerse como variable `VITE_*`.
 
 ---
 

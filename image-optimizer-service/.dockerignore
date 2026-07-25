@@ -1,6 +1,0 @@
-node_modules
-npm-debug.log*
-.env
-public/optimized/*
-!public/optimized/.gitkeep
-.DS_Store

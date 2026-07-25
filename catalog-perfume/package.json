@@ -15,14 +15,17 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.107.0",
+    "formidable": "^3.5.4",
     "framer-motion": "^12.24.10",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-pageflip": "^2.0.3",
+    "sharp": "^0.35.3",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@types/formidable": "^3.5.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
