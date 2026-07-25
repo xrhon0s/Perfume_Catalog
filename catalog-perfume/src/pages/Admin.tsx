@@ -1,5 +1,7 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import type { Session } from "@supabase/supabase-js"
+import { LoaderCircle, Plus } from "lucide-react"
+import AdminAccessLayout from "../features/admin/components/AdminAccessLayout"
 import AdminAlert from "../features/admin/components/AdminAlert"
 import AdminForbidden from "../features/admin/components/AdminForbidden"
 import AdminHeader from "../features/admin/components/AdminHeader"
@@ -57,6 +59,7 @@ export default function Admin() {
   const [email, setEmail] = useState("")
   const [password, setPassword] = useState("")
   const [authError, setAuthError] = useState<string | null>(null)
+  const [authenticating, setAuthenticating] = useState(false)
   const [form, setForm] = useState<PerfumeFormState>(emptyPerfumeForm)
   const [notice, setNotice] = useState<Notice | null>(null)
   const [formErrors, setFormErrors] = useState<string[]>([])
@@ -146,6 +149,12 @@ export default function Admin() {
     })
   }, [perfumes, search, statusFilter])
 
+  const activeCount = useMemo(
+    () => perfumes.filter((perfume) => perfume.isActive !== false).length,
+    [perfumes],
+  )
+  const inactiveCount = perfumes.length - activeCount
+
   const updateField = <Field extends keyof PerfumeFormState>(
     field: Field,
     value: PerfumeFormState[Field],
@@ -159,23 +168,43 @@ export default function Admin() {
     if (!supabase) return
 
     setAuthError(null)
-    const { error: loginError } = await supabase.auth.signInWithPassword({
-      email,
-      password,
-    })
+    setAuthenticating(true)
+    try {
+      const { error: loginError } = await supabase.auth.signInWithPassword({
+        email,
+        password,
+      })
 
-    if (loginError) {
-      setAuthError(loginError.message)
-      return
+      if (loginError) {
+        setAuthError(loginError.message)
+        return
+      }
+
+      setEmail("")
+      setPassword("")
+    } finally {
+      setAuthenticating(false)
     }
-
-    setEmail("")
-    setPassword("")
   }
 
   const handleLogout = async () => {
     await supabase?.auth.signOut()
     setForm(emptyPerfumeForm)
+  }
+
+  const resetForm = () => {
+    setForm(emptyPerfumeForm)
+    setUploadStats(null)
+    setPendingImagePath(null)
+    setFormErrors([])
+  }
+
+  const focusForm = () => {
+    requestAnimationFrame(() => {
+      document
+        .getElementById("perfume-form")
+        ?.scrollIntoView({ behavior: "smooth", block: "start" })
+    })
   }
 
   const handleSave = async (event: FormEvent) => {
@@ -360,15 +389,20 @@ export default function Admin() {
 
   if (!sessionReady || checkingAdmin) {
     return (
-      <main className="grid min-h-screen place-items-center bg-slate-950 px-6 text-white">
-        <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300 shadow-lg">
-          <span
+      <AdminAccessLayout
+        eyebrow="Administración"
+        title="Preparando el panel"
+        description="Estamos verificando la sesión y cargando el catálogo."
+      >
+        <div className="flex items-center gap-3 border-t border-slate-200 pt-5 text-sm text-slate-600">
+          <LoaderCircle
             aria-hidden="true"
-            className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"
+            className="animate-spin text-[#8f334d]"
+            size={19}
           />
-          Preparando panel administrativo
+          Verificando acceso
         </div>
-      </main>
+      </AdminAccessLayout>
     )
   }
 
@@ -378,6 +412,7 @@ export default function Admin() {
         email={email}
         password={password}
         error={authError}
+        submitting={authenticating}
         onEmailChange={setEmail}
         onPasswordChange={setPassword}
         onSubmit={handleLogin}
@@ -396,12 +431,54 @@ export default function Admin() {
   }
 
   return (
-    <main className="min-h-screen bg-slate-100 text-slate-950">
-      <AdminHeader onLogout={handleLogout} />
+    <main className="min-h-dvh bg-[#eef0ec] text-slate-950">
+      <AdminHeader email={session.user.email} onLogout={handleLogout} />
 
-      <div className="mx-auto grid max-w-7xl gap-6 px-4 py-6 lg:grid-cols-[minmax(0,1fr)_420px]">
+      <section className="border-b border-slate-200 bg-white">
+        <div className="mx-auto flex max-w-[1600px] flex-col gap-5 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
+          <div>
+            <h1 className="text-xl font-semibold text-slate-950">Perfumes</h1>
+            <p className="mt-1 text-sm text-slate-500">
+              Consulta y actualiza el inventario publicado.
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-5 sm:gap-7">
+            <dl className="flex items-center gap-5 sm:gap-7">
+              <div>
+                <dt className="text-xs font-medium text-slate-500">Total</dt>
+                <dd className="mt-0.5 text-lg font-semibold">{perfumes.length}</dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium text-slate-500">Activos</dt>
+                <dd className="mt-0.5 text-lg font-semibold text-emerald-700">
+                  {activeCount}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium text-slate-500">Ocultos</dt>
+                <dd className="mt-0.5 text-lg font-semibold text-slate-600">
+                  {inactiveCount}
+                </dd>
+              </div>
+            </dl>
+            <button
+              className="inline-flex h-10 items-center gap-2 rounded-md bg-[#8f334d] px-4 text-sm font-semibold text-white transition hover:bg-[#76283e]"
+              type="button"
+              onClick={() => {
+                resetForm()
+                focusForm()
+              }}
+            >
+              <Plus aria-hidden="true" size={18} />
+              Nuevo perfume
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <div className="mx-auto grid max-w-[1600px] items-start gap-5 px-4 py-5 sm:px-6 xl:grid-cols-[minmax(0,1fr)_460px]">
         {notice && (
-          <div className="lg:col-span-2">
+          <div className="xl:col-span-2">
             <AdminAlert message={notice.message} tone={notice.tone} />
           </div>
         )}
@@ -420,6 +497,8 @@ export default function Admin() {
             setForm(perfumeToForm(perfume))
             setUploadStats(null)
             setPendingImagePath(null)
+            setFormErrors([])
+            focusForm()
           }}
           onDelete={(id) => void handleDelete(id)}
         />
@@ -432,11 +511,7 @@ export default function Admin() {
           removingImage={removingImage}
           uploadStats={uploadStats ? formatUploadStats(uploadStats) : null}
           onSubmit={handleSave}
-          onReset={() => {
-            setForm(emptyPerfumeForm)
-            setUploadStats(null)
-            setPendingImagePath(null)
-          }}
+          onReset={resetForm}
           onImageRemove={() => void handleImageRemove()}
           onFieldChange={updateField}
           onImageUpload={(file) => void handleImageUpload(file)}

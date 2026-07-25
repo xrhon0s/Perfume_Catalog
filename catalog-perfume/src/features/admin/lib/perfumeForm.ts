@@ -54,7 +54,7 @@ export function perfumeToForm(perfume: Perfume): PerfumeFormState {
     name: perfume.name,
     brand: perfume.brand,
     image: perfume.image ?? "",
-    imagePath: "",
+    imagePath: perfume.imagePath ?? "",
     family: perfume.family ?? "",
     concentration: perfume.concentration ?? "",
     gender: perfume.gender ?? "",

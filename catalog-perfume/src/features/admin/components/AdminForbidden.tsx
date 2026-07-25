@@ -12,32 +12,46 @@ export default function AdminForbidden({
   const sql = `insert into public.admin_users (user_id)\nvalues ('${userId}')\non conflict (user_id) do nothing;`
 
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-xl">
-        <a className="text-sm text-white/60 hover:text-white" href="#">
-          ← Volver al catálogo
-        </a>
-        <h1 className="mt-8 text-3xl font-semibold">Sin permiso admin</h1>
-        <p className="mt-4 leading-6 text-white/70">
-          Iniciaste sesión{email ? ` como ${email}` : ""}, pero este usuario no
-          está autorizado para crear, editar o eliminar perfumes.
-        </p>
-        <div className="mt-6 rounded-xl border border-white/10 bg-white/5 p-5 text-sm text-white/80">
-          <p>Agrega este usuario como admin en Supabase:</p>
-          <p className="mt-3 break-all text-xs text-white/55">
-            UID: {userId}
-          </p>
-          <pre className="mt-3 overflow-x-auto rounded-lg bg-black/30 p-3">
-            {sql}
-          </pre>
+    <AdminAccessLayout
+      eyebrow="Acceso restringido"
+      title="Esta cuenta no tiene permiso"
+      description={`La sesión${email ? ` de ${email}` : ""} está activa, pero no pertenece al grupo de administración.`}
+      wide
+    >
+      <div className="flex gap-3 rounded-md border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+        <ShieldAlert aria-hidden="true" className="mt-0.5 shrink-0" size={18} />
+        <p>Agrega el UID de este usuario a la tabla de administradores.</p>
+      </div>
+      <div className="mt-4 rounded-md border border-slate-200 bg-white">
+        <div className="flex items-center justify-between gap-3 border-b border-slate-200 px-4 py-3">
+          <span className="min-w-0 truncate font-mono text-xs text-slate-500">
+            {userId}
+          </span>
+          <button
+            className="inline-flex h-8 w-8 shrink-0 items-center justify-center rounded-md text-slate-500 hover:bg-slate-100 hover:text-slate-900"
+            type="button"
+            title="Copiar SQL"
+            aria-label="Copiar SQL"
+            onClick={() => void navigator.clipboard.writeText(sql)}
+          >
+            <Copy aria-hidden="true" size={16} />
+          </button>
         </div>
+        <pre className="overflow-x-auto p-4 text-xs leading-6 text-slate-700">
+          {sql}
+        </pre>
+      </div>
+      <div className="mt-5 flex justify-end">
         <button
-          className="mt-6 rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-white/90"
+          className="inline-flex h-10 items-center gap-2 rounded-md border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-700 hover:bg-slate-50"
           onClick={onLogout}
         >
-          Salir
+          <LogOut aria-hidden="true" size={17} />
+          Cerrar sesión
         </button>
       </div>
-    </main>
+    </AdminAccessLayout>
   )
 }
+import { Copy, LogOut, ShieldAlert } from "lucide-react"
+import AdminAccessLayout from "./AdminAccessLayout"

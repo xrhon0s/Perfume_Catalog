@@ -1,9 +1,12 @@
 import type { FormEvent } from "react"
+import { AlertCircle, LoaderCircle, LockKeyhole, LogIn, Mail } from "lucide-react"
+import AdminAccessLayout from "./AdminAccessLayout"
 
 type AdminLoginProps = {
   email: string
   password: string
   error: string | null
+  submitting: boolean
   onEmailChange: (value: string) => void
   onPasswordChange: (value: string) => void
   onSubmit: (event: FormEvent) => void
@@ -13,45 +16,75 @@ export default function AdminLogin({
   email,
   password,
   error,
+  submitting,
   onEmailChange,
   onPasswordChange,
   onSubmit,
 }: AdminLoginProps) {
   return (
-    <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-      <div className="mx-auto max-w-sm">
-        <a className="text-sm text-white/60 hover:text-white" href="#">
-          ← Volver al catálogo
-        </a>
-        <h1 className="mt-8 text-3xl font-semibold">Ingreso admin</h1>
-        <form className="mt-8 space-y-4" onSubmit={onSubmit}>
-          <label className="block text-sm">
-            Email
+    <AdminAccessLayout
+      eyebrow="Administración"
+      title="Inicia sesión"
+      description="Accede con la cuenta autorizada para gestionar el catálogo."
+    >
+      <form className="space-y-5" onSubmit={onSubmit}>
+        <label className="block text-sm font-medium text-slate-700">
+          Correo electrónico
+          <span className="relative mt-2 block">
+            <Mail
+              aria-hidden="true"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={18}
+            />
             <input
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none focus:border-white/40"
+              autoComplete="email"
+              className="h-11 w-full rounded-md border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-950 outline-none transition placeholder:text-slate-400 focus:border-[#8f334d] focus:ring-2 focus:ring-[#8f334d]/15"
               type="email"
               value={email}
               onChange={(event) => onEmailChange(event.target.value)}
               required
             />
-          </label>
-          <label className="block text-sm">
-            Contraseña
+          </span>
+        </label>
+        <label className="block text-sm font-medium text-slate-700">
+          Contraseña
+          <span className="relative mt-2 block">
+            <LockKeyhole
+              aria-hidden="true"
+              className="absolute left-3 top-1/2 -translate-y-1/2 text-slate-400"
+              size={18}
+            />
             <input
-              className="mt-2 w-full rounded-xl border border-white/10 bg-white/10 px-4 py-3 text-white outline-none focus:border-white/40"
+              autoComplete="current-password"
+              className="h-11 w-full rounded-md border border-slate-300 bg-white pl-10 pr-3 text-sm text-slate-950 outline-none transition focus:border-[#8f334d] focus:ring-2 focus:ring-[#8f334d]/15"
               type="password"
               value={password}
               onChange={(event) => onPasswordChange(event.target.value)}
               required
             />
-          </label>
-          {error && <p className="text-sm text-red-300">{error}</p>}
-          <button className="w-full rounded-xl bg-white px-4 py-3 text-sm font-semibold text-slate-950 hover:bg-white/90">
-            Entrar
-          </button>
-        </form>
-      </div>
-    </main>
+          </span>
+        </label>
+        {error ? (
+          <div
+            className="flex gap-2 rounded-md border border-red-200 bg-red-50 px-3 py-2.5 text-sm text-red-800"
+            role="alert"
+          >
+            <AlertCircle aria-hidden="true" className="mt-0.5 shrink-0" size={16} />
+            <span>{error}</span>
+          </div>
+        ) : null}
+        <button
+          className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#1b1d19] px-4 text-sm font-semibold text-white transition hover:bg-black disabled:cursor-wait disabled:opacity-60"
+          disabled={submitting}
+        >
+          {submitting ? (
+            <LoaderCircle aria-hidden="true" className="animate-spin" size={18} />
+          ) : (
+            <LogIn aria-hidden="true" size={18} />
+          )}
+          {submitting ? "Ingresando..." : "Entrar al panel"}
+        </button>
+      </form>
+    </AdminAccessLayout>
   )
 }
-
