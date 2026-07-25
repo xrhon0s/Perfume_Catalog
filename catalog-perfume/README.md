@@ -80,6 +80,30 @@ npm run dev
 npm run build
 ```
 
+## 🖼️ Imágenes
+
+El admin puede subir imágenes de dos formas:
+
+* Sin optimizador: el frontend sube directo a Supabase Storage y acepta imágenes de hasta 3 MB.
+* Con optimizador: define `VITE_IMAGE_OPTIMIZER_URL`, el frontend manda la imagen al microservicio, se convierte a WebP y luego se guarda donde el servicio tenga configurado.
+
+Para desarrollo local con el optimizador:
+
+```bash
+cd ../image-optimizer-service
+npm install
+npm run dev
+```
+
+Luego en `catalog-perfume/.env.local`:
+
+```env
+VITE_IMAGE_OPTIMIZER_URL=http://localhost:8787
+VITE_IMAGE_OPTIMIZER_STORAGE=supabase
+```
+
+Si usas `VITE_IMAGE_OPTIMIZER_STORAGE=supabase`, configura también `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` y `SUPABASE_BUCKET` en el `.env` del microservicio, no en el frontend.
+
 ---
 
 ## 🧠 Cómo funciona
