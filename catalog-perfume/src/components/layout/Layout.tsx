@@ -3,14 +3,10 @@ import FilterPanel from "./FilterPanel"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
-    <div className="h-screen w-screen overflow-hidden">
+    <div className="flex h-dvh w-screen flex-col overflow-hidden bg-[#dfe2dc]">
       <Header />
       <FilterPanel />
-
-      {/* CONTENIDO */}
-      <div className="h-[calc(100vh-5rem)] w-screen md:h-[calc(100vh-4rem)]">
-        {children}
-      </div>
+      <div className="min-h-0 flex-1">{children}</div>
     </div>
   )
 }
