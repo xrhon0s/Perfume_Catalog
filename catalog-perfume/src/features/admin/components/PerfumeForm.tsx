@@ -12,6 +12,7 @@ type PerfumeFormProps = {
   errors: string[]
   saving: boolean
   uploadingImage: boolean
+  uploadStats: string | null
   onSubmit: (event: FormEvent) => void
   onReset: () => void
   onFieldChange: <Field extends keyof PerfumeFormState>(
@@ -26,6 +27,7 @@ export default function PerfumeForm({
   errors,
   saving,
   uploadingImage,
+  uploadStats,
   onSubmit,
   onReset,
   onFieldChange,
@@ -118,6 +120,12 @@ export default function PerfumeForm({
               placeholder="https://..."
             />
           </label>
+
+          {uploadStats ? (
+            <p className="mt-2 rounded-md bg-emerald-50 px-2 py-1 text-xs font-medium text-emerald-700">
+              {uploadStats}
+            </p>
+          ) : null}
         </section>
 
         <div className="grid grid-cols-2 gap-3">

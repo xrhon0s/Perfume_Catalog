@@ -16,12 +16,25 @@ import {
 import { validatePerfumeForm } from "../features/admin/lib/validatePerfumeForm"
 import { isSupabaseConfigured, supabase } from "../lib/supabase"
 import { isCurrentUserAdmin } from "../services/adminAuth"
+import type { UploadedPerfumeImage } from "../services/perfumeRepository"
 import { useCatalogStore } from "../store/catalogStore"
 
 type StatusFilter = "active" | "inactive" | "all"
 type Notice = {
   message: string
   tone: "success" | "error" | "info"
+}
+
+type UploadStats = NonNullable<UploadedPerfumeImage["optimization"]>
+
+function formatMegabytes(bytes: number) {
+  return `${(bytes / 1024 / 1024).toFixed(bytes >= 1024 * 1024 ? 1 : 2)} MB`
+}
+
+function formatUploadStats(stats: UploadStats) {
+  return `Reducida ${stats.savedPercent}%: ${formatMegabytes(
+    stats.originalBytes,
+  )} -> ${formatMegabytes(stats.optimizedBytes)}`
 }
 
 export default function Admin() {
@@ -44,6 +57,7 @@ export default function Admin() {
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [uploadStats, setUploadStats] = useState<UploadStats | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
@@ -125,6 +139,7 @@ export default function Admin() {
     field: Field,
     value: PerfumeFormState[Field],
   ) => {
+    if (field === "image") setUploadStats(null)
     setForm((current) => ({ ...current, [field]: value }))
   }
 
@@ -192,12 +207,22 @@ export default function Admin() {
 
     try {
       const uploaded = await uploadPerfumeImage(file)
+      const statsMessage = uploaded.optimization
+        ? formatUploadStats(uploaded.optimization)
+        : null
+
       setForm((current) => ({
         ...current,
         image: uploaded.publicUrl,
         imagePath: uploaded.path,
       }))
-      setNotice({ tone: "success", message: "Imagen subida correctamente." })
+      setUploadStats(uploaded.optimization ?? null)
+      setNotice({
+        tone: "success",
+        message: statsMessage
+          ? `Imagen subida correctamente. ${statsMessage}.`
+          : "Imagen subida correctamente.",
+      })
     } catch (uploadError) {
       setNotice({
         tone: "error",
@@ -298,7 +323,10 @@ export default function Admin() {
           deletingId={deletingId}
           onSearchChange={setSearch}
           onStatusFilterChange={setStatusFilter}
-          onEdit={(perfume) => setForm(perfumeToForm(perfume))}
+          onEdit={(perfume) => {
+            setForm(perfumeToForm(perfume))
+            setUploadStats(null)
+          }}
           onDelete={(id) => void handleDelete(id)}
         />
 
@@ -307,8 +335,12 @@ export default function Admin() {
           errors={formErrors}
           saving={saving}
           uploadingImage={uploadingImage}
+          uploadStats={uploadStats ? formatUploadStats(uploadStats) : null}
           onSubmit={handleSave}
-          onReset={() => setForm(emptyPerfumeForm)}
+          onReset={() => {
+            setForm(emptyPerfumeForm)
+            setUploadStats(null)
+          }}
           onFieldChange={updateField}
           onImageUpload={(file) => void handleImageUpload(file)}
         />

@@ -15,11 +15,23 @@ type OptimizedImageResponse = {
   path?: string
   publicUrl?: string
   message?: string
+  original?: {
+    bytes?: number
+  }
+  optimized?: {
+    bytes?: number
+  }
+  savedPercent?: number
 }
 
 export type UploadedPerfumeImage = {
   path: string
   publicUrl: string
+  optimization?: {
+    originalBytes: number
+    optimizedBytes: number
+    savedPercent: number
+  }
 }
 
 export async function uploadPerfumeImage(file: File): Promise<UploadedPerfumeImage> {
@@ -86,6 +98,16 @@ async function uploadWithOptimizer(file: File): Promise<UploadedPerfumeImage> {
   return {
     path: data.path,
     publicUrl: data.publicUrl,
+    optimization:
+      typeof data.original?.bytes === "number" &&
+      typeof data.optimized?.bytes === "number" &&
+      typeof data.savedPercent === "number"
+        ? {
+            originalBytes: data.original.bytes,
+            optimizedBytes: data.optimized.bytes,
+            savedPercent: data.savedPercent,
+          }
+        : undefined,
   }
 }
 
