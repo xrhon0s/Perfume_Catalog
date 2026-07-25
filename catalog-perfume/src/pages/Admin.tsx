@@ -16,7 +16,10 @@ import {
 import { validatePerfumeForm } from "../features/admin/lib/validatePerfumeForm"
 import { isSupabaseConfigured, supabase } from "../lib/supabase"
 import { isCurrentUserAdmin } from "../services/adminAuth"
-import type { UploadedPerfumeImage } from "../services/perfumeRepository"
+import {
+  getPerfumeImageStoragePath,
+  type UploadedPerfumeImage,
+} from "../services/perfumeRepository"
 import { useCatalogStore } from "../store/catalogStore"
 
 type StatusFilter = "active" | "inactive" | "all"
@@ -48,6 +51,7 @@ export default function Admin() {
   const deletePerfumeImage = useCatalogStore((s) => s.deletePerfumeImage)
 
   const [session, setSession] = useState<Session | null>(null)
+  const [sessionReady, setSessionReady] = useState(false)
   const [isAdmin, setIsAdmin] = useState(false)
   const [checkingAdmin, setCheckingAdmin] = useState(true)
   const [email, setEmail] = useState("")
@@ -64,16 +68,20 @@ export default function Admin() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
+  const sessionUserId = session?.user.id
 
   useEffect(() => {
     if (!supabase) return
 
     void supabase.auth.getSession().then(({ data }) => {
       setSession(data.session)
+      setSessionReady(true)
     })
 
-    const { data } = supabase.auth.onAuthStateChange((_event, currentSession) => {
+    const { data } = supabase.auth.onAuthStateChange((event, currentSession) => {
+      if (event === "TOKEN_REFRESHED") return
       setSession(currentSession)
+      setSessionReady(true)
     })
 
     return () => {
@@ -85,7 +93,7 @@ export default function Admin() {
     let cancelled = false
 
     async function loadAdmin() {
-      if (!session) {
+      if (!sessionUserId) {
         setIsAdmin(false)
         setCheckingAdmin(false)
         return
@@ -120,7 +128,7 @@ export default function Admin() {
     return () => {
       cancelled = true
     }
-  }, [loadAdminPerfumes, session])
+  }, [loadAdminPerfumes, sessionUserId])
 
   const filtered = useMemo(() => {
     const normalized = search.trim().toLowerCase()
@@ -291,19 +299,47 @@ export default function Admin() {
     const perfume = perfumes.find((item) => item.id === id)
     const label = perfume ? `${perfume.brand} ${perfume.name}` : "este perfume"
 
-    if (!window.confirm(`¿Eliminar ${label} del catálogo público?`)) {
+    if (
+      !window.confirm(
+        `¿Eliminar permanentemente ${label}? También se eliminará su imagen del storage.`,
+      )
+    ) {
       return
     }
 
-    setNotice({ tone: "info", message: "Eliminando perfume del catálogo..." })
+    setNotice({ tone: "info", message: "Eliminando perfume e imagen..." })
     setDeletingId(id)
 
     try {
-      await deletePerfume(id)
+      const deleted = await deletePerfume(id)
+      const imagePath =
+        deleted.imagePath ?? getPerfumeImageStoragePath(deleted.imageUrl)
+
+      if (imagePath) {
+        try {
+          await deletePerfumeImage(imagePath)
+        } catch (imageDeleteError) {
+          setNotice({
+            tone: "error",
+            message:
+              "El perfume se eliminó de la base de datos, pero no fue posible borrar " +
+              `su imagen del storage: ${
+                imageDeleteError instanceof Error
+                  ? imageDeleteError.message
+                  : "error desconocido"
+              }`,
+          })
+          if (form.id === id) setForm(emptyPerfumeForm)
+          return
+        }
+      }
+
       if (form.id === id) setForm(emptyPerfumeForm)
       setNotice({
         tone: "success",
-        message: "Perfume eliminado del catálogo público.",
+        message: imagePath
+          ? "Perfume e imagen eliminados correctamente."
+          : "Perfume eliminado correctamente.",
       })
     } catch (deleteError) {
       setNotice({
@@ -322,6 +358,20 @@ export default function Admin() {
     return <AdminUnavailable />
   }
 
+  if (!sessionReady || checkingAdmin) {
+    return (
+      <main className="grid min-h-screen place-items-center bg-slate-950 px-6 text-white">
+        <div className="flex items-center gap-3 rounded-lg border border-white/10 bg-white/5 px-4 py-3 text-sm text-slate-300 shadow-lg">
+          <span
+            aria-hidden="true"
+            className="h-4 w-4 animate-spin rounded-full border-2 border-white/20 border-t-white"
+          />
+          Preparando panel administrativo
+        </div>
+      </main>
+    )
+  }
+
   if (!session) {
     return (
       <AdminLogin
@@ -332,14 +382,6 @@ export default function Admin() {
         onPasswordChange={setPassword}
         onSubmit={handleLogin}
       />
-    )
-  }
-
-  if (checkingAdmin) {
-    return (
-      <main className="min-h-screen bg-slate-950 px-6 py-10 text-white">
-        Verificando permisos...
-      </main>
     )
   }
 

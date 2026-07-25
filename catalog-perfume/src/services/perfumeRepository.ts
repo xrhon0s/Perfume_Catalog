@@ -9,6 +9,12 @@ import { hasSupabaseConfig, getSupabaseClient } from "./supabaseClient"
 export type { PerfumeInput } from "./perfumeTypes"
 export type { UploadedPerfumeImage } from "./perfumeImageStorage"
 
+export type DeletedPerfume = {
+  id: string
+  imagePath?: string
+  imageUrl?: string
+}
+
 export async function listPerfumes(): Promise<Perfume[]> {
   if (!hasSupabaseConfig) {
     return getLocalPerfumes()
@@ -81,7 +87,7 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
   }
 }
 
-export async function deletePerfume(id: string): Promise<void> {
+export async function deletePerfume(id: string): Promise<DeletedPerfume> {
   if (!hasSupabaseConfig) {
     throw new Error("Supabase no está configurado para eliminar perfumes.")
   }
@@ -89,10 +95,20 @@ export async function deletePerfume(id: string): Promise<void> {
   const supabase = await getSupabaseClient()
 
   const request = isUuid(id)
-    ? supabase.from("perfumes").update({ is_active: false }).eq("id", id)
-    : supabase.from("perfumes").update({ is_active: false }).eq("legacy_id", id)
+    ? supabase
+        .from("perfumes")
+        .delete()
+        .eq("id", id)
+        .select("id, primary_image_path, primary_image_url")
+        .maybeSingle()
+    : supabase
+        .from("perfumes")
+        .delete()
+        .eq("legacy_id", id)
+        .select("id, primary_image_path, primary_image_url")
+        .maybeSingle()
 
-  const { error } = await request
+  const { data, error } = await request
 
   if (error) {
     throw new Error(
@@ -101,6 +117,22 @@ export async function deletePerfume(id: string): Promise<void> {
         : error.message,
     )
   }
+
+  if (!data) {
+    throw new Error(
+      "Supabase no eliminó ningún perfume. Recarga la lista y vuelve a intentarlo.",
+    )
+  }
+
+  return {
+    id: data.id,
+    imagePath: data.primary_image_path ?? undefined,
+    imageUrl: data.primary_image_url ?? undefined,
+  }
 }
 
-export { deletePerfumeImage, uploadPerfumeImage } from "./perfumeImageStorage"
+export {
+  deletePerfumeImage,
+  getPerfumeImageStoragePath,
+  uploadPerfumeImage,
+} from "./perfumeImageStorage"

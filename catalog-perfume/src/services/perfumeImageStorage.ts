@@ -34,6 +34,26 @@ export type UploadedPerfumeImage = {
   }
 }
 
+export function getPerfumeImageStoragePath(
+  imageUrl: string | undefined,
+): string | undefined {
+  if (!imageUrl) return undefined
+
+  try {
+    const url = new URL(imageUrl)
+    const marker = `/storage/v1/object/public/${PERFUME_IMAGE_BUCKET}/`
+    const markerIndex = url.pathname.indexOf(marker)
+    if (markerIndex === -1) return undefined
+
+    const path = decodeURIComponent(
+      url.pathname.slice(markerIndex + marker.length),
+    )
+    return path.startsWith("perfumes/") ? path : undefined
+  } catch {
+    return undefined
+  }
+}
+
 async function getAccessToken() {
   const supabase = hasSupabaseConfig ? await getSupabaseClient() : null
   const { data: sessionData } = supabase

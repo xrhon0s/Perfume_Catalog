@@ -6,6 +6,7 @@ import {
   listAdminPerfumes,
   listPerfumes,
   savePerfume,
+  type DeletedPerfume,
   type PerfumeInput,
   type UploadedPerfumeImage,
   uploadPerfumeImage,
@@ -18,7 +19,7 @@ type CatalogState = {
   loadPerfumes: () => Promise<void>
   loadAdminPerfumes: () => Promise<void>
   savePerfume: (perfume: PerfumeInput) => Promise<void>
-  deletePerfume: (id: string) => Promise<void>
+  deletePerfume: (id: string) => Promise<DeletedPerfume>
   uploadPerfumeImage: (file: File) => Promise<UploadedPerfumeImage>
   deletePerfumeImage: (path: string) => Promise<void>
 }
@@ -61,8 +62,12 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   },
 
   deletePerfume: async (id) => {
-    await deletePerfume(id)
+    const deleted = await deletePerfume(id)
+    set((state) => ({
+      perfumes: state.perfumes.filter((perfume) => perfume.id !== id),
+    }))
     await get().loadAdminPerfumes()
+    return deleted
   },
 
   uploadPerfumeImage,
