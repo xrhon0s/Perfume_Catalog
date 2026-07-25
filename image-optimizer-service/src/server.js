@@ -5,10 +5,13 @@ import cors from "@fastify/cors";
 import multipart from "@fastify/multipart";
 import fastifyStatic from "@fastify/static";
 import Fastify from "fastify";
-import { config, maxUploadBytes } from "./config.js";
+import { requireSupabaseAdmin } from "./auth.js";
+import { config, maxUploadBytes, validateProductionConfig } from "./config.js";
 import { optimizeImage } from "./optimizer.js";
 import { saveLocalImage } from "./storage/localStorage.js";
 import { saveSupabaseImage } from "./storage/supabaseStorage.js";
+
+validateProductionConfig();
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const rootDir = path.resolve(__dirname, "..");
@@ -76,10 +79,18 @@ await app.register(fastifyStatic, {
 
 app.get("/health", async () => ({
   ok: true,
-  storageDriver: config.storageDriver
+  storageDriver: config.storageDriver,
+  auth: config.requireSupabaseAdmin ? "supabase-admin" : config.apiKey ? "api-key" : "none"
 }));
 
-app.post("/optimize", { preHandler: requireApiKey }, async (request, reply) => {
+app.get("/ready", async () => ({
+  ok: true,
+  storageDriver: config.storageDriver,
+  supabaseConfigured: Boolean(config.supabaseUrl && config.supabaseServiceRoleKey),
+  requireSupabaseAdmin: config.requireSupabaseAdmin
+}));
+
+app.post("/optimize", { preHandler: [requireApiKey, requireSupabaseAdmin] }, async (request, reply) => {
   const file = await request.file();
   if (!file) {
     return reply.code(400).send({
@@ -100,7 +111,9 @@ app.post("/optimize", { preHandler: requireApiKey }, async (request, reply) => {
   const prefix = request.query.prefix || "images";
   const filenameBase = sanitizeFilename(request.query.filename || file.filename);
   const filename = `${Date.now()}-${crypto.randomUUID()}-${filenameBase}.webp`;
-  const storageDriver = request.query.storage || config.storageDriver;
+  const storageDriver = config.allowStorageOverride
+    ? request.query.storage || config.storageDriver
+    : config.storageDriver;
   const save = storageDriver === "supabase" ? saveSupabaseImage : saveLocalImage;
   const stored = await save(optimized.buffer, { prefix, filename });
 

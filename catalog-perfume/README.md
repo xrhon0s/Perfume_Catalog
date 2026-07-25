@@ -99,10 +99,10 @@ Luego en `catalog-perfume/.env.local`:
 
 ```env
 VITE_IMAGE_OPTIMIZER_URL=http://localhost:8787
-VITE_IMAGE_OPTIMIZER_STORAGE=supabase
+VITE_IMAGE_OPTIMIZER_STORAGE=
 ```
 
-Si usas `VITE_IMAGE_OPTIMIZER_STORAGE=supabase`, configura también `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` y `SUPABASE_BUCKET` en el `.env` del microservicio, no en el frontend.
+Para produccion, `VITE_IMAGE_OPTIMIZER_URL` debe ser la URL publica del microservicio desplegado. El microservicio decide el destino de almacenamiento con `STORAGE_DRIVER=supabase` y valida el token admin de Supabase. No pongas la `service_role` key en este proyecto.
 
 ---
 

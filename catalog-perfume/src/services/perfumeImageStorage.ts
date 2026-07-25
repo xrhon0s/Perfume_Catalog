@@ -52,8 +52,19 @@ async function uploadWithOptimizer(file: File): Promise<UploadedPerfumeImage> {
     params.set("storage", IMAGE_OPTIMIZER_STORAGE)
   }
 
+  const supabase = hasSupabaseConfig ? await getSupabaseClient() : null
+  const { data: sessionData } = supabase
+    ? await supabase.auth.getSession()
+    : { data: { session: null } }
+  const accessToken = sessionData.session?.access_token
+
   const response = await fetch(`${IMAGE_OPTIMIZER_URL}/optimize?${params.toString()}`, {
     method: "POST",
+    headers: accessToken
+      ? {
+          Authorization: `Bearer ${accessToken}`,
+        }
+      : undefined,
     body: formData,
   })
   const data = (await response.json().catch(() => null)) as OptimizedImageResponse | null
