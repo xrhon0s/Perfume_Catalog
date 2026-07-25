@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react"
 import type { Perfume } from "../data/types"
+import { filterCatalogPerfumes } from "../features/catalog/filterCatalogPerfumes"
 import { useFiltersStore } from "../store/filterStore"
 import PerfumeFlipbook from "../components/flipbook/PerfumeFlipbook"
 import PerfumeDetailModal from "../components/perfumes/PerfumeDetailModal"
@@ -21,46 +22,33 @@ export default function Catalog() {
   }, [loadPerfumes])
 
   const filtered = useMemo(() => {
-    const normalizedQuery = query.trim().toLowerCase()
-
-    return perfumes.filter((p) => {
-      const matchesBrand =
-        selectedBrands.length === 0 || selectedBrands.includes(p.brand)
-
-      const matchesFamily =
-        selectedFamilies.length === 0 ||
-        (p.family ? selectedFamilies.includes(p.family) : false)
-
-      const searchableText = [
-        p.name,
-        p.brand,
-        p.family,
-        p.concentration,
-        p.gender,
-        p.description,
-        ...(p.tags ?? []),
-        ...(p.notes?.top ?? []),
-        ...(p.notes?.heart ?? []),
-        ...(p.notes?.base ?? []),
-      ]
-        .filter(Boolean)
-        .join(" ")
-        .toLowerCase()
-
-      const matchesQuery =
-        normalizedQuery.length === 0 || searchableText.includes(normalizedQuery)
-
-      return matchesBrand && matchesFamily && matchesQuery
+    return filterCatalogPerfumes(perfumes, {
+      query,
+      brands: selectedBrands,
+      families: selectedFamilies,
     })
   }, [perfumes, query, selectedBrands, selectedFamilies])
 
   const isInitialLoading = isLoading && perfumes.length === 0
+  const hasBlockingError = Boolean(error) && perfumes.length === 0
 
   return (
     <main className="h-full w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
-      {(isLoading || error) && (
-        <div className="absolute left-1/2 top-24 z-[70] -translate-x-1/2 rounded-xl bg-black/50 px-4 py-2 text-sm text-white backdrop-blur">
-          {isLoading ? "Cargando catálogo..." : error}
+      {(isLoading || (error && perfumes.length > 0)) && (
+        <div
+          aria-live="polite"
+          className="absolute left-1/2 top-24 z-[70] flex -translate-x-1/2 items-center gap-3 rounded-lg bg-black/60 px-4 py-2 text-sm text-white backdrop-blur"
+        >
+          <span>{isLoading ? "Actualizando catálogo..." : error}</span>
+          {error && !isLoading ? (
+            <button
+              className="font-semibold underline underline-offset-4"
+              type="button"
+              onClick={() => void loadPerfumes()}
+            >
+              Reintentar
+            </button>
+          ) : null}
         </div>
       )}
 
@@ -69,6 +57,28 @@ export default function Catalog() {
           <div>
             <p className="text-sm uppercase text-white/50">Cargando</p>
             <h1 className="mt-3 text-3xl font-semibold">Preparando catálogo</h1>
+          </div>
+        </section>
+      ) : hasBlockingError ? (
+        <section
+          className="flex h-full w-full items-center justify-center px-6 text-center text-white"
+          role="alert"
+        >
+          <div className="max-w-md">
+            <p className="text-sm font-semibold uppercase text-white/45">
+              Catálogo no disponible
+            </p>
+            <h1 className="mt-3 text-3xl font-semibold">
+              No pudimos cargar los perfumes
+            </h1>
+            <p className="mt-3 text-sm leading-6 text-white/65">{error}</p>
+            <button
+              className="mt-6 rounded-lg bg-white px-4 py-2 text-sm font-semibold text-slate-950 hover:bg-white/90"
+              type="button"
+              onClick={() => void loadPerfumes()}
+            >
+              Reintentar
+            </button>
           </div>
         </section>
       ) : filtered.length > 0 ? (

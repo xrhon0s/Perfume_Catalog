@@ -87,6 +87,20 @@ npm run check
 
 Esto ejecuta lint, validación del catálogo local y build de producción.
 
-## 6. Pendiente: imágenes
+## 6. Imágenes
 
-Por ahora el seed no migra imágenes ni guarda links externos. La decisión de storage queda para una fase posterior. La recomendación inicial es usar Supabase Storage mientras el panel admin madura, y evaluar R2 o Cloudinary cuando el volumen de imágenes/tráfico lo justifique.
+El panel optimiza las imágenes a WebP mediante `/api/optimize-image` y las
+guarda en el bucket `perfume-images`. La función requiere
+`SUPABASE_SERVICE_ROLE_KEY` únicamente en el entorno privado del servidor.
+
+## 7. Respaldos
+
+Ejecuta antes de migraciones o cambios importantes:
+
+```bash
+npm run backup:supabase
+```
+
+Esto exporta las tablas administrativas y descarga las imágenes a una carpeta
+local `backups/`, ignorada por Git. Usa `-- --data-only` cuando solo necesites
+los registros JSON.
