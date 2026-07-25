@@ -50,6 +50,16 @@ const TAG_KEYWORDS = [
   "fiesta",
 ]
 
+const BRAND_HINTS = [
+  "Afnan",
+  "Armaf",
+  "Bond No.9",
+  "Carolina Herrera",
+  "Chanel",
+  "Lattafa",
+  "Orientica",
+]
+
 const normalize = (value: string) =>
   value
     .normalize("NFKD")
@@ -99,12 +109,21 @@ function parseName(text: string) {
   return cleanValue(firstSentence)
 }
 
-function parseBrand(text: string) {
+function parseBrand(text: string, name: string) {
   const labeled = findLabeledValue(text, ["marca", "casa", "brand"])
   if (labeled) return labeled
 
-  const byMatch = text.match(/\b(?:de la casa|de|by)\s+([A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ&'. -]{1,40})/i)
-  return byMatch?.[1] ? cleanValue(byMatch[1]) : ""
+  const houseMatch = text.match(
+    /\b(?:de la casa|casa|by)\s+([A-ZÁÉÍÓÚÑ][\wÁÉÍÓÚÑáéíóúñ&'. -]{1,40})/i,
+  )
+  if (houseMatch?.[1]) return cleanValue(houseMatch[1])
+
+  const normalizedName = normalize(name)
+  const hintedBrand = BRAND_HINTS.find((brand) =>
+    normalizedName.startsWith(normalize(brand)),
+  )
+
+  return hintedBrand || ""
 }
 
 function parseConcentration(text: string) {
@@ -183,23 +202,55 @@ function parseDescription(text: string) {
   const paragraph = text
     .split(/\n{2,}/)
     .map(cleanValue)
-    .find((item) => item.length > 80)
+    .find((item) => item.length > 80 && !/notas?\s+de/i.test(item))
 
   return paragraph || ""
+}
+
+function formatDescriptionList(values: string[]) {
+  if (values.length <= 1) return values.join("")
+  return `${values.slice(0, -1).join(", ")} y ${values.at(-1)}`
+}
+
+function buildGeneratedDescription(fields: ParsedPerfumeFields) {
+  const parts = ["Fragancia"]
+  const genderLabel =
+    fields.gender === "Femenino"
+      ? "femenina"
+      : fields.gender === "Masculino"
+        ? "masculina"
+        : fields.gender?.toLowerCase()
+
+  if (genderLabel) parts.push(genderLabel)
+  if (fields.family) parts.push(fields.family.toLowerCase())
+  if (fields.year) parts.push(`lanzada en ${fields.year}`)
+  if (fields.concentration) parts.push(`de concentración ${fields.concentration}`)
+
+  const tags = fields.tags
+    ?.split(",")
+    .map(cleanValue)
+    .filter(Boolean)
+    .slice(0, 4)
+
+  const profile = tags?.length
+    ? `, con perfil ${formatDescriptionList(tags)}`
+    : ""
+
+  return `${parts.join(" ")}${profile}.`
 }
 
 export function parsePerfumeText(text: string): ParsedPerfumeFields {
   const normalizedText = text.trim()
   if (!normalizedText) return {}
 
-  return {
-    name: parseName(normalizedText),
-    brand: parseBrand(normalizedText),
+  const name = parseName(normalizedText)
+  const fields: ParsedPerfumeFields = {
+    name,
+    brand: parseBrand(normalizedText, name),
     family: parseFamily(normalizedText),
     concentration: parseConcentration(normalizedText),
     gender: parseGender(normalizedText),
     year: parseYear(normalizedText),
-    description: parseDescription(normalizedText),
     tags: parseTags(normalizedText),
     topNotes: parseNotes(normalizedText, [
       "notas de salida",
@@ -223,6 +274,10 @@ export function parsePerfumeText(text: string): ParsedPerfumeFields {
       "base",
     ]),
   }
+
+  fields.description = parseDescription(normalizedText) || buildGeneratedDescription(fields)
+
+  return fields
 }
 
 export function parsedEntries(fields: ParsedPerfumeFields) {
