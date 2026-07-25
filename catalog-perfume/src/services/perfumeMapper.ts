@@ -8,6 +8,7 @@ export function mapCatalogRow(row: CatalogPerfumeRow): Perfume {
     name: row.name,
     brand: row.brand,
     image: row.image ?? undefined,
+    imagePath: row.image_path ?? undefined,
     family: row.family ?? undefined,
     concentration: row.concentration ?? undefined,
     gender: row.gender ?? undefined,
@@ -33,7 +34,7 @@ export function toPerfumePayload(input: PerfumeInput, brandId: string) {
     tags: input.tags ?? [],
     notes: input.notes ?? {},
     primary_image_url: input.image || null,
-    ...(input.imagePath ? { primary_image_path: input.imagePath } : {}),
+    primary_image_path: input.imagePath || null,
     is_active: input.isActive ?? true,
   }
 }

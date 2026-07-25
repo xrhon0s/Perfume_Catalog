@@ -40,6 +40,11 @@ export default function PerfumeTextInterpreter({
     setParsed(parsePerfumeText(text))
   }
 
+  const handleClear = () => {
+    setText("")
+    setParsed({})
+  }
+
   const applyParsed = (overwrite: boolean) => {
     for (const [field, value] of entries) {
       const formField = field as keyof ParsedPerfumeFields
@@ -57,14 +62,24 @@ export default function PerfumeTextInterpreter({
             Pega texto de otra fuente y extrae los campos del perfume.
           </p>
         </div>
-        <button
-          className="rounded-lg bg-slate-950 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
-          type="button"
-          disabled={!text.trim()}
-          onClick={handleParse}
-        >
-          Interpretar
-        </button>
+        <div className="flex gap-2">
+          <button
+            className="rounded-lg border bg-white px-3 py-2 text-xs font-semibold hover:bg-slate-100 disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            disabled={!text.trim() && entries.length === 0}
+            onClick={handleClear}
+          >
+            Limpiar
+          </button>
+          <button
+            className="rounded-lg bg-slate-950 px-3 py-2 text-xs font-semibold text-white hover:bg-slate-800 disabled:cursor-not-allowed disabled:bg-slate-400"
+            type="button"
+            disabled={!text.trim()}
+            onClick={handleParse}
+          >
+            Interpretar
+          </button>
+        </div>
       </div>
 
       <textarea

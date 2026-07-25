@@ -22,6 +22,7 @@ export type Perfume = {
   name: string
   brand: string
   image?: string
+  imagePath?: string
 
   family?: OlfactiveFamily
   concentration?: Concentration

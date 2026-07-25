@@ -1,3 +1,4 @@
+import { useMemo, useState } from "react"
 import type { Perfume } from "../../../data/types"
 
 type StatusFilter = "active" | "inactive" | "all"
@@ -16,6 +17,8 @@ type PerfumeTableProps = {
   onDelete: (id: string) => void
 }
 
+const PAGE_SIZE = 12
+
 export default function PerfumeTable({
   perfumes,
   isLoading,
@@ -29,8 +32,18 @@ export default function PerfumeTable({
   onEdit,
   onDelete,
 }: PerfumeTableProps) {
+  const [page, setPage] = useState(1)
+  const totalPages = Math.max(1, Math.ceil(perfumes.length / PAGE_SIZE))
+  const safePage = Math.min(page, totalPages)
+  const visiblePerfumes = useMemo(
+    () => perfumes.slice((safePage - 1) * PAGE_SIZE, safePage * PAGE_SIZE),
+    [safePage, perfumes],
+  )
+  const firstResult = perfumes.length === 0 ? 0 : (safePage - 1) * PAGE_SIZE + 1
+  const lastResult = Math.min(safePage * PAGE_SIZE, perfumes.length)
+
   return (
-    <section className="rounded-lg bg-white p-4 shadow-sm">
+    <section className="min-w-0 rounded-lg bg-white p-4 shadow-sm">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div>
           <h2 className="text-lg font-semibold">Perfumes</h2>
@@ -42,9 +55,10 @@ export default function PerfumeTable({
           <select
             className="rounded-lg border px-3 py-2 text-sm outline-none focus:border-slate-400"
             value={statusFilter}
-            onChange={(event) =>
+            onChange={(event) => {
+              setPage(1)
               onStatusFilterChange(event.target.value as StatusFilter)
-            }
+            }}
           >
             <option value="active">Activos</option>
             <option value="inactive">Inactivos</option>
@@ -54,7 +68,10 @@ export default function PerfumeTable({
             className="w-full rounded-lg border px-3 py-2 text-sm outline-none focus:border-slate-400 sm:w-72"
             placeholder="Buscar..."
             value={search}
-            onChange={(event) => onSearchChange(event.target.value)}
+            onChange={(event) => {
+              setPage(1)
+              onSearchChange(event.target.value)
+            }}
           />
         </div>
       </div>
@@ -65,20 +82,20 @@ export default function PerfumeTable({
         </p>
       )}
 
-      <div className="mt-4 overflow-x-auto rounded-lg border">
-        <table className="w-full text-left text-sm">
+      <div className="mt-4 overflow-hidden rounded-lg border">
+        <table className="w-full table-fixed text-left text-sm">
           <thead className="bg-slate-50 text-xs uppercase text-slate-500">
             <tr>
-              <th className="min-w-52 px-3 py-3">Perfume</th>
-              <th className="min-w-36 px-3 py-3">Marca</th>
-              <th className="min-w-32 px-3 py-3">Familia</th>
-              <th className="min-w-36 px-3 py-3">Perfil</th>
-              <th className="min-w-28 px-3 py-3">Estado</th>
-              <th className="min-w-44 px-3 py-3 text-right">Acciones</th>
+              <th className="w-[28%] px-3 py-3">Perfume</th>
+              <th className="w-[15%] px-3 py-3">Marca</th>
+              <th className="w-[13%] px-3 py-3">Familia</th>
+              <th className="w-[16%] px-3 py-3">Perfil</th>
+              <th className="w-[10%] px-3 py-3">Estado</th>
+              <th className="w-[18%] px-3 py-3 text-right">Acciones</th>
             </tr>
           </thead>
           <tbody className="divide-y">
-            {perfumes.map((perfume) => {
+            {visiblePerfumes.map((perfume) => {
               const isActive = perfume.isActive !== false
 
               return (
@@ -98,14 +115,18 @@ export default function PerfumeTable({
                           </div>
                         )}
                       </div>
-                      <span className="font-medium">{perfume.name}</span>
+                      <span className="min-w-0 truncate font-medium">
+                        {perfume.name}
+                      </span>
                     </div>
                   </td>
-                  <td className="px-3 py-3 text-slate-600">{perfume.brand}</td>
-                  <td className="px-3 py-3 text-slate-600">
+                  <td className="truncate px-3 py-3 text-slate-600">
+                    {perfume.brand}
+                  </td>
+                  <td className="truncate px-3 py-3 text-slate-600">
                     {perfume.family ?? "Sin familia"}
                   </td>
-                  <td className="px-3 py-3 text-slate-600">
+                  <td className="truncate px-3 py-3 text-slate-600">
                     {[perfume.concentration, perfume.gender, perfume.year]
                       .filter(Boolean)
                       .join(" · ") || "Sin perfil"}
@@ -123,15 +144,15 @@ export default function PerfumeTable({
                     </span>
                   </td>
                   <td className="px-3 py-3">
-                    <div className="flex justify-end gap-2">
+                    <div className="flex justify-end gap-1.5">
                       <button
-                        className="rounded-lg border px-3 py-1.5 font-medium hover:bg-slate-50"
+                        className="rounded-lg border px-2 py-1.5 text-xs font-medium hover:bg-slate-50"
                         onClick={() => onEdit(perfume)}
                       >
                         Editar
                       </button>
                       <button
-                        className="rounded-lg border border-red-200 px-3 py-1.5 font-medium text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="rounded-lg border border-red-200 px-2 py-1.5 text-xs font-medium text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
                         disabled={deletingId === perfume.id || !isActive}
                         onClick={() => onDelete(perfume.id)}
                       >
@@ -151,6 +172,37 @@ export default function PerfumeTable({
             )}
           </tbody>
         </table>
+      </div>
+
+      <div className="mt-4 flex flex-col gap-3 text-sm text-slate-600 sm:flex-row sm:items-center sm:justify-between">
+        <span>
+          {perfumes.length === 0
+            ? "Sin resultados"
+            : `${firstResult}-${lastResult} de ${perfumes.length}`}
+        </span>
+        <div className="flex items-center gap-2">
+          <button
+            className="rounded-lg border px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            disabled={safePage === 1}
+            onClick={() => setPage((current) => Math.max(1, current - 1))}
+          >
+            Anterior
+          </button>
+          <span className="min-w-20 text-center font-medium">
+            {safePage} / {totalPages}
+          </span>
+          <button
+            className="rounded-lg border px-3 py-2 font-semibold text-slate-700 hover:bg-slate-50 disabled:cursor-not-allowed disabled:opacity-50"
+            type="button"
+            disabled={safePage === totalPages}
+            onClick={() =>
+              setPage((current) => Math.min(totalPages, current + 1))
+            }
+          >
+            Siguiente
+          </button>
+        </div>
       </div>
     </section>
   )

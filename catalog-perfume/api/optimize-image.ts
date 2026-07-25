@@ -56,6 +56,18 @@ function getSupabaseAdmin() {
   })
 }
 
+async function readJsonBody(request: IncomingMessage) {
+  const chunks: Buffer[] = []
+
+  for await (const chunk of request) {
+    chunks.push(Buffer.isBuffer(chunk) ? chunk : Buffer.from(chunk))
+  }
+
+  if (chunks.length === 0) return {}
+
+  return JSON.parse(Buffer.concat(chunks).toString("utf8")) as Record<string, unknown>
+}
+
 async function requireAdmin(request: IncomingMessage) {
   const token = request.headers.authorization?.replace(/^Bearer\s+/i, "")
   if (!token) {
@@ -111,16 +123,37 @@ async function parseImage(request: IncomingMessage) {
 }
 
 export default async function handler(request: IncomingMessage, response: ServerResponse) {
-  if (request.method !== "POST") {
-    response.setHeader("allow", "POST")
+  if (request.method !== "POST" && request.method !== "DELETE") {
+    response.setHeader("allow", "POST, DELETE")
     return sendJson(response, 405, {
       error: "method_not_allowed",
-      message: "Usa POST para optimizar imágenes.",
+      message: "Usa POST para optimizar imágenes o DELETE para eliminarlas.",
     })
   }
 
   try {
     const supabase = await requireAdmin(request)
+
+    if (request.method === "DELETE") {
+      const body = await readJsonBody(request)
+      const path = typeof body.path === "string" ? body.path : ""
+
+      if (!path || !path.startsWith("perfumes/")) {
+        return sendJson(response, 400, {
+          error: "invalid_storage_path",
+          message: "No se recibió una ruta de imagen válida.",
+        })
+      }
+
+      const { error: removeError } = await supabase.storage
+        .from(SUPABASE_BUCKET)
+        .remove([path])
+
+      if (removeError) throw new Error(removeError.message)
+
+      return sendJson(response, 200, { ok: true })
+    }
+
     const image = await parseImage(request)
     const input = await readFile(image.filepath)
     const width = clamp(process.env.IMAGE_MAX_WIDTH, 100, 4000, DEFAULT_MAX_WIDTH)

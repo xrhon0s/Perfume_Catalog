@@ -13,9 +13,11 @@ type PerfumeFormProps = {
   errors: string[]
   saving: boolean
   uploadingImage: boolean
+  removingImage: boolean
   uploadStats: string | null
   onSubmit: (event: FormEvent) => void
   onReset: () => void
+  onImageRemove: () => void
   onFieldChange: <Field extends keyof PerfumeFormState>(
     field: Field,
     value: PerfumeFormState[Field],
@@ -28,9 +30,11 @@ export default function PerfumeForm({
   errors,
   saving,
   uploadingImage,
+  removingImage,
   uploadStats,
   onSubmit,
   onReset,
+  onImageRemove,
   onFieldChange,
   onImageUpload,
 }: PerfumeFormProps) {
@@ -109,6 +113,17 @@ export default function PerfumeForm({
               </div>
             )}
           </div>
+
+          {form.image ? (
+            <button
+              className="mt-3 w-full rounded-lg border border-red-200 bg-white px-3 py-2 text-xs font-semibold text-red-700 hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-60"
+              type="button"
+              disabled={removingImage || uploadingImage}
+              onClick={onImageRemove}
+            >
+              {removingImage ? "Quitando imagen..." : "Quitar imagen"}
+            </button>
+          ) : null}
 
           <label className="mt-3 block text-xs font-medium text-slate-600">
             URL de imagen

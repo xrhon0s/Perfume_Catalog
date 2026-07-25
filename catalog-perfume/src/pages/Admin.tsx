@@ -45,6 +45,7 @@ export default function Admin() {
   const savePerfume = useCatalogStore((s) => s.savePerfume)
   const deletePerfume = useCatalogStore((s) => s.deletePerfume)
   const uploadPerfumeImage = useCatalogStore((s) => s.uploadPerfumeImage)
+  const deletePerfumeImage = useCatalogStore((s) => s.deletePerfumeImage)
 
   const [session, setSession] = useState<Session | null>(null)
   const [isAdmin, setIsAdmin] = useState(false)
@@ -57,7 +58,9 @@ export default function Admin() {
   const [formErrors, setFormErrors] = useState<string[]>([])
   const [saving, setSaving] = useState(false)
   const [uploadingImage, setUploadingImage] = useState(false)
+  const [removingImage, setRemovingImage] = useState(false)
   const [uploadStats, setUploadStats] = useState<UploadStats | null>(null)
+  const [pendingImagePath, setPendingImagePath] = useState<string | null>(null)
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
@@ -187,6 +190,7 @@ export default function Admin() {
     try {
       await savePerfume(formToPerfumeInput(form))
       setForm(emptyPerfumeForm)
+      setPendingImagePath(null)
       setNotice({ tone: "success", message: "Perfume guardado correctamente." })
     } catch (saveError) {
       setNotice({
@@ -216,6 +220,10 @@ export default function Admin() {
         image: uploaded.publicUrl,
         imagePath: uploaded.path,
       }))
+      if (pendingImagePath && pendingImagePath !== uploaded.path) {
+        void deletePerfumeImage(pendingImagePath).catch(() => undefined)
+      }
+      setPendingImagePath(uploaded.path)
       setUploadStats(uploaded.optimization ?? null)
       setNotice({
         tone: "success",
@@ -233,6 +241,49 @@ export default function Admin() {
       })
     } finally {
       setUploadingImage(false)
+    }
+  }
+
+  const handleImageRemove = async () => {
+    const path = form.imagePath
+
+    if (!form.image) return
+
+    if (path && !window.confirm("¿Quitar esta imagen y eliminarla del storage?")) {
+      return
+    }
+
+    setRemovingImage(true)
+    setNotice({
+      tone: "info",
+      message: path ? "Eliminando imagen del storage..." : "Quitando URL de imagen...",
+    })
+
+    try {
+      if (path) await deletePerfumeImage(path)
+      setForm((current) => ({
+        ...current,
+        image: "",
+        imagePath: "",
+      }))
+      if (pendingImagePath === path) setPendingImagePath(null)
+      setUploadStats(null)
+      setNotice({
+        tone: "success",
+        message: path
+          ? "Imagen eliminada del storage. Guarda el perfume para confirmar el cambio."
+          : "URL de imagen quitada. Guarda el perfume para confirmar el cambio.",
+      })
+    } catch (removeError) {
+      setNotice({
+        tone: "error",
+        message:
+          removeError instanceof Error
+            ? removeError.message
+            : "No se pudo quitar la imagen.",
+      })
+    } finally {
+      setRemovingImage(false)
     }
   }
 
@@ -326,6 +377,7 @@ export default function Admin() {
           onEdit={(perfume) => {
             setForm(perfumeToForm(perfume))
             setUploadStats(null)
+            setPendingImagePath(null)
           }}
           onDelete={(id) => void handleDelete(id)}
         />
@@ -335,12 +387,15 @@ export default function Admin() {
           errors={formErrors}
           saving={saving}
           uploadingImage={uploadingImage}
+          removingImage={removingImage}
           uploadStats={uploadStats ? formatUploadStats(uploadStats) : null}
           onSubmit={handleSave}
           onReset={() => {
             setForm(emptyPerfumeForm)
             setUploadStats(null)
+            setPendingImagePath(null)
           }}
+          onImageRemove={() => void handleImageRemove()}
           onFieldChange={updateField}
           onImageUpload={(file) => void handleImageUpload(file)}
         />

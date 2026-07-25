@@ -6,6 +6,7 @@ export type CatalogPerfumeRow = {
   name: string
   brand: string
   image: string | null
+  image_path: string | null
   family: Perfume["family"] | null
   concentration: Perfume["concentration"] | null
   gender: Perfume["gender"] | null

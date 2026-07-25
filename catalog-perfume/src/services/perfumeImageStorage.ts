@@ -34,6 +34,15 @@ export type UploadedPerfumeImage = {
   }
 }
 
+async function getAccessToken() {
+  const supabase = hasSupabaseConfig ? await getSupabaseClient() : null
+  const { data: sessionData } = supabase
+    ? await supabase.auth.getSession()
+    : { data: { session: null } }
+
+  return sessionData.session?.access_token
+}
+
 export async function uploadPerfumeImage(file: File): Promise<UploadedPerfumeImage> {
   if (!file.type.startsWith("image/")) {
     throw new Error("Selecciona un archivo de imagen válido.")
@@ -64,11 +73,7 @@ async function uploadWithOptimizer(file: File): Promise<UploadedPerfumeImage> {
     params.set("storage", IMAGE_OPTIMIZER_STORAGE)
   }
 
-  const supabase = hasSupabaseConfig ? await getSupabaseClient() : null
-  const { data: sessionData } = supabase
-    ? await supabase.auth.getSession()
-    : { data: { session: null } }
-  const accessToken = sessionData.session?.access_token
+  const accessToken = await getAccessToken()
 
   const endpoint = IMAGE_OPTIMIZER_URL.startsWith("/")
     ? IMAGE_OPTIMIZER_URL
@@ -108,6 +113,28 @@ async function uploadWithOptimizer(file: File): Promise<UploadedPerfumeImage> {
             savedPercent: data.savedPercent,
           }
         : undefined,
+  }
+}
+
+export async function deletePerfumeImage(path: string): Promise<void> {
+  if (!path) return
+
+  const endpoint = IMAGE_OPTIMIZER_URL.startsWith("/")
+    ? IMAGE_OPTIMIZER_URL
+    : `${IMAGE_OPTIMIZER_URL}/optimize`
+  const accessToken = await getAccessToken()
+  const response = await fetch(endpoint, {
+    method: "DELETE",
+    headers: {
+      "content-type": "application/json",
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+    body: JSON.stringify({ path }),
+  })
+  const data = (await response.json().catch(() => null)) as { message?: string } | null
+
+  if (!response.ok) {
+    throw new Error(data?.message || "No se pudo eliminar la imagen del storage.")
   }
 }
 

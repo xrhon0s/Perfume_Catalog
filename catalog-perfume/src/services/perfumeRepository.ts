@@ -103,4 +103,4 @@ export async function deletePerfume(id: string): Promise<void> {
   }
 }
 
-export { uploadPerfumeImage } from "./perfumeImageStorage"
+export { deletePerfumeImage, uploadPerfumeImage } from "./perfumeImageStorage"

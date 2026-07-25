@@ -158,6 +158,7 @@ select
   p.name,
   b.name as brand,
   p.primary_image_url as image,
+  p.primary_image_path as image_path,
   p.family,
   p.concentration,
   p.gender,

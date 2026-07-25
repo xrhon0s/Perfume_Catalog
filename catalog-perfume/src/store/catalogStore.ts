@@ -2,6 +2,7 @@ import { create } from "zustand"
 import type { Perfume } from "../data/types"
 import {
   deletePerfume,
+  deletePerfumeImage,
   listAdminPerfumes,
   listPerfumes,
   savePerfume,
@@ -19,6 +20,7 @@ type CatalogState = {
   savePerfume: (perfume: PerfumeInput) => Promise<void>
   deletePerfume: (id: string) => Promise<void>
   uploadPerfumeImage: (file: File) => Promise<UploadedPerfumeImage>
+  deletePerfumeImage: (path: string) => Promise<void>
 }
 
 export const useCatalogStore = create<CatalogState>((set, get) => ({
@@ -64,4 +66,5 @@ export const useCatalogStore = create<CatalogState>((set, get) => ({
   },
 
   uploadPerfumeImage,
+  deletePerfumeImage,
 }))
