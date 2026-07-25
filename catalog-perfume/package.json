@@ -20,6 +20,7 @@
     "@supabase/supabase-js": "^2.107.0",
     "formidable": "^3.5.4",
     "framer-motion": "^12.24.10",
+    "lucide-react": "^1.26.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
     "react-pageflip": "^2.0.3",
