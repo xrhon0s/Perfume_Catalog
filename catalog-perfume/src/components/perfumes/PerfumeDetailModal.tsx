@@ -1,5 +1,9 @@
 import { useEffect, useId } from "react"
 import type { Perfume } from "../../data/types"
+import {
+  formatCatalogPrice,
+  formatPerfumeSize,
+} from "../../shared/utils/catalogFormatting"
 
 type Props = {
   perfume: Perfume
@@ -95,6 +99,44 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
                 Cerrar ✕
               </button>
             </div>
+
+            {perfume.inventory ? (
+              <div className="mt-6 grid grid-cols-2 gap-x-4 gap-y-3 border-y border-slate-200 py-4 sm:grid-cols-4">
+                <div>
+                  <p className="text-xs text-slate-500">Precio</p>
+                  <p className="mt-1 font-semibold text-slate-950">
+                    {formatCatalogPrice(perfume.inventory.salePrice)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Presentación</p>
+                  <p className="mt-1 font-semibold text-slate-950">
+                    {formatPerfumeSize(perfume.inventory.sizeMl)}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">Disponibilidad</p>
+                  <p
+                    className={[
+                      "mt-1 font-semibold",
+                      perfume.inventory.stockQuantity > 0
+                        ? "text-emerald-700"
+                        : "text-red-700",
+                    ].join(" ")}
+                  >
+                    {perfume.inventory.stockQuantity > 0
+                      ? `${perfume.inventory.stockQuantity} unidades`
+                      : "Agotado"}
+                  </p>
+                </div>
+                <div>
+                  <p className="text-xs text-slate-500">SKU</p>
+                  <p className="mt-1 truncate font-mono text-sm font-semibold text-slate-700">
+                    {perfume.inventory.sku ?? "Automático"}
+                  </p>
+                </div>
+              </div>
+            ) : null}
 
             <dl className="mt-6 grid grid-cols-2 gap-3 text-sm sm:grid-cols-4">
               {perfume.family && (

@@ -19,6 +19,10 @@ export type ParsedPerfumeFields = Partial<
     | "topNotes"
     | "heartNotes"
     | "baseNotes"
+    | "sku"
+    | "sizeMl"
+    | "salePrice"
+    | "stockQuantity"
   >
 >
 
@@ -160,6 +164,70 @@ function parseYear(text: string) {
   return year?.[1] || ""
 }
 
+function parseSizeMl(text: string) {
+  const labeled = findLabeledValue(text, [
+    "tamaño",
+    "tamano",
+    "presentación",
+    "presentacion",
+    "contenido",
+    "size",
+  ])
+  const match =
+    labeled.match(/\b(\d{1,4})\s*(?:ml|mililitros?)?\b/i) ||
+    text.match(/\b(\d{1,4})\s*(?:ml|mililitros?)\b/i)
+
+  return match?.[1] || ""
+}
+
+function parseNumericAmount(value: string) {
+  const numeric = value.replace(/[^\d.,]/g, "")
+  if (!numeric) return ""
+
+  const separatorMatches = numeric.match(/[.,]/g) ?? []
+  const lastSeparator = Math.max(numeric.lastIndexOf("."), numeric.lastIndexOf(","))
+  const decimalPlaces =
+    lastSeparator >= 0 ? numeric.length - lastSeparator - 1 : 0
+  const usesThousandsSeparator =
+    separatorMatches.length > 1 || decimalPlaces === 3
+  const normalized = usesThousandsSeparator
+    ? numeric.replace(/[.,]/g, "")
+    : numeric.replace(",", ".")
+  const amount = Number(normalized)
+
+  return Number.isFinite(amount) ? String(amount) : ""
+}
+
+function parseSalePrice(text: string) {
+  const labeled = findLabeledValue(text, [
+    "precio de venta",
+    "precio",
+    "valor",
+    "sale price",
+  ])
+  return parseNumericAmount(labeled)
+}
+
+function parseStockQuantity(text: string) {
+  const labeled = findLabeledValue(text, [
+    "existencias",
+    "stock",
+    "unidades disponibles",
+    "cantidad disponible",
+  ])
+  const match =
+    labeled.match(/\b(\d+)\b/) ||
+    text.match(/\b(\d+)\s+unidades?\s+disponibles?\b/i)
+
+  return match?.[1] || ""
+}
+
+function parseSku(text: string) {
+  return findLabeledValue(text, ["sku", "referencia", "código", "codigo"])
+    .replace(/\s+/g, "-")
+    .toUpperCase()
+}
+
 function parseFamily(text: string) {
   const labeled = findLabeledValue(text, [
     "familia",
@@ -273,6 +341,10 @@ export function parsePerfumeText(text: string): ParsedPerfumeFields {
       "base notes",
       "base",
     ]),
+    sku: parseSku(normalizedText),
+    sizeMl: parseSizeMl(normalizedText),
+    salePrice: parseSalePrice(normalizedText),
+    stockQuantity: parseStockQuantity(normalizedText),
   }
 
   fields.description = parseDescription(normalizedText) || buildGeneratedDescription(fields)

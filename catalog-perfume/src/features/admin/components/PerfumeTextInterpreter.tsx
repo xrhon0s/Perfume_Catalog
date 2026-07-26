@@ -27,6 +27,10 @@ const FIELD_LABELS: Record<keyof ParsedPerfumeFields, string> = {
   topNotes: "Salida",
   heartNotes: "Corazón",
   baseNotes: "Fondo",
+  sku: "SKU",
+  sizeMl: "Tamaño",
+  salePrice: "Precio",
+  stockQuantity: "Existencias",
 }
 
 export default function PerfumeTextInterpreter({

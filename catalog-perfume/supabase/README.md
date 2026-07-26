@@ -18,7 +18,15 @@ Para producción:
 
 ## 2. Aplicar esquema
 
-Ejecuta `supabase/migrations/001_catalog_inventory.sql` en el SQL editor de Supabase o con Supabase CLI.
+Ejecuta las migraciones en este orden desde el SQL editor de Supabase o con
+Supabase CLI:
+
+1. `supabase/migrations/001_catalog_inventory.sql`
+2. `supabase/migrations/002_catalog_perfumes_image_path.sql`
+3. `supabase/migrations/003_primary_inventory.sql`
+
+Si el proyecto ya estaba funcionando antes de incorporar precios y existencias,
+solo necesitas ejecutar la migración `003_primary_inventory.sql`.
 
 Este esquema crea:
 
@@ -32,6 +40,8 @@ Este esquema crea:
 - bucket público `perfume-images`
 - políticas RLS para lectura pública y escritura de admins
 - restricciones de calidad para familia, concentración, género, año, notas y precios
+- presentación principal con SKU automático, precio y existencias
+- ajustes de inventario registrados como movimientos de stock
 
 ## 3. Generar seed desde el catálogo actual
 

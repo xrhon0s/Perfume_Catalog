@@ -145,7 +145,9 @@ export default function Admin() {
       if (!matchesStatus) return false
       if (!normalized) return true
 
-      return `${perfume.name} ${perfume.brand}`.toLowerCase().includes(normalized)
+      return `${perfume.name} ${perfume.brand} ${perfume.inventory?.sku ?? ""}`
+        .toLowerCase()
+        .includes(normalized)
     })
   }, [perfumes, search, statusFilter])
 
@@ -153,7 +155,22 @@ export default function Admin() {
     () => perfumes.filter((perfume) => perfume.isActive !== false).length,
     [perfumes],
   )
-  const inactiveCount = perfumes.length - activeCount
+  const outOfStockCount = useMemo(
+    () =>
+      perfumes.filter(
+        (perfume) =>
+          perfume.inventory && perfume.inventory.stockQuantity === 0,
+      ).length,
+    [perfumes],
+  )
+  const stockUnits = useMemo(
+    () =>
+      perfumes.reduce(
+        (total, perfume) => total + (perfume.inventory?.stockQuantity ?? 0),
+        0,
+      ),
+    [perfumes],
+  )
 
   const updateField = <Field extends keyof PerfumeFormState>(
     field: Field,
@@ -443,7 +460,7 @@ export default function Admin() {
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-5 sm:gap-7">
-            <dl className="flex items-center gap-5 sm:gap-7">
+            <dl className="flex flex-wrap items-center gap-x-5 gap-y-3 sm:gap-x-7">
               <div>
                 <dt className="text-xs font-medium text-slate-500">Total</dt>
                 <dd className="mt-0.5 text-lg font-semibold">{perfumes.length}</dd>
@@ -455,9 +472,15 @@ export default function Admin() {
                 </dd>
               </div>
               <div>
-                <dt className="text-xs font-medium text-slate-500">Ocultos</dt>
-                <dd className="mt-0.5 text-lg font-semibold text-slate-600">
-                  {inactiveCount}
+                <dt className="text-xs font-medium text-slate-500">Agotados</dt>
+                <dd className="mt-0.5 text-lg font-semibold text-red-700">
+                  {outOfStockCount}
+                </dd>
+              </div>
+              <div>
+                <dt className="text-xs font-medium text-slate-500">Unidades</dt>
+                <dd className="mt-0.5 text-lg font-semibold text-slate-700">
+                  {stockUnits}
                 </dd>
               </div>
             </dl>

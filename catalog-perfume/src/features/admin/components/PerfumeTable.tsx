@@ -9,6 +9,10 @@ import {
   Trash2,
 } from "lucide-react"
 import type { Perfume } from "../../../data/types"
+import {
+  formatCatalogPrice,
+  formatPerfumeSize,
+} from "../../../shared/utils/catalogFormatting"
 
 type StatusFilter = "active" | "inactive" | "all"
 
@@ -66,6 +70,27 @@ function StatusBadge({ active }: { active: boolean }) {
         ].join(" ")}
       />
       {active ? "Activo" : "Oculto"}
+    </span>
+  )
+}
+
+function StockStatus({ perfume }: { perfume: Perfume }) {
+  const stock = perfume.inventory?.stockQuantity
+
+  if (stock === undefined) {
+    return <span className="text-xs text-slate-400">Sin configurar</span>
+  }
+
+  const tone =
+    stock === 0
+      ? "text-red-700"
+      : stock <= 3
+        ? "text-amber-700"
+        : "text-emerald-700"
+
+  return (
+    <span className={`text-xs font-semibold ${tone}`}>
+      {stock === 0 ? "Agotado" : `${stock} unidades`}
     </span>
   )
 }
@@ -141,7 +166,7 @@ export default function PerfumeTable({
               <span className="sr-only">Buscar perfumes</span>
               <input
                 className="h-10 w-full rounded-md border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#8f334d] focus:ring-2 focus:ring-[#8f334d]/10"
-                placeholder="Nombre o marca"
+                placeholder="Nombre, marca o SKU"
                 value={search}
                 onChange={(event) => {
                   setPage(1)
@@ -159,15 +184,15 @@ export default function PerfumeTable({
         )}
       </div>
 
-      <div className="hidden md:block">
+      <div className="hidden lg:block">
         <table className="w-full table-fixed text-left text-sm">
           <thead className="border-b border-slate-200 bg-slate-50/70 text-[11px] uppercase text-slate-500">
             <tr>
-              <th className="w-[27%] px-4 py-3 font-semibold">Perfume</th>
-              <th className="w-[17%] px-3 py-3 font-semibold">Marca</th>
-              <th className="w-[16%] px-3 py-3 font-semibold">Familia</th>
-              <th className="w-[19%] px-3 py-3 font-semibold">Perfil</th>
-              <th className="w-[10%] px-3 py-3 font-semibold">Estado</th>
+              <th className="w-[34%] px-4 py-3 font-semibold">Perfume</th>
+              <th className="w-[13%] px-3 py-3 font-semibold">Presentación</th>
+              <th className="w-[16%] px-3 py-3 font-semibold">Precio</th>
+              <th className="w-[15%] px-3 py-3 font-semibold">Existencias</th>
+              <th className="w-[11%] px-3 py-3 font-semibold">Estado</th>
               <th className="w-[11%] px-4 py-3 text-right font-semibold">
                 Acciones
               </th>
@@ -183,21 +208,27 @@ export default function PerfumeTable({
                   <td className="px-4 py-2.5">
                     <div className="flex min-w-0 items-center gap-3">
                       <PerfumeImage perfume={perfume} />
-                      <span className="min-w-0 truncate font-medium text-slate-900">
-                        {perfume.name}
-                      </span>
+                      <div className="min-w-0">
+                        <p className="truncate font-medium text-slate-900">
+                          {perfume.name}
+                        </p>
+                        <p className="mt-0.5 truncate text-xs text-slate-500">
+                          {perfume.brand}
+                          {perfume.inventory?.sku
+                            ? ` · ${perfume.inventory.sku}`
+                            : ""}
+                        </p>
+                      </div>
                     </div>
                   </td>
                   <td className="truncate px-3 py-2.5 text-slate-600">
-                    {perfume.brand}
+                    {formatPerfumeSize(perfume.inventory?.sizeMl)}
                   </td>
-                  <td className="truncate px-3 py-2.5 text-slate-600">
-                    {perfume.family ?? "Sin familia"}
+                  <td className="truncate px-3 py-2.5 font-medium text-slate-700">
+                    {formatCatalogPrice(perfume.inventory?.salePrice)}
                   </td>
-                  <td className="truncate px-3 py-2.5 text-slate-600">
-                    {[perfume.concentration, perfume.gender, perfume.year]
-                      .filter(Boolean)
-                      .join(" · ") || "Sin perfil"}
+                  <td className="px-3 py-2.5">
+                    <StockStatus perfume={perfume} />
                   </td>
                   <td className="px-3 py-2.5">
                     <StatusBadge active={isActive} />
@@ -247,7 +278,7 @@ export default function PerfumeTable({
         </table>
       </div>
 
-      <div className="divide-y divide-slate-100 md:hidden">
+      <div className="divide-y divide-slate-100 lg:hidden">
         {visiblePerfumes.map((perfume) => {
           const isActive = perfume.isActive !== false
           const isDeleting = deletingId === perfume.id
@@ -261,10 +292,15 @@ export default function PerfumeTable({
                     {perfume.name}
                   </h3>
                   <p className="mt-0.5 truncate text-xs text-slate-500">
-                    {perfume.brand} · {perfume.family ?? "Sin familia"}
+                    {perfume.brand} ·{" "}
+                    {formatPerfumeSize(perfume.inventory?.sizeMl)}
                   </p>
-                  <div className="mt-2">
+                  <p className="mt-1 text-xs font-medium text-slate-700">
+                    {formatCatalogPrice(perfume.inventory?.salePrice)}
+                  </p>
+                  <div className="mt-2 flex items-center gap-3">
                     <StatusBadge active={isActive} />
+                    <StockStatus perfume={perfume} />
                   </div>
                 </div>
                 <div className="flex shrink-0 items-start gap-1">

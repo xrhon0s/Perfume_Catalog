@@ -1,6 +1,10 @@
 import { useState } from "react"
 import { ArrowUpRight, ImageOff } from "lucide-react"
 import type { Perfume } from "../../data/types"
+import {
+  formatCatalogPrice,
+  formatPerfumeSize,
+} from "../../shared/utils/catalogFormatting"
 
 type MagazinePageProps = {
   side: "left" | "right"
@@ -22,6 +26,9 @@ export default function MagazinePage({
     perfume?.concentration,
     perfume?.gender,
     perfume?.year,
+    perfume?.inventory?.sizeMl
+      ? formatPerfumeSize(perfume.inventory.sizeMl)
+      : undefined,
   ].filter(Boolean)
   const titleLength = perfume?.name.length ?? 0
   const titleSize =
@@ -82,6 +89,26 @@ export default function MagazinePage({
             <p className="mt-3 text-xs leading-5 text-white/70">
               {profile.join(" · ")}
             </p>
+          ) : null}
+
+          {perfume?.inventory ? (
+            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+              <span className="text-lg font-semibold">
+                {formatCatalogPrice(perfume.inventory.salePrice)}
+              </span>
+              <span
+                className={[
+                  "text-xs font-semibold",
+                  perfume.inventory.stockQuantity > 0
+                    ? "text-emerald-300"
+                    : "text-red-300",
+                ].join(" ")}
+              >
+                {perfume.inventory.stockQuantity > 0
+                  ? `${perfume.inventory.stockQuantity} disponibles`
+                  : "Agotado"}
+              </span>
+            </div>
           ) : null}
 
           {onView && perfume && (

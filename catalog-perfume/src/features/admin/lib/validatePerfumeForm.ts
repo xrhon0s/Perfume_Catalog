@@ -5,6 +5,9 @@ export const currentCatalogYear = new Date().getFullYear()
 export function validatePerfumeForm(form: PerfumeFormState) {
   const errors: string[] = []
   const year = form.year ? Number(form.year) : undefined
+  const sizeMl = Number(form.sizeMl)
+  const salePrice = Number(form.salePrice)
+  const stockQuantity = Number(form.stockQuantity)
 
   if (form.name.trim().length < 2) {
     errors.push("El nombre debe tener al menos 2 caracteres.")
@@ -38,6 +41,21 @@ export function validatePerfumeForm(form: PerfumeFormState) {
     errors.push("Agrega al menos una nota olfativa.")
   }
 
+  if (!Number.isInteger(sizeMl) || sizeMl <= 0) {
+    errors.push("El tamaño debe ser un número entero mayor que cero.")
+  }
+
+  if (form.salePrice.trim() === "" || !Number.isFinite(salePrice) || salePrice < 0) {
+    errors.push("El precio de venta debe ser cero o mayor.")
+  }
+
+  if (
+    form.stockQuantity.trim() === "" ||
+    !Number.isInteger(stockQuantity) ||
+    stockQuantity < 0
+  ) {
+    errors.push("Las existencias deben ser un número entero igual o mayor que cero.")
+  }
+
   return errors
 }
-

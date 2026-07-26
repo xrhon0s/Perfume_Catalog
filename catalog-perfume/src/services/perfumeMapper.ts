@@ -17,6 +17,20 @@ export function mapCatalogRow(row: CatalogPerfumeRow): Perfume {
     tags: row.tags ?? undefined,
     notes: row.notes ?? undefined,
     isActive: row.is_active,
+    inventory:
+      row.inventory_item_id ||
+      row.sku ||
+      row.size_ml !== null ||
+      row.sale_price !== null
+        ? {
+            id: row.inventory_item_id ?? undefined,
+            sku: row.sku ?? undefined,
+            sizeMl: row.size_ml ?? undefined,
+            salePrice:
+              row.sale_price === null ? undefined : Number(row.sale_price),
+            stockQuantity: row.stock_quantity ?? 0,
+          }
+        : undefined,
   }
 }
 

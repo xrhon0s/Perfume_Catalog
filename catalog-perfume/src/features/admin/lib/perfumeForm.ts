@@ -16,6 +16,10 @@ export type PerfumeFormState = {
   topNotes: string
   heartNotes: string
   baseNotes: string
+  sku: string
+  sizeMl: string
+  salePrice: string
+  stockQuantity: string
   isActive: boolean
 }
 
@@ -34,6 +38,10 @@ export const emptyPerfumeForm: PerfumeFormState = {
   topNotes: "",
   heartNotes: "",
   baseNotes: "",
+  sku: "",
+  sizeMl: "",
+  salePrice: "",
+  stockQuantity: "0",
   isActive: true,
 }
 
@@ -64,6 +72,15 @@ export function perfumeToForm(perfume: Perfume): PerfumeFormState {
     topNotes: joinValues(perfume.notes?.top),
     heartNotes: joinValues(perfume.notes?.heart),
     baseNotes: joinValues(perfume.notes?.base),
+    sku: perfume.inventory?.sku ?? "",
+    sizeMl: perfume.inventory?.sizeMl
+      ? String(perfume.inventory.sizeMl)
+      : "",
+    salePrice:
+      perfume.inventory?.salePrice !== undefined
+        ? String(perfume.inventory.salePrice)
+        : "",
+    stockQuantity: String(perfume.inventory?.stockQuantity ?? 0),
     isActive: perfume.isActive ?? true,
   }
 }
@@ -86,6 +103,12 @@ export function formToPerfumeInput(form: PerfumeFormState): PerfumeInput {
       top: splitValues(form.topNotes),
       heart: splitValues(form.heartNotes),
       base: splitValues(form.baseNotes),
+    },
+    inventory: {
+      sku: form.sku.trim() || undefined,
+      sizeMl: Number(form.sizeMl),
+      salePrice: Number(form.salePrice),
+      stockQuantity: Number(form.stockQuantity),
     },
     isActive: form.isActive,
   }

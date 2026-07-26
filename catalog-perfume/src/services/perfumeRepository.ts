@@ -1,6 +1,6 @@
 import type { Perfume } from "../data/types"
 import { getPerfumes as getLocalPerfumes } from "../data/legacy/getPerfumes"
-import { isUuid } from "../shared/utils/text"
+import { isUuid, toSlug } from "../shared/utils/text"
 import { getOrCreateBrandId } from "./brandRepository"
 import { mapCatalogRow, toPerfumePayload } from "./perfumeMapper"
 import type { CatalogPerfumeRow, PerfumeInput } from "./perfumeTypes"
@@ -66,6 +66,47 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
   }
 
   const supabase = await getSupabaseClient()
+
+  if (input.inventory) {
+    const { error: productError } = await supabase.rpc(
+      "save_perfume_product",
+      {
+        requested_perfume_id:
+          input.id && isUuid(input.id) ? input.id : null,
+        requested_legacy_id:
+          input.id && !isUuid(input.id) ? input.id : null,
+        requested_brand_name: input.brand.trim(),
+        requested_name: input.name.trim(),
+        requested_slug: toSlug(input.name),
+        requested_family: input.family || null,
+        requested_concentration: input.concentration || null,
+        requested_gender: input.gender || null,
+        requested_year: input.year || null,
+        requested_description: input.description || null,
+        requested_tags: input.tags ?? [],
+        requested_notes: input.notes ?? {},
+        requested_image_url: input.image || null,
+        requested_image_path: input.imagePath || null,
+        requested_is_active: input.isActive ?? true,
+        requested_sku: input.inventory.sku || null,
+        requested_size_ml: input.inventory.sizeMl,
+        requested_sale_price: input.inventory.salePrice,
+        requested_stock_quantity: input.inventory.stockQuantity,
+      },
+    )
+
+    if (productError) {
+      throw new Error(
+        productError.code === "PGRST202"
+          ? "Ejecuta la migración 003_primary_inventory.sql en Supabase antes de guardar inventario."
+          : productError.code === "42501"
+            ? "No tienes permisos de administrador para guardar el producto."
+            : productError.message,
+      )
+    }
+    return
+  }
+
   const brandId = await getOrCreateBrandId(input.brand)
   const payload = toPerfumePayload(input, brandId)
 

@@ -26,6 +26,8 @@ export function filterCatalogPerfumes(
       perfume.concentration,
       perfume.gender,
       perfume.description,
+      perfume.inventory?.sku,
+      perfume.inventory?.sizeMl,
       ...(perfume.tags ?? []),
       ...(perfume.notes?.top ?? []),
       ...(perfume.notes?.heart ?? []),

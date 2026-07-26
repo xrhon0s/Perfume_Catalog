@@ -15,6 +15,9 @@ Notas de corazón: fresa fizz candy, gardenia
 Notas de fondo: vainilla, ámbar, almizcle, sándalo
 Tags: dulce, frutal, gourmand, juvenil
 Descripción: Una fragancia dulce y cremosa.
+Presentación: 100 ml
+Precio: $189.900
+Existencias: 7
 `)
 
     expect(parsed).toMatchObject({
@@ -28,6 +31,17 @@ Descripción: Una fragancia dulce y cremosa.
       heartNotes: "fresa fizz candy, gardenia",
       baseNotes: "vainilla, ámbar, almizcle, sándalo",
       description: "Una fragancia dulce y cremosa",
+      sizeMl: "100",
+      salePrice: "189900",
+      stockQuantity: "7",
     })
+  })
+
+  it("reconoce el tamaño dentro de una frase natural", () => {
+    const parsed = parsePerfumeText(
+      "Lattafa Yara Candy viene en una presentación de 100 ml.",
+    )
+
+    expect(parsed.sizeMl).toBe("100")
   })
 })

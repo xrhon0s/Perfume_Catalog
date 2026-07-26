@@ -10,6 +10,12 @@ const perfumes: Perfume[] = [
     family: "Gourmand",
     tags: ["dulce", "cremoso"],
     notes: { base: ["vainilla"] },
+    inventory: {
+      sku: "LATT-YARACAND-100",
+      sizeMl: 100,
+      salePrice: 189900,
+      stockQuantity: 7,
+    },
   },
   {
     id: "bleu",
@@ -26,6 +32,16 @@ describe("filterCatalogPerfumes", () => {
     expect(
       filterCatalogPerfumes(perfumes, {
         query: "vainilla",
+        brands: [],
+        families: [],
+      }).map((perfume) => perfume.id),
+    ).toEqual(["yara"])
+  })
+
+  it("encuentra una presentación por SKU", () => {
+    expect(
+      filterCatalogPerfumes(perfumes, {
+        query: "LATT-YARACAND-100",
         brands: [],
         families: [],
       }).map((perfume) => perfume.id),

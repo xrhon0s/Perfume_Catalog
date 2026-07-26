@@ -113,6 +113,83 @@ export default function PerfumeForm({
         </section>
 
         <section className="border-t border-slate-200 pt-5">
+          <div>
+            <h3 className="text-sm font-semibold text-slate-900">
+              Venta e inventario
+            </h3>
+            <p className="mt-0.5 text-xs text-slate-500">
+              Presentación principal disponible en el catálogo.
+            </p>
+          </div>
+          <div className="mt-3 grid grid-cols-2 gap-4">
+            <label className={`${labelClass} col-span-2`}>
+              SKU
+              <input
+                className={inputClass}
+                value={form.sku}
+                onChange={(event) => onFieldChange("sku", event.target.value)}
+                placeholder="Automático si se deja vacío"
+              />
+            </label>
+            <label className={labelClass}>
+              Tamaño
+              <span className="relative block">
+                <input
+                  className={`${inputClass} pr-10`}
+                  inputMode="numeric"
+                  min="1"
+                  step="1"
+                  type="number"
+                  value={form.sizeMl}
+                  onChange={(event) =>
+                    onFieldChange("sizeMl", event.target.value)
+                  }
+                  required
+                />
+                <span className="pointer-events-none absolute right-3 top-1/2 mt-0.5 -translate-y-1/2 text-xs font-medium text-slate-400">
+                  ml
+                </span>
+              </span>
+            </label>
+            <label className={labelClass}>
+              Existencias
+              <input
+                className={inputClass}
+                inputMode="numeric"
+                min="0"
+                step="1"
+                type="number"
+                value={form.stockQuantity}
+                onChange={(event) =>
+                  onFieldChange("stockQuantity", event.target.value)
+                }
+                required
+              />
+            </label>
+            <label className={`${labelClass} col-span-2`}>
+              Precio de venta
+              <span className="relative block">
+                <span className="pointer-events-none absolute left-3 top-1/2 mt-0.5 -translate-y-1/2 text-sm text-slate-400">
+                  $
+                </span>
+                <input
+                  className={`${inputClass} pl-7`}
+                  inputMode="decimal"
+                  min="0"
+                  step="0.01"
+                  type="number"
+                  value={form.salePrice}
+                  onChange={(event) =>
+                    onFieldChange("salePrice", event.target.value)
+                  }
+                  required
+                />
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <section className="border-t border-slate-200 pt-5">
           <div className="flex items-center justify-between gap-3">
             <div>
               <h3 className="text-sm font-semibold text-slate-900">

@@ -3,12 +3,16 @@ import { deletePerfume, savePerfume } from "./perfumeRepository"
 
 const mocks = vi.hoisted(() => ({
   from: vi.fn(),
+  rpc: vi.fn(),
   getOrCreateBrandId: vi.fn(),
 }))
 
 vi.mock("./supabaseClient", () => ({
   hasSupabaseConfig: true,
-  getSupabaseClient: vi.fn(async () => ({ from: mocks.from })),
+  getSupabaseClient: vi.fn(async () => ({
+    from: mocks.from,
+    rpc: mocks.rpc,
+  })),
 }))
 
 vi.mock("./brandRepository", () => ({
@@ -18,6 +22,7 @@ vi.mock("./brandRepository", () => ({
 describe("perfumeRepository", () => {
   beforeEach(() => {
     mocks.from.mockReset()
+    mocks.rpc.mockReset()
     mocks.getOrCreateBrandId.mockReset()
   })
 
@@ -58,6 +63,38 @@ describe("perfumeRepository", () => {
 
     expect(update).toHaveBeenCalledOnce()
     expect(eq).toHaveBeenCalledWith("id", id)
+  })
+
+  it("guarda la presentación principal y ajusta sus existencias", async () => {
+    mocks.rpc.mockResolvedValue({ error: null })
+
+    await savePerfume({
+      name: "Yara Candy",
+      brand: "Lattafa",
+      family: "Gourmand",
+      concentration: "EDP",
+      gender: "Femenino",
+      inventory: {
+        sizeMl: 100,
+        salePrice: 189900,
+        stockQuantity: 7,
+      },
+    })
+
+    expect(mocks.rpc).toHaveBeenCalledWith(
+      "save_perfume_product",
+      expect.objectContaining({
+        requested_perfume_id: null,
+        requested_legacy_id: null,
+        requested_brand_name: "Lattafa",
+        requested_name: "Yara Candy",
+        requested_slug: "yara-candy",
+        requested_sku: null,
+        requested_size_ml: 100,
+        requested_sale_price: 189900,
+        requested_stock_quantity: 7,
+      }),
+    )
   })
 
   it("confirma la fila borrada y devuelve su imagen", async () => {

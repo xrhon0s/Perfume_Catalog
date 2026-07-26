@@ -12,6 +12,12 @@ const perfume: Perfume = {
   concentration: "EDP",
   gender: "Unisex",
   year: 2024,
+  inventory: {
+    sku: "CASA-PRUEBA-100",
+    sizeMl: 100,
+    salePrice: 189900,
+    stockQuantity: 7,
+  },
 }
 
 describe("MagazinePage", () => {
@@ -22,7 +28,11 @@ describe("MagazinePage", () => {
 
     expect(screen.getByText("Casa de prueba")).toBeVisible()
     expect(screen.getByText("Perfume de prueba")).toBeVisible()
-    expect(screen.getByText("Floral · EDP · Unisex · 2024")).toBeVisible()
+    expect(
+      screen.getByText("Floral · EDP · Unisex · 2024 · 100 ml"),
+    ).toBeVisible()
+    expect(screen.getByText(/189.900/)).toBeVisible()
+    expect(screen.getByText("7 disponibles")).toBeVisible()
 
     fireEvent.click(screen.getByRole("button", { name: "Ver detalles" }))
     expect(onView).toHaveBeenCalledTimes(1)

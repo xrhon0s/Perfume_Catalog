@@ -15,6 +15,18 @@ export type CatalogPerfumeRow = {
   tags: string[] | null
   notes: Perfume["notes"] | null
   is_active: boolean
+  inventory_item_id: string | null
+  sku: string | null
+  size_ml: number | null
+  sale_price: number | string | null
+  stock_quantity: number | null
+}
+
+export type InventoryInput = {
+  sku?: string
+  sizeMl: number
+  salePrice: number
+  stockQuantity: number
 }
 
 export type PerfumeInput = {
@@ -31,4 +43,5 @@ export type PerfumeInput = {
   tags?: string[]
   notes?: Perfume["notes"]
   isActive?: boolean
+  inventory?: InventoryInput
 }
