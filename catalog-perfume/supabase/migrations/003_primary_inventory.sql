@@ -172,8 +172,8 @@ begin
 
   select coalesce(sum(quantity), 0)::integer
   into current_stock
-  from public.stock_movements
-  where inventory_item_id = item.id;
+  from public.stock_movements as movements
+  where movements.inventory_item_id = item.id;
 
   stock_difference := requested_stock_quantity - current_stock;
 

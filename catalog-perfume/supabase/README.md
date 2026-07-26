@@ -24,9 +24,13 @@ Supabase CLI:
 1. `supabase/migrations/001_catalog_inventory.sql`
 2. `supabase/migrations/002_catalog_perfumes_image_path.sql`
 3. `supabase/migrations/003_primary_inventory.sql`
+4. `supabase/migrations/004_fix_inventory_function_ambiguity.sql`
 
 Si el proyecto ya estaba funcionando antes de incorporar precios y existencias,
 solo necesitas ejecutar la migración `003_primary_inventory.sql`.
+
+Si ya ejecutaste la migración 003 antes de la corrección de referencias
+ambiguas, ejecuta únicamente `004_fix_inventory_function_ambiguity.sql`.
 
 Este esquema crea:
 
