@@ -1,5 +1,11 @@
-import { fireEvent, render, screen, within } from "@testing-library/react"
-import { beforeEach, describe, expect, it, vi } from "vitest"
+import {
+  cleanup,
+  fireEvent,
+  render,
+  screen,
+  within,
+} from "@testing-library/react"
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { Perfume } from "../../data/types"
 import { useCartStore } from "../../store/cartStore"
 import MagazinePage from "./MagazinePage"
@@ -23,6 +29,8 @@ const perfume: Perfume = {
 }
 
 describe("MagazinePage", () => {
+  afterEach(cleanup)
+
   beforeEach(() => {
     useCartStore.setState({ items: [], isOpen: false })
   })

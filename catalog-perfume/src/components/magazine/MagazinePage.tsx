@@ -43,40 +43,16 @@ export default function MagazinePage({
   const inventory = perfume?.inventory
   const cartItem = perfume ? perfumeToCartItem(perfume) : null
 
-  const inventorySummary = inventory ? (
-    <div
-      className={[
-        "flex flex-wrap items-center gap-x-3 gap-y-1",
-        isLeft ? "justify-start" : "justify-end",
-        "order-1 sm:order-2",
-      ].join(" ")}
-    >
-      <span className="text-lg font-semibold">
-        {formatCatalogPrice(inventory.salePrice)}
-      </span>
-      <span
-        className={[
-          "text-xs font-semibold",
-          inventory.stockQuantity > 0
-            ? "text-emerald-300"
-            : "text-red-300",
-        ].join(" ")}
-      >
-        {inventory.stockQuantity > 0
-          ? `${inventory.stockQuantity} disponibles`
-          : "Agotado"}
-      </span>
-    </div>
+  const priceSummary = inventory ? (
+    <p className="whitespace-nowrap text-lg font-semibold">
+      {formatCatalogPrice(inventory.salePrice)}
+    </p>
   ) : null
 
-  const detailAction =
-    onView && perfume ? (
+  const purchaseActions =
+    perfume && (cartItem || onView) ? (
       <div
-        className={[
-          "order-2 shrink-0",
-          isLeft ? "sm:order-3" : "sm:order-1",
-          !isLeft && !inventory ? "sm:ml-auto" : "",
-        ].join(" ")}
+        className="flex shrink-0 flex-col items-stretch gap-1.5"
         onPointerDownCapture={(e) => {
           e.preventDefault()
           e.stopPropagation()
@@ -90,11 +66,11 @@ export default function MagazinePage({
           e.stopPropagation()
         }}
       >
-        <div className="flex items-center gap-1.5">
+        <div className="flex flex-wrap items-center gap-1.5 sm:w-[138px] sm:flex-col sm:items-stretch">
           {cartItem ? (
             <button
               aria-label={`Agregar ${perfume.name} al carrito`}
-              className="grid h-10 w-10 place-items-center rounded-md border border-white/20 text-white transition hover:bg-white/10"
+              className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md border border-white/25 px-2.5 text-xs font-semibold text-white transition hover:bg-white/10"
               title="Agregar al carrito"
               type="button"
               onClick={(event) => {
@@ -102,21 +78,38 @@ export default function MagazinePage({
                 addCartItem(cartItem)
               }}
             >
-              <ShoppingBag aria-hidden="true" size={17} />
+              <ShoppingBag aria-hidden="true" size={14} />
+              Añadir al carrito
             </button>
           ) : null}
-          <button
-            type="button"
-            onClick={(e) => {
-              e.stopPropagation()
-              onView()
-            }}
-            className="inline-flex h-10 items-center gap-2 rounded-md bg-white px-4 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100"
-          >
-            Ver detalles
-            <ArrowUpRight aria-hidden="true" size={16} />
-          </button>
+          {onView ? (
+            <button
+              type="button"
+              onClick={(e) => {
+                e.stopPropagation()
+                onView()
+              }}
+              className="inline-flex h-8 items-center justify-center gap-1.5 rounded-md bg-white px-3 text-xs font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100"
+            >
+              Ver detalles
+              <ArrowUpRight aria-hidden="true" size={14} />
+            </button>
+          ) : null}
         </div>
+        {inventory ? (
+          <p
+            className={[
+              "text-[11px] font-semibold sm:text-center",
+              inventory.stockQuantity > 0
+                ? "text-emerald-300"
+                : "text-red-300",
+            ].join(" ")}
+          >
+            {inventory.stockQuantity > 0
+              ? `${inventory.stockQuantity} disponibles`
+              : "Agotado"}
+          </p>
+        ) : null}
       </div>
     ) : null
 
@@ -150,10 +143,10 @@ export default function MagazinePage({
             : "pl-20 pr-6 text-right sm:pl-32 sm:pr-10",
         ].join(" ")}
       >
-        <div className="flex h-full min-w-0 flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+        <div className="flex h-full min-w-0 flex-col gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-6">
           <div
             className={[
-              "min-w-0 sm:flex-1",
+              "min-w-0",
               isLeft ? "sm:order-1" : "sm:order-3",
             ].join(" ")}
           >
@@ -179,15 +172,21 @@ export default function MagazinePage({
             ) : null}
           </div>
 
-          {(inventorySummary || detailAction) && (
+          {(priceSummary || purchaseActions) && (
             <div
               className={[
-                "mt-auto flex flex-col gap-3 pt-3 sm:contents",
-                isLeft ? "items-start" : "items-end",
+                "mt-auto flex items-end gap-4 sm:contents",
+                isLeft ? "justify-between" : "flex-row-reverse justify-between",
               ].join(" ")}
             >
-              {inventorySummary}
-              {detailAction}
+              {priceSummary ? (
+                <div className="sm:order-2">{priceSummary}</div>
+              ) : null}
+              {purchaseActions ? (
+                <div className={isLeft ? "sm:order-3" : "sm:order-1"}>
+                  {purchaseActions}
+                </div>
+              ) : null}
             </div>
           )}
         </div>
