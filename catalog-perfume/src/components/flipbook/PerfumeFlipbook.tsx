@@ -2,6 +2,11 @@ import { useEffect, useMemo, useRef, useState } from "react"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Perfume } from "../../data/types"
+import {
+  getCatalogPageCount,
+  getCatalogPageIndex,
+  getLeafIndexForCatalogPage,
+} from "../../features/catalog/catalogPagination"
 import MagazinePage from "../magazine/MagazinePage"
 import { useUIStore } from "../../store/uiStore"
 
@@ -14,6 +19,7 @@ type FlipBookApi = {
   flip: (pageIndex: number) => void
   flipNext: () => void
   flipPrev: () => void
+  turnToPage: (pageIndex: number) => void
 }
 
 type FlipBookRef = {
@@ -37,11 +43,12 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
       ? (items as Array<Perfume | null>)
       : [...items, null]
   }, [items])
+  const totalCatalogPages = getCatalogPageCount(items.length)
 
   useEffect(() => {
-    setTotalPages(items.length)
+    setTotalPages(totalCatalogPages)
     return () => setTotalPages(0)
-  }, [items.length, setTotalPages])
+  }, [setTotalPages, totalCatalogPages])
 
   useEffect(() => {
     if (jumpToPageRequest === null) return
@@ -49,12 +56,14 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
     const api = bookRef.current?.pageFlip()
     if (!api) return
 
-    const maxIndex = pages.length - 1
-    const target = Math.max(0, Math.min(jumpToPageRequest, maxIndex))
+    const target = getLeafIndexForCatalogPage(
+      jumpToPageRequest,
+      items.length,
+    )
 
-    api.flip(target)
+    api.turnToPage(target)
     consumeJumpToPage()
-  }, [jumpToPageRequest, consumeJumpToPage, pages.length])
+  }, [jumpToPageRequest, consumeJumpToPage, items.length])
 
   useEffect(() => {
     const onKeyDown = (e: KeyboardEvent) => {
@@ -148,7 +157,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           swipeDistance={30}
           onFlip={(e: FlipEvent) => {
             setPageIndex(e.data)
-            setPageIndexGlobal(e.data)
+            setPageIndexGlobal(getCatalogPageIndex(e.data))
           }}
           showPageCorners={false}
           disableFlipByClick={false}

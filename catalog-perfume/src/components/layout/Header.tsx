@@ -28,14 +28,16 @@ export default function Header() {
   )
   const parsedPage = Number(pageInput)
   const canJump =
-    hasPages && pageInput.trim() !== "" && Number.isInteger(parsedPage)
+    hasPages &&
+    pageInput.trim() !== "" &&
+    Number.isInteger(parsedPage) &&
+    parsedPage >= 1 &&
+    parsedPage <= totalPages
 
   const goToPage = () => {
     if (!canJump) return
 
-    requestJumpToPage(
-      Math.max(0, Math.min(parsedPage - 1, totalPages - 1)),
-    )
+    requestJumpToPage(parsedPage - 1)
     setPageInput("")
   }
 
