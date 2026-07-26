@@ -134,7 +134,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
       <div className="flex h-full w-full items-center justify-center">
         <HTMLFlipBook
           ref={bookRef}
-          className="shadow-2xl"
+          className="h-full w-full shadow-2xl"
           style={{}}
           width={600}
           height={800}
@@ -148,7 +148,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
           flippingTime={360}
           usePortrait={true}
           startZIndex={0}
-          autoSize={true}
+          autoSize={false}
           maxShadowOpacity={0.28}
           showCover={false}
           mobileScrollSupport={true}

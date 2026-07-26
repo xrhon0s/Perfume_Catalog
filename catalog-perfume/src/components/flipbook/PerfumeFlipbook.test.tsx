@@ -1,5 +1,5 @@
 import type { PropsWithChildren } from "react"
-import { act, cleanup, render, waitFor } from "@testing-library/react"
+import { act, cleanup, render, screen, waitFor } from "@testing-library/react"
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest"
 import type { Perfume } from "../../data/types"
 import { useUIStore } from "../../store/uiStore"
@@ -17,14 +17,26 @@ vi.mock("react-pageflip", async () => {
 
   return {
     default: ReactModule.forwardRef(function MockFlipbook(
-      { children }: PropsWithChildren,
+      {
+        autoSize,
+        children,
+        className,
+      }: PropsWithChildren<{ autoSize?: boolean; className?: string }>,
       ref,
     ) {
       ReactModule.useImperativeHandle(ref, () => ({
         pageFlip: () => flipbookApi,
       }))
 
-      return <div>{children}</div>
+      return (
+        <div
+          className={className}
+          data-auto-size={String(autoSize)}
+          data-testid="flipbook-shell"
+        >
+          {children}
+        </div>
+      )
     }),
   }
 })
@@ -58,5 +70,16 @@ describe("PerfumeFlipbook pagination", () => {
       expect(flipbookApi.turnToPage).toHaveBeenCalledWith(48)
     })
     expect(useUIStore.getState().jumpToPageRequest).toBeNull()
+  })
+
+  it("ajusta el libro a la altura disponible del catálogo", () => {
+    render(
+      <PerfumeFlipbook items={perfumes} onViewPerfume={() => undefined} />,
+    )
+
+    const shell = screen.getByTestId("flipbook-shell")
+
+    expect(shell).toHaveAttribute("data-auto-size", "false")
+    expect(shell).toHaveClass("h-full", "w-full")
   })
 })

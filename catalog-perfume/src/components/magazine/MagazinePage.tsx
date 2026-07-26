@@ -33,10 +33,10 @@ export default function MagazinePage({
   const titleLength = perfume?.name.length ?? 0
   const titleSize =
     titleLength > 34
-      ? "text-2xl sm:text-3xl"
+      ? "text-2xl"
       : titleLength > 22
-        ? "text-3xl sm:text-4xl"
-        : "text-4xl"
+        ? "text-2xl sm:text-3xl"
+        : "text-3xl sm:text-4xl"
 
   return (
     <div className="relative h-full w-full overflow-hidden bg-white">
@@ -62,61 +62,67 @@ export default function MagazinePage({
 
       <div
         className={[
-          "absolute inset-x-0 bottom-0 z-10 min-h-[15rem] border-t border-white/10 bg-[#171914] pb-20 pt-5 text-white sm:min-h-[17rem] sm:pt-6",
+          "absolute inset-x-0 bottom-0 z-10 h-[15rem] border-t border-white/10 bg-[#171914] py-5 text-white sm:h-[17rem] sm:py-6",
           isLeft
-            ? "pl-6 pr-12 text-left sm:pl-10 sm:pr-20"
-            : "pl-12 pr-6 text-right sm:pl-20 sm:pr-10",
+            ? "pl-6 pr-20 text-left sm:pl-10 sm:pr-32"
+            : "pl-20 pr-6 text-right sm:pl-32 sm:pr-10",
         ].join(" ")}
       >
-        <div className="inline-block max-w-[92%]">
-          {perfume?.brand && (
-            <p className="text-[11px] font-semibold uppercase text-white/60">
-              {perfume.brand}
-            </p>
-          )}
+        <div className="flex h-full min-w-0 flex-col">
+          <div className="min-w-0">
+            {perfume?.brand && (
+              <p className="truncate text-[11px] font-semibold uppercase text-white/60">
+                {perfume.brand}
+              </p>
+            )}
 
-          {perfume?.name && (
-            <h2
-              className={`mt-2 font-display font-semibold leading-tight ${titleSize}`}
-            >
-              {perfume.name}
-            </h2>
-          )}
+            {perfume?.name && (
+              <h2
+                className={`mt-2 line-clamp-2 font-display font-semibold leading-tight ${titleSize}`}
+                title={perfume.name}
+              >
+                {perfume.name}
+              </h2>
+            )}
 
-          {profile.length > 0 ? (
-            <p className="mt-2 text-xs leading-5 text-white/60">
-              {profile.join(" · ")}
-            </p>
-          ) : null}
+            {profile.length > 0 ? (
+              <p className="mt-2 truncate text-xs leading-5 text-white/60">
+                {profile.join(" · ")}
+              </p>
+            ) : null}
 
-          {perfume?.inventory ? (
-            <div
-              className={[
-                "mt-2 flex flex-wrap items-center gap-x-3 gap-y-1",
-                isLeft ? "justify-start" : "justify-end",
-              ].join(" ")}
-            >
-              <span className="text-lg font-semibold">
-                {formatCatalogPrice(perfume.inventory.salePrice)}
-              </span>
-              <span
+            {perfume?.inventory ? (
+              <div
                 className={[
-                  "text-xs font-semibold",
-                  perfume.inventory.stockQuantity > 0
-                    ? "text-emerald-300"
-                    : "text-red-300",
+                  "mt-2 flex flex-wrap items-center gap-x-3 gap-y-1",
+                  isLeft ? "justify-start" : "justify-end",
                 ].join(" ")}
               >
-                {perfume.inventory.stockQuantity > 0
-                  ? `${perfume.inventory.stockQuantity} disponibles`
-                  : "Agotado"}
-              </span>
-            </div>
-          ) : null}
+                <span className="text-lg font-semibold">
+                  {formatCatalogPrice(perfume.inventory.salePrice)}
+                </span>
+                <span
+                  className={[
+                    "text-xs font-semibold",
+                    perfume.inventory.stockQuantity > 0
+                      ? "text-emerald-300"
+                      : "text-red-300",
+                  ].join(" ")}
+                >
+                  {perfume.inventory.stockQuantity > 0
+                    ? `${perfume.inventory.stockQuantity} disponibles`
+                    : "Agotado"}
+                </span>
+              </div>
+            ) : null}
+          </div>
 
           {onView && perfume && (
             <div
-              className="mt-4 inline-block"
+              className={[
+                "mt-auto flex pt-3",
+                isLeft ? "justify-start" : "justify-end",
+              ].join(" ")}
               onPointerDownCapture={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
