@@ -95,7 +95,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   const visiblePerfumePosition = Math.min(visiblePageIndex + 1, items.length)
 
   return (
-    <div className="relative h-full w-full">
+    <div className="catalog-flipbook-surface relative h-full w-full">
       <nav
         aria-label="Navegación del catálogo"
         className="absolute bottom-3 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-1 rounded-md border border-white/15 bg-[#161814]/95 p-1 text-white shadow-lg backdrop-blur"

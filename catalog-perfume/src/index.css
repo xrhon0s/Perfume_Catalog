@@ -43,3 +43,20 @@ textarea:focus-visible {
   background: #faf9f5;
   transform: translateZ(0);
 }
+
+.catalog-flipbook-surface {
+  --catalog-info-height: 15rem;
+  background: linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff calc(100% - var(--catalog-info-height)),
+    #171914 calc(100% - var(--catalog-info-height)),
+    #171914 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .catalog-flipbook-surface {
+    --catalog-info-height: 17rem;
+  }
+}
