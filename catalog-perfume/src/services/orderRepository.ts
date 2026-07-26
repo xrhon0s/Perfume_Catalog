@@ -26,6 +26,9 @@ export type CatalogOrder = {
   customerName: string
   customerPhone: string
   customerCity?: string
+  customerDepartment?: string
+  customerMunicipality?: string
+  customerAddress?: string
   customerNotes?: string
   status: OrderStatus
   subtotal: number
@@ -39,6 +42,9 @@ type OrderRow = {
   customer_name: string
   customer_phone: string
   customer_city: string | null
+  customer_department: string | null
+  customer_municipality: string | null
+  customer_address: string | null
   customer_notes: string | null
   status: OrderStatus
   subtotal: number | string
@@ -63,6 +69,9 @@ function mapOrder(row: OrderRow): CatalogOrder {
     customerName: row.customer_name,
     customerPhone: row.customer_phone,
     customerCity: row.customer_city ?? undefined,
+    customerDepartment: row.customer_department ?? undefined,
+    customerMunicipality: row.customer_municipality ?? undefined,
+    customerAddress: row.customer_address ?? undefined,
     customerNotes: row.customer_notes ?? undefined,
     status: row.status,
     subtotal: Number(row.subtotal),
@@ -94,7 +103,9 @@ export async function createCatalogOrder(
     .rpc("create_catalog_order", {
       requested_customer_name: customer.name,
       requested_customer_phone: customer.phone,
-      requested_customer_city: customer.city,
+      requested_customer_department: customer.department,
+      requested_customer_municipality: customer.municipality,
+      requested_customer_address: customer.address,
       requested_customer_notes: customer.notes,
       requested_items: items.map((item) => ({
         inventoryItemId: item.inventoryItemId,
@@ -106,7 +117,7 @@ export async function createCatalogOrder(
   if (error) {
     throw new Error(
       error.code === "PGRST202"
-        ? "Ejecuta la migración 005_customer_orders.sql en Supabase."
+        ? "Ejecuta las migraciones 005 y 006 de pedidos en Supabase."
         : error.message,
     )
   }
@@ -124,7 +135,7 @@ export async function listCatalogOrders(): Promise<CatalogOrder[]> {
   if (error) {
     throw new Error(
       error.code === "42P01"
-        ? "Ejecuta la migración 005_customer_orders.sql en Supabase."
+        ? "Ejecuta las migraciones 005 y 006 de pedidos en Supabase."
         : error.message,
     )
   }

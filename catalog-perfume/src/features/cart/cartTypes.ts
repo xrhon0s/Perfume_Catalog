@@ -15,7 +15,9 @@ export type CartItem = {
 export type CustomerDetails = {
   name: string
   phone: string
-  city: string
+  department: string
+  municipality: string
+  address: string
   notes: string
 }
 

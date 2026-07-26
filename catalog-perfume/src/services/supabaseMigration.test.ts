@@ -2,6 +2,7 @@ import { describe, expect, it } from "vitest"
 import migration from "../../supabase/migrations/003_primary_inventory.sql?raw"
 import ambiguityFix from "../../supabase/migrations/004_fix_inventory_function_ambiguity.sql?raw"
 import customerOrders from "../../supabase/migrations/005_customer_orders.sql?raw"
+import orderDeliveryAddress from "../../supabase/migrations/006_order_delivery_address.sql?raw"
 
 describe("003_primary_inventory migration", () => {
   it("recrea catalog_perfumes para admitir esquemas anteriores sin image_path", () => {
@@ -42,5 +43,16 @@ describe("005_customer_orders migration", () => {
     expect(customerOrders).toContain("requested_status = 'confirmed'")
     expect(customerOrders).toContain("'sale',")
     expect(customerOrders).toContain("-selected_item.quantity")
+  })
+})
+
+describe("006_order_delivery_address migration", () => {
+  it("agrega y exige la dirección estructurada del pedido", () => {
+    expect(orderDeliveryAddress).toContain("customer_department")
+    expect(orderDeliveryAddress).toContain("customer_municipality")
+    expect(orderDeliveryAddress).toContain("customer_address")
+    expect(orderDeliveryAddress).toContain(
+      "Customer address is required",
+    )
   })
 })

@@ -190,8 +190,20 @@ export default function OrdersPanel({
                     </div>
                     <p className="mt-1 text-sm text-slate-600">
                       {order.customerName} · {order.customerPhone}
-                      {order.customerCity ? ` · ${order.customerCity}` : ""}
+                      {order.customerMunicipality
+                        ? ` · ${order.customerMunicipality}`
+                        : order.customerCity
+                          ? ` · ${order.customerCity}`
+                          : ""}
+                      {order.customerDepartment
+                        ? `, ${order.customerDepartment}`
+                        : ""}
                     </p>
+                    {order.customerAddress ? (
+                      <p className="mt-1 text-sm text-slate-500">
+                        {order.customerAddress}
+                      </p>
+                    ) : null}
                     <p className="mt-1 text-xs text-slate-400">
                       {new Intl.DateTimeFormat("es-CO", {
                         dateStyle: "medium",

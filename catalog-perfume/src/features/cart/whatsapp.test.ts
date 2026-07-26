@@ -22,7 +22,9 @@ describe("WhatsApp cart messages", () => {
     const message = buildCartWhatsAppMessage([item], {
       name: "Daniel",
       phone: "",
-      city: "Medellín",
+      department: "Antioquia",
+      municipality: "Medellín",
+      address: "Carrera 43 # 10-20",
       notes: "Entrega en la tarde",
     })
 
@@ -30,11 +32,13 @@ describe("WhatsApp cart messages", () => {
     expect(message).toContain("2 x")
     expect(message).toContain("160.000")
     expect(message).toContain("Daniel")
+    expect(message).toContain("Antioquia")
+    expect(message).toContain("Carrera 43 # 10-20")
   })
 
   it("normaliza el teléfono y codifica el mensaje", () => {
-    expect(normalizeWhatsAppPhone("+57 300 123-4567")).toBe("573001234567")
-    expect(normalizeWhatsAppPhone("300 123-4567")).toBe("573001234567")
+    expect(normalizeWhatsAppPhone("+57 312 648-5885")).toBe("573126485885")
+    expect(normalizeWhatsAppPhone("312 648-5885")).toBe("573126485885")
     expect(createWhatsAppUrl("+57 300", "Hola mundo")).toBe(
       "https://wa.me/57300?text=Hola%20mundo",
     )

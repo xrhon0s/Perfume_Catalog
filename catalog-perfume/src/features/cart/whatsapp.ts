@@ -33,7 +33,14 @@ export function buildCartWhatsAppMessage(
 
   const customerLines = [
     customer.name.trim() ? `Nombre: ${customer.name.trim()}` : "",
-    customer.city.trim() ? `Ciudad: ${customer.city.trim()}` : "",
+    customer.phone.trim() ? `Teléfono: ${customer.phone.trim()}` : "",
+    customer.department.trim()
+      ? `Departamento: ${customer.department.trim()}`
+      : "",
+    customer.municipality.trim()
+      ? `Municipio: ${customer.municipality.trim()}`
+      : "",
+    customer.address.trim() ? `Dirección: ${customer.address.trim()}` : "",
     customer.notes.trim() ? `Nota: ${customer.notes.trim()}` : "",
   ].filter(Boolean)
 
@@ -63,9 +70,18 @@ export function buildAdminWhatsAppMessage(order: CatalogOrder) {
     ...lines,
     "",
     `Total: ${formatCatalogPrice(order.subtotal)}`,
+    order.customerDepartment
+      ? `Departamento: ${order.customerDepartment}`
+      : "",
+    order.customerMunicipality
+      ? `Municipio: ${order.customerMunicipality}`
+      : "",
+    order.customerAddress ? `Dirección: ${order.customerAddress}` : "",
     "",
     "Revisamos la disponibilidad. Continuemos por aquí para coordinar envío y pago.",
-  ].join("\n")
+  ]
+    .filter((line, index, lines) => line || lines[index - 1] !== "")
+    .join("\n")
 }
 
 export function createWhatsAppUrl(phone: string, message: string) {

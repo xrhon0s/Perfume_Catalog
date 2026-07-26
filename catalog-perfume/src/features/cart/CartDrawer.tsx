@@ -10,7 +10,9 @@ import {
   Trash2,
   X,
 } from "lucide-react"
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
 import { createCatalogOrder } from "../../services/orderRepository"
+import colombiaLocations from "../../shared/data/colombiaLocations.json"
 import {
   formatCatalogPrice,
   formatPerfumeSize,
@@ -25,7 +27,9 @@ import {
 const emptyCustomer: CustomerDetails = {
   name: "",
   phone: "",
-  city: "",
+  department: "",
+  municipality: "",
+  address: "",
   notes: "",
 }
 
@@ -33,6 +37,7 @@ const businessWhatsApp =
   (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined) ?? ""
 
 export default function CartDrawer() {
+  const prefersReducedMotion = useReducedMotion()
   const items = useCartStore((state) => state.items)
   const isOpen = useCartStore((state) => state.isOpen)
   const close = useCartStore((state) => state.close)
@@ -51,6 +56,13 @@ export default function CartDrawer() {
       ),
     [items],
   )
+  const selectedDepartment = useMemo(
+    () =>
+      colombiaLocations.find(
+        (department) => department.name === customer.department,
+      ),
+    [customer.department],
+  )
 
   useEffect(() => {
     if (!isOpen) return
@@ -66,14 +78,29 @@ export default function CartDrawer() {
     }
   }, [close, isOpen])
 
-  if (!isOpen) return null
-
   const updateCustomer = (field: keyof CustomerDetails, value: string) => {
     setCustomer((current) => ({ ...current, [field]: value }))
     setError(null)
   }
 
+  const validateCustomer = () => {
+    if (!customer.name.trim() || !customer.phone.trim()) {
+      setError("Escribe tu nombre y teléfono para continuar.")
+      return false
+    }
+    if (
+      !customer.department.trim() ||
+      !customer.municipality.trim() ||
+      !customer.address.trim()
+    ) {
+      setError("Completa el departamento, municipio y dirección de entrega.")
+      return false
+    }
+    return true
+  }
+
   const sendDirectly = () => {
+    if (!validateCustomer()) return
     if (!businessWhatsApp) {
       setError("Configura VITE_WHATSAPP_NUMBER para enviar pedidos por WhatsApp.")
       return
@@ -86,10 +113,7 @@ export default function CartDrawer() {
   }
 
   const submitForReview = async () => {
-    if (!customer.name.trim() || !customer.phone.trim()) {
-      setError("Escribe tu nombre y teléfono para guardar la solicitud.")
-      return
-    }
+    if (!validateCustomer()) return
 
     setSubmitting(true)
     setError(null)
@@ -108,18 +132,34 @@ export default function CartDrawer() {
     }
   }
 
+  const transition = prefersReducedMotion
+    ? { duration: 0 }
+    : { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const }
+
   return (
-    <div className="fixed inset-0 z-[9999]">
-      <button
-        aria-label="Cerrar carrito"
-        className="absolute inset-0 bg-black/45"
-        type="button"
-        onClick={close}
-      />
-      <aside
-        aria-label="Carrito"
-        className="absolute inset-y-0 right-0 flex w-full max-w-[480px] flex-col bg-[#f7f8f5] shadow-2xl"
-      >
+    <AnimatePresence>
+      {isOpen ? (
+        <div className="fixed inset-0 z-[9999]">
+          <motion.button
+            animate={{ opacity: 1 }}
+            aria-label="Cerrar carrito"
+            className="absolute inset-0 bg-black/45"
+            exit={{ opacity: 0 }}
+            initial={{ opacity: 0 }}
+            transition={{ duration: prefersReducedMotion ? 0 : 0.2 }}
+            type="button"
+            onClick={close}
+          />
+          <motion.aside
+            animate={{ x: 0 }}
+            aria-label="Carrito"
+            aria-modal="true"
+            className="absolute inset-y-0 right-0 flex w-full max-w-[480px] flex-col bg-[#f7f8f5] shadow-2xl"
+            exit={{ x: "100%" }}
+            initial={{ x: "100%" }}
+            role="dialog"
+            transition={transition}
+          >
         <header className="flex h-16 shrink-0 items-center justify-between border-b border-slate-200 bg-white px-5">
           <div className="flex items-center gap-3">
             <ShoppingBag aria-hidden="true" size={20} />
@@ -273,13 +313,75 @@ export default function CartDrawer() {
                     />
                   </label>
                 </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <label className="col-span-2 sm:col-span-1">
+                    <span className="text-xs font-medium text-slate-600">
+                      Departamento *
+                    </span>
+                    <select
+                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
+                      value={customer.department}
+                      onChange={(event) => {
+                        setCustomer((current) => ({
+                          ...current,
+                          department: event.target.value,
+                          municipality: "",
+                        }))
+                        setError(null)
+                      }}
+                    >
+                      <option value="">Seleccionar</option>
+                      {colombiaLocations.map((department) => (
+                        <option
+                          key={department.code}
+                          value={department.name}
+                        >
+                          {department.name}
+                        </option>
+                      ))}
+                    </select>
+                  </label>
+                  <label className="col-span-2 sm:col-span-1">
+                    <span className="text-xs font-medium text-slate-600">
+                      Municipio *
+                    </span>
+                    <select
+                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500 disabled:bg-slate-100 disabled:text-slate-400"
+                      disabled={!selectedDepartment}
+                      value={customer.municipality}
+                      onChange={(event) =>
+                        updateCustomer("municipality", event.target.value)
+                      }
+                    >
+                      <option value="">
+                        {selectedDepartment
+                          ? "Seleccionar"
+                          : "Elige departamento"}
+                      </option>
+                      {selectedDepartment?.municipalities.map(
+                        (municipality) => (
+                          <option
+                            key={municipality.code}
+                            value={municipality.name}
+                          >
+                            {municipality.name}
+                          </option>
+                        ),
+                      )}
+                    </select>
+                  </label>
+                </div>
                 <label className="block">
-                  <span className="text-xs font-medium text-slate-600">Ciudad</span>
+                  <span className="text-xs font-medium text-slate-600">
+                    Dirección *
+                  </span>
                   <input
+                    autoComplete="street-address"
                     className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
-                    value={customer.city}
+                    placeholder="Calle, carrera, número y complemento"
+                    value={customer.address}
                     onChange={(event) =>
-                      updateCustomer("city", event.target.value)
+                      updateCustomer("address", event.target.value)
                     }
                   />
                 </label>
@@ -338,7 +440,9 @@ export default function CartDrawer() {
             </footer>
           </>
         )}
-      </aside>
-    </div>
+          </motion.aside>
+        </div>
+      ) : null}
+    </AnimatePresence>
   )
 }

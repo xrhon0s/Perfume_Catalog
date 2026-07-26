@@ -64,7 +64,16 @@ describe("CartDrawer", () => {
       target: { value: "Daniel" },
     })
     fireEvent.change(screen.getByLabelText("WhatsApp *"), {
-      target: { value: "3001234567" },
+      target: { value: "3126485885" },
+    })
+    fireEvent.change(screen.getByLabelText("Departamento *"), {
+      target: { value: "Antioquia" },
+    })
+    fireEvent.change(screen.getByLabelText("Municipio *"), {
+      target: { value: "Medellín" },
+    })
+    fireEvent.change(screen.getByLabelText("Dirección *"), {
+      target: { value: "Carrera 43 # 10-20" },
     })
     fireEvent.click(
       screen.getByRole("button", {
@@ -75,7 +84,28 @@ describe("CartDrawer", () => {
     await waitFor(() => {
       expect(screen.getByText("Solicitud recibida")).toBeVisible()
     })
+    expect(createCatalogOrder).toHaveBeenCalledWith(
+      expect.objectContaining({
+        department: "Antioquia",
+        municipality: "Medellín",
+        address: "Carrera 43 # 10-20",
+      }),
+      expect.any(Array),
+    )
     expect(screen.getByText(/ETER-001001/)).toBeVisible()
     expect(useCartStore.getState().items).toEqual([])
+  })
+
+  it("conserva el drawer durante la animación y lo desmonta al cerrar", async () => {
+    render(<CartDrawer />)
+
+    fireEvent.click(screen.getByRole("button", { name: "Cerrar" }))
+
+    expect(screen.getByRole("dialog", { name: "Carrito" })).toBeInTheDocument()
+    await waitFor(() => {
+      expect(
+        screen.queryByRole("dialog", { name: "Carrito" }),
+      ).not.toBeInTheDocument()
+    })
   })
 })
