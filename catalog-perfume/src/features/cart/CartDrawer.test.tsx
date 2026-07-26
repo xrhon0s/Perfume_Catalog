@@ -16,7 +16,11 @@ vi.mock("../../services/orderRepository", () => ({
 }))
 
 describe("CartDrawer", () => {
-  afterEach(cleanup)
+  afterEach(() => {
+    cleanup()
+    vi.unstubAllEnvs()
+    vi.restoreAllMocks()
+  })
 
   beforeEach(() => {
     createCatalogOrder.mockReset()
@@ -106,6 +110,49 @@ describe("CartDrawer", () => {
       expect(
         screen.queryByRole("dialog", { name: "Carrito" }),
       ).not.toBeInTheDocument()
+    })
+  })
+
+  it("conserva el carrito al abrir WhatsApp y lo vacía al confirmarlo", async () => {
+    vi.stubEnv("VITE_WHATSAPP_NUMBER", "573126485885")
+    const openedWindow = { opener: window } as Window
+    vi.spyOn(window, "open").mockReturnValue(openedWindow)
+    render(<CartDrawer />)
+
+    fireEvent.change(screen.getByLabelText("Nombre *"), {
+      target: { value: "Daniel" },
+    })
+    fireEvent.change(screen.getByLabelText("WhatsApp *"), {
+      target: { value: "3126485885" },
+    })
+    fireEvent.change(screen.getByLabelText("Departamento *"), {
+      target: { value: "Antioquia" },
+    })
+    fireEvent.change(screen.getByLabelText("Municipio *"), {
+      target: { value: "Medellín" },
+    })
+    fireEvent.change(screen.getByLabelText("Dirección *"), {
+      target: { value: "Carrera 43 # 10-20" },
+    })
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Continuar ahora por WhatsApp",
+      }),
+    )
+
+    expect(window.open).toHaveBeenCalledOnce()
+    expect(openedWindow.opener).toBeNull()
+    expect(useCartStore.getState().items).toHaveLength(1)
+    expect(screen.getByText("Pedido abierto en WhatsApp")).toBeVisible()
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Ya lo envié: vaciar y cerrar",
+      }),
+    )
+
+    await waitFor(() => {
+      expect(useCartStore.getState().items).toEqual([])
     })
   })
 })

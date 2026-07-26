@@ -2,12 +2,14 @@ import { useEffect, useMemo, useState } from "react"
 import {
   CheckCircle2,
   LoaderCircle,
+  MapPin,
   MessageCircle,
   Minus,
   Plus,
   Send,
   ShoppingBag,
   Trash2,
+  UserRound,
   X,
 } from "lucide-react"
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion"
@@ -33,9 +35,6 @@ const emptyCustomer: CustomerDetails = {
   notes: "",
 }
 
-const businessWhatsApp =
-  (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined) ?? ""
-
 export default function CartDrawer() {
   const prefersReducedMotion = useReducedMotion()
   const items = useCartStore((state) => state.items)
@@ -48,6 +47,8 @@ export default function CartDrawer() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [createdReference, setCreatedReference] = useState<string | null>(null)
+  const [whatsAppOpened, setWhatsAppOpened] = useState(false)
+  const [clearAfterClose, setClearAfterClose] = useState(false)
   const total = useMemo(
     () =>
       items.reduce(
@@ -81,6 +82,7 @@ export default function CartDrawer() {
   const updateCustomer = (field: keyof CustomerDetails, value: string) => {
     setCustomer((current) => ({ ...current, [field]: value }))
     setError(null)
+    setWhatsAppOpened(false)
   }
 
   const validateCustomer = () => {
@@ -101,6 +103,8 @@ export default function CartDrawer() {
 
   const sendDirectly = () => {
     if (!validateCustomer()) return
+    const businessWhatsApp =
+      (import.meta.env.VITE_WHATSAPP_NUMBER as string | undefined) ?? ""
     if (!businessWhatsApp) {
       setError("Configura VITE_WHATSAPP_NUMBER para enviar pedidos por WhatsApp.")
       return
@@ -109,7 +113,29 @@ export default function CartDrawer() {
       businessWhatsApp,
       buildCartWhatsAppMessage(items, customer),
     )
-    if (url) window.open(url, "_blank", "noopener,noreferrer")
+    const openedWindow = url ? window.open(url, "_blank") : null
+    if (!openedWindow) {
+      setError(
+        "El navegador bloqueó WhatsApp. Habilita las ventanas emergentes e intenta de nuevo.",
+      )
+      return
+    }
+    openedWindow.opener = null
+    setError(null)
+    setWhatsAppOpened(true)
+  }
+
+  const finishWhatsAppOrder = () => {
+    setClearAfterClose(true)
+    close()
+  }
+
+  const handleExitComplete = () => {
+    if (!clearAfterClose) return
+    clear()
+    setCustomer(emptyCustomer)
+    setWhatsAppOpened(false)
+    setClearAfterClose(false)
   }
 
   const submitForReview = async () => {
@@ -137,7 +163,7 @@ export default function CartDrawer() {
     : { duration: 0.28, ease: [0.22, 1, 0.36, 1] as const }
 
   return (
-    <AnimatePresence>
+    <AnimatePresence onExitComplete={handleExitComplete}>
       {isOpen ? (
         <div className="fixed inset-0 z-[9999]">
           <motion.button
@@ -254,9 +280,10 @@ export default function CartDrawer() {
                           aria-label={`Quitar una unidad de ${item.name}`}
                           className="grid h-7 w-7 place-items-center"
                           type="button"
-                          onClick={() =>
+                          onClick={() => {
                             setQuantity(item.inventoryItemId, item.quantity - 1)
-                          }
+                            setWhatsAppOpened(false)
+                          }}
                         >
                           <Minus aria-hidden="true" size={14} />
                         </button>
@@ -268,9 +295,10 @@ export default function CartDrawer() {
                           className="grid h-7 w-7 place-items-center disabled:opacity-30"
                           disabled={item.quantity >= item.stockQuantity}
                           type="button"
-                          onClick={() =>
+                          onClick={() => {
                             setQuantity(item.inventoryItemId, item.quantity + 1)
-                          }
+                            setWhatsAppOpened(false)
+                          }}
                         >
                           <Plus aria-hidden="true" size={14} />
                         </button>
@@ -280,7 +308,10 @@ export default function CartDrawer() {
                       aria-label={`Eliminar ${item.name}`}
                       className="grid h-8 w-8 place-items-center text-slate-400 hover:text-red-600"
                       type="button"
-                      onClick={() => removeItem(item.inventoryItemId)}
+                      onClick={() => {
+                        removeItem(item.inventoryItemId)
+                        setWhatsAppOpened(false)
+                      }}
                     >
                       <Trash2 aria-hidden="true" size={16} />
                     </button>
@@ -288,117 +319,144 @@ export default function CartDrawer() {
                 ))}
               </div>
 
-              <div className="space-y-3 px-5 py-5">
-                <div className="grid grid-cols-2 gap-3">
-                  <label className="col-span-2 sm:col-span-1">
-                    <span className="text-xs font-medium text-slate-600">Nombre *</span>
-                    <input
-                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
-                      value={customer.name}
-                      onChange={(event) =>
-                        updateCustomer("name", event.target.value)
-                      }
-                    />
-                  </label>
-                  <label className="col-span-2 sm:col-span-1">
-                    <span className="text-xs font-medium text-slate-600">WhatsApp *</span>
-                    <input
-                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
-                      inputMode="tel"
-                      placeholder="57..."
-                      value={customer.phone}
-                      onChange={(event) =>
-                        updateCustomer("phone", event.target.value)
-                      }
-                    />
-                  </label>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <label className="col-span-2 sm:col-span-1">
-                    <span className="text-xs font-medium text-slate-600">
-                      Departamento *
-                    </span>
-                    <select
-                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
-                      value={customer.department}
-                      onChange={(event) => {
-                        setCustomer((current) => ({
-                          ...current,
-                          department: event.target.value,
-                          municipality: "",
-                        }))
-                        setError(null)
-                      }}
-                    >
-                      <option value="">Seleccionar</option>
-                      {colombiaLocations.map((department) => (
-                        <option
-                          key={department.code}
-                          value={department.name}
-                        >
-                          {department.name}
-                        </option>
-                      ))}
-                    </select>
-                  </label>
-                  <label className="col-span-2 sm:col-span-1">
-                    <span className="text-xs font-medium text-slate-600">
-                      Municipio *
-                    </span>
-                    <select
-                      className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500 disabled:bg-slate-100 disabled:text-slate-400"
-                      disabled={!selectedDepartment}
-                      value={customer.municipality}
-                      onChange={(event) =>
-                        updateCustomer("municipality", event.target.value)
-                      }
-                    >
-                      <option value="">
-                        {selectedDepartment
-                          ? "Seleccionar"
-                          : "Elige departamento"}
-                      </option>
-                      {selectedDepartment?.municipalities.map(
-                        (municipality) => (
+              <div className="space-y-5 border-t border-slate-200 px-5 py-5">
+                <fieldset>
+                  <legend className="mb-3 flex items-center gap-2 text-sm font-semibold text-slate-900">
+                    <UserRound aria-hidden="true" size={17} />
+                    Datos de contacto
+                  </legend>
+                  <div className="grid gap-3 sm:grid-cols-2">
+                    <label>
+                      <span className="text-xs font-medium text-slate-600">
+                        Nombre *
+                      </span>
+                      <input
+                        autoComplete="name"
+                        className="mt-1.5 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                        placeholder="Nombre completo"
+                        value={customer.name}
+                        onChange={(event) =>
+                          updateCustomer("name", event.target.value)
+                        }
+                      />
+                    </label>
+                    <label>
+                      <span className="text-xs font-medium text-slate-600">
+                        WhatsApp *
+                      </span>
+                      <input
+                        autoComplete="tel"
+                        className="mt-1.5 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                        inputMode="tel"
+                        placeholder="300 123 4567"
+                        value={customer.phone}
+                        onChange={(event) =>
+                          updateCustomer("phone", event.target.value)
+                        }
+                      />
+                    </label>
+                  </div>
+                </fieldset>
+
+                <fieldset className="border-t border-slate-200 pt-5">
+                  <legend className="flex items-center gap-2 bg-[#f7f8f5] pr-3 text-sm font-semibold text-slate-900">
+                    <MapPin aria-hidden="true" size={17} />
+                    Dirección de entrega
+                  </legend>
+                  <div className="mt-3 grid gap-3 sm:grid-cols-2">
+                    <label>
+                      <span className="text-xs font-medium text-slate-600">
+                        Departamento *
+                      </span>
+                      <select
+                        autoComplete="address-level1"
+                        className="mt-1.5 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                        value={customer.department}
+                        onChange={(event) => {
+                          setCustomer((current) => ({
+                            ...current,
+                            department: event.target.value,
+                            municipality: "",
+                          }))
+                          setError(null)
+                          setWhatsAppOpened(false)
+                        }}
+                      >
+                        <option value="">Seleccionar</option>
+                        {colombiaLocations.map((department) => (
                           <option
-                            key={municipality.code}
-                            value={municipality.name}
+                            key={department.code}
+                            value={department.name}
                           >
-                            {municipality.name}
+                            {department.name}
                           </option>
-                        ),
-                      )}
-                    </select>
-                  </label>
-                </div>
-                <label className="block">
-                  <span className="text-xs font-medium text-slate-600">
-                    Dirección *
-                  </span>
-                  <input
-                    autoComplete="street-address"
-                    className="mt-1 h-10 w-full border border-slate-200 bg-white px-3 text-sm outline-none focus:border-slate-500"
-                    placeholder="Calle, carrera, número y complemento"
-                    value={customer.address}
-                    onChange={(event) =>
-                      updateCustomer("address", event.target.value)
-                    }
-                  />
-                </label>
-                <label className="block">
-                  <span className="text-xs font-medium text-slate-600">
-                    Nota opcional
-                  </span>
-                  <textarea
-                    className="mt-1 min-h-20 w-full resize-none border border-slate-200 bg-white p-3 text-sm outline-none focus:border-slate-500"
-                    value={customer.notes}
-                    onChange={(event) =>
-                      updateCustomer("notes", event.target.value)
-                    }
-                  />
-                </label>
+                        ))}
+                      </select>
+                    </label>
+                    <label>
+                      <span className="text-xs font-medium text-slate-600">
+                        Municipio *
+                      </span>
+                      <select
+                        autoComplete="address-level2"
+                        className="mt-1.5 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10 disabled:bg-slate-100 disabled:text-slate-400"
+                        disabled={!selectedDepartment}
+                        value={customer.municipality}
+                        onChange={(event) =>
+                          updateCustomer("municipality", event.target.value)
+                        }
+                      >
+                        <option value="">
+                          {selectedDepartment
+                            ? "Seleccionar"
+                            : "Elige departamento"}
+                        </option>
+                        {selectedDepartment?.municipalities.map(
+                          (municipality) => (
+                            <option
+                              key={municipality.code}
+                              value={municipality.name}
+                            >
+                              {municipality.name}
+                            </option>
+                          ),
+                        )}
+                      </select>
+                    </label>
+                    <label className="sm:col-span-2">
+                      <span className="text-xs font-medium text-slate-600">
+                        Dirección *
+                      </span>
+                      <input
+                        autoComplete="street-address"
+                        className="mt-1.5 h-11 w-full rounded-md border border-slate-300 bg-white px-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                        placeholder="Calle, carrera, número y complemento"
+                        value={customer.address}
+                        onChange={(event) =>
+                          updateCustomer("address", event.target.value)
+                        }
+                      />
+                    </label>
+                    <label className="sm:col-span-2">
+                      <span className="text-xs font-medium text-slate-600">
+                        Indicaciones opcionales
+                      </span>
+                      <textarea
+                        className="mt-1.5 min-h-20 w-full resize-y rounded-md border border-slate-300 bg-white p-3 text-sm outline-none transition-colors focus:border-slate-900 focus:ring-2 focus:ring-slate-900/10"
+                        placeholder="Apartamento, horario o referencia"
+                        value={customer.notes}
+                        onChange={(event) =>
+                          updateCustomer("notes", event.target.value)
+                        }
+                      />
+                    </label>
+                  </div>
+                </fieldset>
                 {error ? (
-                  <p className="text-sm font-medium text-red-700" role="alert">
+                  <p
+                    className="rounded-md border border-red-200 bg-red-50 px-3 py-2.5 text-sm font-medium text-red-700"
+                    role="alert"
+                  >
                     {error}
                   </p>
                 ) : null}
@@ -406,6 +464,33 @@ export default function CartDrawer() {
             </div>
 
             <footer className="shrink-0 border-t border-slate-200 bg-white p-5">
+              {whatsAppOpened ? (
+                <div
+                  className="mb-4 flex items-start gap-3 rounded-md border border-emerald-200 bg-emerald-50 p-3"
+                  role="status"
+                >
+                  <CheckCircle2
+                    aria-hidden="true"
+                    className="mt-0.5 shrink-0 text-emerald-700"
+                    size={18}
+                  />
+                  <div className="min-w-0 flex-1">
+                    <p className="text-sm font-semibold text-emerald-950">
+                      Pedido abierto en WhatsApp
+                    </p>
+                    <p className="mt-0.5 text-xs leading-5 text-emerald-800">
+                      Conservamos el carrito hasta que confirmes el envío.
+                    </p>
+                    <button
+                      className="mt-2 text-xs font-semibold text-emerald-950 underline underline-offset-2"
+                      type="button"
+                      onClick={finishWhatsAppOrder}
+                    >
+                      Ya lo envié: vaciar y cerrar
+                    </button>
+                  </div>
+                </div>
+              ) : null}
               <div className="mb-4 flex items-center justify-between">
                 <span className="text-sm text-slate-500">Total estimado</span>
                 <strong className="text-lg">{formatCatalogPrice(total)}</strong>
@@ -417,7 +502,9 @@ export default function CartDrawer() {
                   onClick={sendDirectly}
                 >
                   <MessageCircle aria-hidden="true" size={18} />
-                  Continuar ahora por WhatsApp
+                  {whatsAppOpened
+                    ? "Abrir WhatsApp otra vez"
+                    : "Continuar ahora por WhatsApp"}
                 </button>
                 <button
                   className="inline-flex h-11 items-center justify-center gap-2 border border-slate-300 bg-white px-4 text-sm font-semibold text-slate-950 disabled:opacity-50"
