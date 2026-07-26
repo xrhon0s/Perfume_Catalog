@@ -1,5 +1,6 @@
 import Header from "./Header"
 import FilterPanel from "./FilterPanel"
+import CartDrawer from "../../features/cart/CartDrawer"
 
 export default function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -7,6 +8,7 @@ export default function Layout({ children }: { children: React.ReactNode }) {
       <Header />
       <FilterPanel />
       <div className="min-h-0 flex-1">{children}</div>
+      <CartDrawer />
     </div>
   )
 }

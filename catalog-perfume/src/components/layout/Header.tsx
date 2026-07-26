@@ -2,12 +2,14 @@ import { useMemo, useRef, useState } from "react"
 import {
   ArrowRight,
   Search,
+  ShoppingBag,
   SlidersHorizontal,
   X,
 } from "lucide-react"
 import logo from "../../assets/eter_wordmark_white.webp"
 import { useFiltersStore } from "../../store/filterStore"
 import { useUIStore } from "../../store/uiStore"
+import { useCartStore } from "../../store/cartStore"
 
 export default function Header() {
   const toggleFilters = useUIStore((state) => state.toggleFilters)
@@ -19,8 +21,14 @@ export default function Header() {
   const brands = useFiltersStore((state) => state.brands)
   const families = useFiltersStore((state) => state.families)
   const [pageInput, setPageInput] = useState("")
+  const cartItems = useCartStore((state) => state.items)
+  const openCart = useCartStore((state) => state.open)
   const searchInputRef = useRef<HTMLInputElement | null>(null)
   const hasPages = totalPages > 0
+  const cartQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  )
 
   const activeFiltersCount = useMemo(
     () => brands.length + families.length,
@@ -64,20 +72,36 @@ export default function Header() {
             </span>
           </a>
 
-          <button
-            aria-label="Abrir filtros"
-            className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10 md:hidden"
-            title="Filtros"
-            type="button"
-            onClick={toggleFilters}
-          >
-            <SlidersHorizontal aria-hidden="true" size={18} />
-            {activeFiltersCount > 0 ? (
-              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
-                {activeFiltersCount}
-              </span>
-            ) : null}
-          </button>
+          <div className="flex items-center gap-2 md:hidden">
+            <button
+              aria-label="Abrir carrito"
+              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+              title="Carrito"
+              type="button"
+              onClick={openCart}
+            >
+              <ShoppingBag aria-hidden="true" size={18} />
+              {cartQuantity > 0 ? (
+                <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                  {cartQuantity}
+                </span>
+              ) : null}
+            </button>
+            <button
+              aria-label="Abrir filtros"
+              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+              title="Filtros"
+              type="button"
+              onClick={toggleFilters}
+            >
+              <SlidersHorizontal aria-hidden="true" size={18} />
+              {activeFiltersCount > 0 ? (
+                <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                  {activeFiltersCount}
+                </span>
+              ) : null}
+            </button>
+          </div>
         </div>
 
         <div className="relative min-w-0 flex-1">
@@ -110,6 +134,21 @@ export default function Header() {
             </button>
           ) : null}
         </div>
+
+        <button
+          aria-label="Abrir carrito"
+          className="relative hidden h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10 md:grid lg:hidden"
+          title="Carrito"
+          type="button"
+          onClick={openCart}
+        >
+          <ShoppingBag aria-hidden="true" size={18} />
+          {cartQuantity > 0 ? (
+            <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+              {cartQuantity}
+            </span>
+          ) : null}
+        </button>
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <div className="flex h-11 items-center rounded-md border border-white/10 bg-white/[0.04]">
@@ -170,6 +209,20 @@ export default function Header() {
             {activeFiltersCount > 0 ? (
               <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
                 {activeFiltersCount}
+              </span>
+            ) : null}
+          </button>
+          <button
+            aria-label="Abrir carrito"
+            className="relative grid h-11 w-11 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+            title="Carrito"
+            type="button"
+            onClick={openCart}
+          >
+            <ShoppingBag aria-hidden="true" size={18} />
+            {cartQuantity > 0 ? (
+              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                {cartQuantity}
               </span>
             ) : null}
           </button>

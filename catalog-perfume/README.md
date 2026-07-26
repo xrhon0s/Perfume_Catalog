@@ -26,6 +26,9 @@ Aplicación web interactiva para explorar perfumes en formato tipo revista digit
   * Familia olfativa
 * 📄 Navegación por páginas
 * 🧾 Modal con detalle del perfume
+* 🛍️ Carrito persistente
+* 💬 Pedido directo por WhatsApp o solicitud para revisión
+* 📋 Gestión de pedidos desde administración
 * 📱 Diseño responsive
 * ⚡ Alto rendimiento con Vite
 
@@ -135,6 +138,7 @@ SUPABASE_BUCKET=perfume-images
 MAX_UPLOAD_MB=8
 DEFAULT_MAX_WIDTH=1200
 DEFAULT_WEBP_QUALITY=78
+VITE_WHATSAPP_NUMBER=573001234567
 ```
 
 La `SUPABASE_SERVICE_ROLE_KEY` es privada del hosting. No debe exponerse como variable `VITE_*`.
@@ -153,14 +157,18 @@ La `SUPABASE_SERVICE_ROLE_KEY` es privada del hosting. No debe exponerse como va
    * Filtrar resultados
    * Buscar perfumes
    * Ver detalles en modal
+   * Preparar un carrito
+   * Continuar directamente por WhatsApp
+   * Enviar una solicitud para revisión administrativa
 
 ---
 
 ## 📌 Alcance
 
-El proyecto incluye catálogo público y un panel autenticado para crear,
-editar y eliminar perfumes. Favoritos, carrito y recomendaciones no forman
-parte del alcance actual.
+El proyecto incluye catálogo público, carrito, solicitudes de pedido y un
+panel autenticado para administrar productos e inventario, revisar pedidos y
+continuar la venta por WhatsApp. Los pagos en línea y las recomendaciones no
+forman parte del alcance actual.
 
 ---
 

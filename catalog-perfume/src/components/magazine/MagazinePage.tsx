@@ -1,10 +1,12 @@
 import { useState } from "react"
-import { ArrowUpRight, ImageOff } from "lucide-react"
+import { ArrowUpRight, ImageOff, ShoppingBag } from "lucide-react"
 import type { Perfume } from "../../data/types"
+import { perfumeToCartItem } from "../../features/cart/cartTypes"
 import {
   formatCatalogPrice,
   formatPerfumeSize,
 } from "../../shared/utils/catalogFormatting"
+import { useCartStore } from "../../store/cartStore"
 
 type MagazinePageProps = {
   side: "left" | "right"
@@ -18,6 +20,7 @@ export default function MagazinePage({
   onView,
 }: MagazinePageProps) {
   const isLeft = side === "left"
+  const addCartItem = useCartStore((state) => state.addItem)
   const [failedImageUrl, setFailedImageUrl] = useState<string | undefined>()
   const imageUrl = perfume?.image
   const hasImage = Boolean(imageUrl) && failedImageUrl !== imageUrl
@@ -38,6 +41,7 @@ export default function MagazinePage({
         ? "text-2xl"
         : "text-3xl"
   const inventory = perfume?.inventory
+  const cartItem = perfume ? perfumeToCartItem(perfume) : null
 
   const inventorySummary = inventory ? (
     <div
@@ -86,17 +90,33 @@ export default function MagazinePage({
           e.stopPropagation()
         }}
       >
-        <button
-          type="button"
-          onClick={(e) => {
-            e.stopPropagation()
-            onView()
-          }}
-          className="inline-flex h-10 items-center gap-2 rounded-md bg-white px-4 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100"
-        >
-          Ver detalles
-          <ArrowUpRight aria-hidden="true" size={16} />
-        </button>
+        <div className="flex items-center gap-1.5">
+          {cartItem ? (
+            <button
+              aria-label={`Agregar ${perfume.name} al carrito`}
+              className="grid h-10 w-10 place-items-center rounded-md border border-white/20 text-white transition hover:bg-white/10"
+              title="Agregar al carrito"
+              type="button"
+              onClick={(event) => {
+                event.stopPropagation()
+                addCartItem(cartItem)
+              }}
+            >
+              <ShoppingBag aria-hidden="true" size={17} />
+            </button>
+          ) : null}
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation()
+              onView()
+            }}
+            className="inline-flex h-10 items-center gap-2 rounded-md bg-white px-4 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100"
+          >
+            Ver detalles
+            <ArrowUpRight aria-hidden="true" size={16} />
+          </button>
+        </div>
       </div>
     ) : null
 

@@ -16,6 +16,8 @@ const TABLES = [
   { name: "perfume_images", orderBy: "id" },
   { name: "inventory_items", orderBy: "id" },
   { name: "stock_movements", orderBy: "id" },
+  { name: "orders", orderBy: "id" },
+  { name: "order_items", orderBy: "id" },
 ]
 
 function loadEnvFile(filePath) {

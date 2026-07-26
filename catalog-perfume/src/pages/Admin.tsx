@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState, type FormEvent } from "react"
 import type { Session } from "@supabase/supabase-js"
-import { LoaderCircle, Plus } from "lucide-react"
+import { ClipboardList, LoaderCircle, Package, Plus } from "lucide-react"
 import AdminAccessLayout from "../features/admin/components/AdminAccessLayout"
 import AdminAlert from "../features/admin/components/AdminAlert"
 import AdminForbidden from "../features/admin/components/AdminForbidden"
@@ -9,6 +9,7 @@ import AdminLogin from "../features/admin/components/AdminLogin"
 import AdminUnavailable from "../features/admin/components/AdminUnavailable"
 import PerfumeForm from "../features/admin/components/PerfumeForm"
 import PerfumeTable from "../features/admin/components/PerfumeTable"
+import OrdersPanel from "../features/admin/components/OrdersPanel"
 import {
   emptyPerfumeForm,
   formToPerfumeInput,
@@ -71,6 +72,7 @@ export default function Admin() {
   const [deletingId, setDeletingId] = useState<string | null>(null)
   const [search, setSearch] = useState("")
   const [statusFilter, setStatusFilter] = useState<StatusFilter>("active")
+  const [adminView, setAdminView] = useState<"products" | "orders">("products")
   const sessionUserId = session?.user.id
 
   useEffect(() => {
@@ -451,6 +453,41 @@ export default function Admin() {
     <main className="min-h-dvh bg-[#eef0ec] text-slate-950">
       <AdminHeader email={session.user.email} onLogout={handleLogout} />
 
+      <nav className="border-b border-slate-200 bg-white" aria-label="Secciones">
+        <div className="mx-auto flex h-12 max-w-[1600px] items-end gap-1 px-4 sm:px-6">
+          <button
+            className={[
+              "inline-flex h-11 items-center gap-2 border-b-2 px-3 text-sm font-semibold",
+              adminView === "products"
+                ? "border-[#8f334d] text-slate-950"
+                : "border-transparent text-slate-500",
+            ].join(" ")}
+            type="button"
+            onClick={() => setAdminView("products")}
+          >
+            <Package aria-hidden="true" size={17} />
+            Productos
+          </button>
+          <button
+            className={[
+              "inline-flex h-11 items-center gap-2 border-b-2 px-3 text-sm font-semibold",
+              adminView === "orders"
+                ? "border-[#8f334d] text-slate-950"
+                : "border-transparent text-slate-500",
+            ].join(" ")}
+            type="button"
+            onClick={() => setAdminView("orders")}
+          >
+            <ClipboardList aria-hidden="true" size={17} />
+            Pedidos
+          </button>
+        </div>
+      </nav>
+
+      {adminView === "orders" ? (
+        <OrdersPanel onInventoryChange={loadAdminPerfumes} />
+      ) : (
+        <>
       <section className="border-b border-slate-200 bg-white">
         <div className="mx-auto flex max-w-[1600px] flex-col gap-5 px-4 py-5 sm:px-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
@@ -540,6 +577,8 @@ export default function Admin() {
           onImageUpload={(file) => void handleImageUpload(file)}
         />
       </div>
+        </>
+      )}
     </main>
   )
 }

@@ -1,6 +1,7 @@
 import { fireEvent, render, screen, within } from "@testing-library/react"
-import { describe, expect, it, vi } from "vitest"
+import { beforeEach, describe, expect, it, vi } from "vitest"
 import type { Perfume } from "../../data/types"
+import { useCartStore } from "../../store/cartStore"
 import MagazinePage from "./MagazinePage"
 
 const perfume: Perfume = {
@@ -13,6 +14,7 @@ const perfume: Perfume = {
   gender: "Unisex",
   year: 2024,
   inventory: {
+    id: "inventory-test",
     sku: "CASA-PRUEBA-100",
     sizeMl: 100,
     salePrice: 189900,
@@ -21,6 +23,10 @@ const perfume: Perfume = {
 }
 
 describe("MagazinePage", () => {
+  beforeEach(() => {
+    useCartStore.setState({ items: [], isOpen: false })
+  })
+
   it("muestra la información esencial y abre el detalle", () => {
     const onView = vi.fn()
 
@@ -36,6 +42,19 @@ describe("MagazinePage", () => {
 
     fireEvent.click(screen.getByRole("button", { name: "Ver detalles" }))
     expect(onView).toHaveBeenCalledTimes(1)
+  })
+
+  it("agrega el perfume disponible al carrito", () => {
+    render(<MagazinePage side="left" perfume={perfume} />)
+
+    fireEvent.click(
+      screen.getByRole("button", {
+        name: "Agregar Perfume de prueba al carrito",
+      }),
+    )
+
+    expect(useCartStore.getState().items).toHaveLength(1)
+    expect(useCartStore.getState().isOpen).toBe(true)
   })
 
   it("usa el respaldo editorial cuando la imagen falla", () => {

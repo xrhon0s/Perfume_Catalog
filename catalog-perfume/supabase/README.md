@@ -25,12 +25,16 @@ Supabase CLI:
 2. `supabase/migrations/002_catalog_perfumes_image_path.sql`
 3. `supabase/migrations/003_primary_inventory.sql`
 4. `supabase/migrations/004_fix_inventory_function_ambiguity.sql`
+5. `supabase/migrations/005_customer_orders.sql`
 
 Si el proyecto ya estaba funcionando antes de incorporar precios y existencias,
 solo necesitas ejecutar la migración `003_primary_inventory.sql`.
 
 Si ya ejecutaste la migración 003 antes de la corrección de referencias
 ambiguas, ejecuta únicamente `004_fix_inventory_function_ambiguity.sql`.
+
+Para habilitar carrito, solicitudes y gestión de pedidos, ejecuta
+`005_customer_orders.sql` después de las anteriores.
 
 Este esquema crea:
 
@@ -46,6 +50,8 @@ Este esquema crea:
 - restricciones de calidad para familia, concentración, género, año, notas y precios
 - presentación principal con SKU automático, precio y existencias
 - ajustes de inventario registrados como movimientos de stock
+- solicitudes de pedido con precios validados en servidor
+- confirmación y cancelación de pedidos vinculadas al inventario
 
 ## 3. Generar seed desde el catálogo actual
 

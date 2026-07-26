@@ -1,9 +1,12 @@
 import { useEffect, useId } from "react"
+import { ShoppingBag } from "lucide-react"
 import type { Perfume } from "../../data/types"
+import { perfumeToCartItem } from "../../features/cart/cartTypes"
 import {
   formatCatalogPrice,
   formatPerfumeSize,
 } from "../../shared/utils/catalogFormatting"
+import { useCartStore } from "../../store/cartStore"
 
 type Props = {
   perfume: Perfume
@@ -12,6 +15,8 @@ type Props = {
 
 export default function PerfumeDetailModal({ perfume, onClose }: Props) {
   const titleId = useId()
+  const addCartItem = useCartStore((state) => state.addItem)
+  const cartItem = perfumeToCartItem(perfume)
   const profile = [
     perfume.family,
     perfume.concentration,
@@ -212,6 +217,26 @@ export default function PerfumeDetailModal({ perfume, onClose }: Props) {
                 ))}
               </div>
             )}
+
+            <div className="sticky bottom-0 mt-6 border-t border-slate-200 bg-white pt-4">
+              <button
+                className="inline-flex h-11 w-full items-center justify-center gap-2 rounded-md bg-[#171914] px-5 text-sm font-semibold text-white transition hover:bg-[#292c26] disabled:cursor-not-allowed disabled:bg-slate-300"
+                disabled={!cartItem}
+                type="button"
+                onClick={() => {
+                  if (!cartItem) return
+                  addCartItem(cartItem)
+                  onClose()
+                }}
+              >
+                <ShoppingBag aria-hidden="true" size={18} />
+                {cartItem
+                  ? "Agregar al carrito"
+                  : perfume.inventory?.stockQuantity === 0
+                    ? "Producto agotado"
+                    : "No disponible para pedido"}
+              </button>
+            </div>
           </div>
         </div>
       </div>
