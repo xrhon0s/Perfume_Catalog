@@ -44,7 +44,7 @@ export default function MagazinePage({
       className={[
         "flex flex-wrap items-center gap-x-3 gap-y-1",
         isLeft ? "justify-start" : "justify-end",
-        isLeft ? "order-1 sm:order-2" : "order-1",
+        "order-1 sm:order-2",
       ].join(" ")}
     >
       <span className="text-lg font-semibold">
@@ -70,7 +70,7 @@ export default function MagazinePage({
       <div
         className={[
           "order-2 shrink-0",
-          isLeft ? "sm:order-1" : "sm:order-2",
+          isLeft ? "sm:order-3" : "sm:order-1",
           !isLeft && !inventory ? "sm:ml-auto" : "",
         ].join(" ")}
         onPointerDownCapture={(e) => {
@@ -105,13 +105,13 @@ export default function MagazinePage({
       {hasImage ? (
         <img
           alt={perfume ? `${perfume.name} de ${perfume.brand}` : ""}
-          className="absolute inset-0 h-full w-full object-contain pb-[15rem] sm:pb-[10rem]"
+          className="absolute inset-0 h-full w-full object-cover pb-[15rem] sm:pb-[8rem]"
           loading="lazy"
           src={imageUrl}
           onError={() => setFailedImageUrl(imageUrl)}
         />
       ) : perfume ? (
-        <div className="absolute inset-x-0 bottom-[15rem] top-0 grid place-items-center bg-[#f5f5f2] text-slate-950 sm:bottom-[10rem]">
+        <div className="absolute inset-x-0 bottom-[15rem] top-0 grid place-items-center bg-[#f5f5f2] text-slate-950 sm:bottom-[8rem]">
           <div className="absolute inset-x-8 top-8 flex items-center justify-between border-t border-slate-950/15 pt-4 text-[10px] font-semibold uppercase text-slate-500">
             <span>Éter</span>
             <span>{perfume.family ?? "Catálogo olfativo"}</span>
@@ -124,14 +124,19 @@ export default function MagazinePage({
 
       <div
         className={[
-          "absolute inset-x-0 bottom-0 z-10 h-[15rem] border-t border-white/10 bg-[#171914] py-5 text-white sm:h-[10rem] sm:py-4",
+          "absolute inset-x-0 bottom-0 z-10 h-[15rem] border-t border-white/10 bg-[#171914] py-5 text-white sm:h-[8rem] sm:py-4",
           isLeft
             ? "pl-6 pr-20 text-left sm:pl-10 sm:pr-32"
             : "pl-20 pr-6 text-right sm:pl-32 sm:pr-10",
         ].join(" ")}
       >
-        <div className="flex h-full min-w-0 flex-col">
-          <div className="min-w-0">
+        <div className="flex h-full min-w-0 flex-col sm:flex-row sm:items-center sm:justify-between sm:gap-5">
+          <div
+            className={[
+              "min-w-0 sm:flex-1",
+              isLeft ? "sm:order-1" : "sm:order-3",
+            ].join(" ")}
+          >
             {perfume?.brand && (
               <p className="truncate text-[11px] font-semibold uppercase text-white/60">
                 {perfume.brand}
@@ -157,7 +162,7 @@ export default function MagazinePage({
           {(inventorySummary || detailAction) && (
             <div
               className={[
-                "mt-auto flex flex-col gap-3 pt-3 sm:flex-row sm:items-end sm:justify-between sm:gap-4 sm:pt-1",
+                "mt-auto flex flex-col gap-3 pt-3 sm:contents",
                 isLeft ? "items-start" : "items-end",
               ].join(" ")}
             >

@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react"
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Perfume } from "../../data/types"
@@ -31,12 +31,14 @@ type FlipEvent = {
 }
 
 export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
+  const hostRef = useRef<HTMLDivElement | null>(null)
   const bookRef = useRef<FlipBookRef | null>(null)
   const setPageIndexGlobal = useUIStore((s) => s.setPageIndex)
   const setTotalPages = useUIStore((s) => s.setTotalPages)
   const jumpToPageRequest = useUIStore((s) => s.jumpToPageRequest)
   const consumeJumpToPage = useUIStore((s) => s.consumeJumpToPage)
   const [pageIndex, setPageIndex] = useState(0)
+  const [pageWidth, setPageWidth] = useState(730)
 
   const pages = useMemo(() => {
     return items.length % 2 === 0
@@ -89,13 +91,34 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
     return () => window.removeEventListener("keydown", onKeyDown)
   }, [])
 
+  useLayoutEffect(() => {
+    const host = hostRef.current
+    if (!host || typeof ResizeObserver === "undefined") return
+
+    const observer = new ResizeObserver(([entry]) => {
+      const { width, height } = entry.contentRect
+      if (width < 640 || height <= 0) return
+
+      const nextPageWidth = Math.round((width * 400) / height)
+      setPageWidth((current) =>
+        current === nextPageWidth ? current : nextPageWidth,
+      )
+    })
+
+    observer.observe(host)
+    return () => observer.disconnect()
+  }, [])
+
   const visiblePageIndex = Math.min(pageIndex, Math.max(0, pages.length - 1))
   const canGoBack = visiblePageIndex > 0
   const canGoForward = visiblePageIndex < items.length - 1
   const visiblePerfumePosition = Math.min(visiblePageIndex + 1, items.length)
 
   return (
-    <div className="catalog-flipbook-surface relative h-full w-full">
+    <div
+      ref={hostRef}
+      className="catalog-flipbook-surface relative h-full w-full"
+    >
       <nav
         aria-label="Navegación del catálogo"
         className="absolute bottom-3 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-1 rounded-md border border-white/15 bg-[#161814]/95 p-1 text-white shadow-lg backdrop-blur"
@@ -133,12 +156,13 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
 
       <div className="flex h-full w-full items-center justify-center">
         <HTMLFlipBook
+          key={pageWidth}
           ref={bookRef}
           className="h-full w-full shadow-2xl"
           style={{}}
-          width={600}
+          width={pageWidth}
           height={800}
-          startPage={0}
+          startPage={pageIndex}
           size="stretch"
           minWidth={320}
           maxWidth={1400}
