@@ -39,17 +39,17 @@ export default function MagazinePage({
         : "text-4xl"
 
   return (
-    <div className="relative h-full w-full overflow-hidden bg-[#efeee9]">
+    <div className="relative h-full w-full overflow-hidden bg-white">
       {hasImage ? (
         <img
           alt={perfume ? `${perfume.name} de ${perfume.brand}` : ""}
-          className="absolute inset-0 h-full w-full object-contain p-8 pb-40 sm:p-14 sm:pb-52"
+          className="absolute inset-0 h-full w-full object-contain p-5 pb-[15rem] sm:p-8 sm:pb-[17rem]"
           loading="lazy"
           src={imageUrl}
           onError={() => setFailedImageUrl(imageUrl)}
         />
       ) : perfume ? (
-        <div className="absolute inset-0 grid place-items-center text-slate-950">
+        <div className="absolute inset-x-0 bottom-[15rem] top-0 grid place-items-center bg-[#f5f5f2] text-slate-950 sm:bottom-[17rem]">
           <div className="absolute inset-x-8 top-8 flex items-center justify-between border-t border-slate-950/15 pt-4 text-[10px] font-semibold uppercase text-slate-500">
             <span>Éter</span>
             <span>{perfume.family ?? "Catálogo olfativo"}</span>
@@ -60,19 +60,17 @@ export default function MagazinePage({
         </div>
       ) : null}
 
-      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
-
       <div
         className={[
-          "absolute inset-x-0 bottom-24 z-10 sm:bottom-28 md:bottom-32",
+          "absolute inset-x-0 bottom-0 z-10 min-h-[15rem] border-t border-white/10 bg-[#171914] pb-20 pt-5 text-white sm:min-h-[17rem] sm:pt-6",
           isLeft
             ? "pl-6 pr-12 text-left sm:pl-10 sm:pr-20"
             : "pl-12 pr-6 text-right sm:pl-20 sm:pr-10",
         ].join(" ")}
       >
-        <div className="inline-block max-w-[88%] text-white">
+        <div className="inline-block max-w-[92%]">
           {perfume?.brand && (
-            <p className="text-xs font-semibold uppercase text-white/75">
+            <p className="text-[11px] font-semibold uppercase text-white/60">
               {perfume.brand}
             </p>
           )}
@@ -86,13 +84,18 @@ export default function MagazinePage({
           )}
 
           {profile.length > 0 ? (
-            <p className="mt-3 text-xs leading-5 text-white/70">
+            <p className="mt-2 text-xs leading-5 text-white/60">
               {profile.join(" · ")}
             </p>
           ) : null}
 
           {perfume?.inventory ? (
-            <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1">
+            <div
+              className={[
+                "mt-2 flex flex-wrap items-center gap-x-3 gap-y-1",
+                isLeft ? "justify-start" : "justify-end",
+              ].join(" ")}
+            >
               <span className="text-lg font-semibold">
                 {formatCatalogPrice(perfume.inventory.salePrice)}
               </span>
@@ -113,7 +116,7 @@ export default function MagazinePage({
 
           {onView && perfume && (
             <div
-              className="mt-5 inline-block"
+              className="mt-4 inline-block"
               onPointerDownCapture={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
