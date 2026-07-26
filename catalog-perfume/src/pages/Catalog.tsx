@@ -31,6 +31,11 @@ export default function Catalog() {
 
   const isInitialLoading = isLoading && perfumes.length === 0
   const hasBlockingError = Boolean(error) && perfumes.length === 0
+  const catalogViewKey = [
+    query.trim().toLowerCase(),
+    selectedBrands.join("|"),
+    selectedFamilies.join("|"),
+  ].join("::")
 
   return (
     <main className="h-full w-full overflow-hidden bg-gradient-to-br from-slate-950 via-slate-900 to-slate-950">
@@ -83,6 +88,7 @@ export default function Catalog() {
         </section>
       ) : filtered.length > 0 ? (
         <PerfumeFlipbook
+          key={catalogViewKey}
           items={filtered}
           onViewPerfume={setSelectedPerfume}
         />

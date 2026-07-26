@@ -1,54 +1,92 @@
+import { useState } from "react"
+import { ArrowUpRight, ImageOff } from "lucide-react"
+import type { Perfume } from "../../data/types"
+
 type MagazinePageProps = {
   side: "left" | "right"
-  title?: string
-  subtitle?: string
-  imageUrl?: string
+  perfume?: Perfume
   onView?: () => void
 }
 
 export default function MagazinePage({
   side,
-  title,
-  subtitle,
-  imageUrl,
+  perfume,
   onView,
 }: MagazinePageProps) {
   const isLeft = side === "left"
+  const [failedImageUrl, setFailedImageUrl] = useState<string | undefined>()
+  const imageUrl = perfume?.image
+  const hasImage = Boolean(imageUrl) && failedImageUrl !== imageUrl
+  const profile = [
+    perfume?.family,
+    perfume?.concentration,
+    perfume?.gender,
+    perfume?.year,
+  ].filter(Boolean)
+  const titleLength = perfume?.name.length ?? 0
+  const titleSize =
+    titleLength > 34
+      ? "text-2xl sm:text-3xl"
+      : titleLength > 22
+        ? "text-3xl sm:text-4xl"
+        : "text-4xl"
 
   return (
-    <div
-      className="relative h-full w-full overflow-hidden bg-gray-200 bg-cover bg-center"
-      style={{
-        ...(imageUrl ? { backgroundImage: `url(${imageUrl})` } : {}),
-      }}
-    >
-      <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+    <div className="relative h-full w-full overflow-hidden bg-[#efeee9]">
+      {hasImage ? (
+        <img
+          alt={perfume ? `${perfume.name} de ${perfume.brand}` : ""}
+          className="absolute inset-0 h-full w-full object-contain p-8 pb-40 sm:p-14 sm:pb-52"
+          loading="lazy"
+          src={imageUrl}
+          onError={() => setFailedImageUrl(imageUrl)}
+        />
+      ) : perfume ? (
+        <div className="absolute inset-0 grid place-items-center text-slate-950">
+          <div className="absolute inset-x-8 top-8 flex items-center justify-between border-t border-slate-950/15 pt-4 text-[10px] font-semibold uppercase text-slate-500">
+            <span>Éter</span>
+            <span>{perfume.family ?? "Catálogo olfativo"}</span>
+          </div>
+          <div className="grid h-32 w-32 place-items-center border border-slate-950/15">
+            <ImageOff aria-hidden="true" className="text-slate-400" size={30} />
+          </div>
+        </div>
+      ) : null}
+
+      <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/10 to-transparent" />
 
       <div
         className={[
-          "absolute inset-x-0 z-10",
-          "bottom-10 sm:bottom-28 md:bottom-32",
+          "absolute inset-x-0 bottom-24 z-10 sm:bottom-28 md:bottom-32",
           isLeft
-            ? "pl-6 pr-16 text-left sm:pl-10 sm:pr-24"
-            : "pl-16 pr-6 text-right sm:pl-24 sm:pr-10",
+            ? "pl-6 pr-12 text-left sm:pl-10 sm:pr-20"
+            : "pl-12 pr-6 text-right sm:pl-20 sm:pr-10",
         ].join(" ")}
       >
-        <div className="inline-block max-w-[70%] text-white">
-          {subtitle && (
-            <p className="text-base font-medium opacity-95 drop-shadow">
-              {subtitle}
+        <div className="inline-block max-w-[88%] text-white">
+          {perfume?.brand && (
+            <p className="text-xs font-semibold uppercase text-white/75">
+              {perfume.brand}
             </p>
           )}
 
-          {title && (
-            <h2 className="mt-1 text-5xl font-semibold leading-tight drop-shadow">
-              {title}
+          {perfume?.name && (
+            <h2
+              className={`mt-2 font-display font-semibold leading-tight ${titleSize}`}
+            >
+              {perfume.name}
             </h2>
           )}
 
-          {onView && (
+          {profile.length > 0 ? (
+            <p className="mt-3 text-xs leading-5 text-white/70">
+              {profile.join(" · ")}
+            </p>
+          ) : null}
+
+          {onView && perfume && (
             <div
-              className="mt-6 inline-block"
+              className="mt-5 inline-block"
               onPointerDownCapture={(e) => {
                 e.preventDefault()
                 e.stopPropagation()
@@ -68,9 +106,10 @@ export default function MagazinePage({
                   e.stopPropagation()
                   onView()
                 }}
-                className="rounded-xl bg-white px-8 py-3 text-sm font-semibold text-black shadow hover:bg-gray-100"
+                className="inline-flex h-10 items-center gap-2 rounded-md bg-white px-4 text-sm font-semibold text-slate-950 shadow-sm transition hover:bg-slate-100"
               >
-                Ver más
+                Ver detalles
+                <ArrowUpRight aria-hidden="true" size={16} />
               </button>
             </div>
           )}

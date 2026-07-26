@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useRef, useState } from "react"
 import HTMLFlipBook from "react-pageflip"
+import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Perfume } from "../../data/types"
 import MagazinePage from "../magazine/MagazinePage"
 import { useUIStore } from "../../store/uiStore"
@@ -25,7 +26,6 @@ type FlipEvent = {
 
 export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   const bookRef = useRef<FlipBookRef | null>(null)
-  const isFilterOpen = useUIStore((s) => s.isFilterOpen)
   const setPageIndexGlobal = useUIStore((s) => s.setPageIndex)
   const setTotalPages = useUIStore((s) => s.setTotalPages)
   const jumpToPageRequest = useUIStore((s) => s.jumpToPageRequest)
@@ -39,8 +39,9 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   }, [items])
 
   useEffect(() => {
-    setTotalPages(pages.length)
-  }, [pages.length, setTotalPages])
+    setTotalPages(items.length)
+    return () => setTotalPages(0)
+  }, [items.length, setTotalPages])
 
   useEffect(() => {
     if (jumpToPageRequest === null) return
@@ -80,30 +81,46 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   }, [])
 
   const visiblePageIndex = Math.min(pageIndex, Math.max(0, pages.length - 1))
+  const canGoBack = visiblePageIndex > 0
+  const canGoForward = visiblePageIndex < items.length - 1
+  const visiblePerfumePosition = Math.min(visiblePageIndex + 1, items.length)
 
   return (
     <div className="relative h-full w-full">
-      <div className="absolute left-4 top-4 z-[80] hidden gap-2 md:flex">
+      <nav
+        aria-label="Navegación del catálogo"
+        className="absolute bottom-3 left-1/2 z-[80] flex -translate-x-1/2 items-center gap-1 rounded-md border border-white/15 bg-[#161814]/95 p-1 text-white shadow-lg backdrop-blur"
+      >
         <button
+          aria-label="Perfume anterior"
+          className="grid h-10 w-10 place-items-center rounded text-white/80 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          disabled={!canGoBack}
+          title="Anterior"
+          type="button"
           onClick={() => bookRef.current?.pageFlip()?.flipPrev()}
-          className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
         >
-          ← Anterior
+          <ChevronLeft aria-hidden="true" size={19} />
         </button>
-
-        <button
-          onClick={() => bookRef.current?.pageFlip()?.flipNext()}
-          className="rounded-xl bg-black/40 px-3 py-2 text-xs text-white backdrop-blur"
+        <div
+          aria-live="polite"
+          className="min-w-[112px] px-2 text-center"
         >
-          Siguiente →
-        </button>
-      </div>
-
-      {!isFilterOpen && (
-        <div className="absolute right-6 top-6 z-[80] rounded-lg bg-black/50 px-3 py-2 text-xs text-white">
-          Página {visiblePageIndex + 1}
+          <p className="text-xs font-semibold">
+            {visiblePerfumePosition} de {items.length}
+          </p>
+          <p className="text-[10px] text-white/50">perfumes</p>
         </div>
-      )}
+        <button
+          aria-label="Perfume siguiente"
+          className="grid h-10 w-10 place-items-center rounded text-white/80 transition hover:bg-white/10 hover:text-white disabled:cursor-not-allowed disabled:opacity-30"
+          disabled={!canGoForward}
+          title="Siguiente"
+          type="button"
+          onClick={() => bookRef.current?.pageFlip()?.flipNext()}
+        >
+          <ChevronRight aria-hidden="true" size={19} />
+        </button>
+      </nav>
 
       <div className="flex h-full w-full items-center justify-center">
         <HTMLFlipBook
@@ -145,9 +162,7 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
                 {p ? (
                   <MagazinePage
                     side={idx % 2 === 0 ? "left" : "right"}
-                    title={p.name}
-                    subtitle={p.brand}
-                    imageUrl={p.image}
+                    perfume={p}
                     onView={() => onViewPerfume(p)}
                   />
                 ) : (
