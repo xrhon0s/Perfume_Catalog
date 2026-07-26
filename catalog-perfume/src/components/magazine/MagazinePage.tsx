@@ -143,7 +143,14 @@ export default function MagazinePage({
             : "pl-20 pr-6 text-right sm:pl-32 sm:pr-10",
         ].join(" ")}
       >
-        <div className="flex h-full min-w-0 flex-col gap-3 sm:grid sm:grid-cols-[minmax(0,1fr)_auto_auto] sm:items-center sm:gap-6">
+        <div
+          className={[
+            "flex h-full min-w-0 flex-col gap-3 sm:grid sm:items-center sm:gap-6",
+            isLeft
+              ? "sm:grid-cols-[minmax(0,1fr)_auto_auto]"
+              : "sm:grid-cols-[auto_auto_minmax(0,1fr)]",
+          ].join(" ")}
+        >
           <div
             className={[
               "min-w-0",
