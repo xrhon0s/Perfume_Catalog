@@ -403,7 +403,12 @@ group by
   i.is_active,
   i.is_primary;
 
-create or replace view public.catalog_perfumes as
+-- The original 001 view did not include image_path. PostgreSQL cannot insert a
+-- view column in the middle with CREATE OR REPLACE, so rebuild this read-only
+-- view while preserving all underlying table data.
+drop view if exists public.catalog_perfumes;
+
+create view public.catalog_perfumes as
 select
   p.id,
   p.legacy_id,
