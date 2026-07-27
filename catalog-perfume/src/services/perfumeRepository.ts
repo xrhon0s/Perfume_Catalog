@@ -101,7 +101,12 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
           ? "Ejecuta la migración 003_primary_inventory.sql en Supabase antes de guardar inventario."
           : productError.code === "42501"
             ? "No tienes permisos de administrador para guardar el producto."
-            : productError.message,
+            : productError.code === "23505" &&
+                productError.message.includes(
+                  "perfumes_brand_id_slug_key",
+                )
+              ? "Ya existe un perfume con ese nombre dentro de la misma marca."
+              : productError.message,
       )
     }
     return
@@ -123,7 +128,10 @@ export async function savePerfume(input: PerfumeInput): Promise<void> {
     throw new Error(
       error.code === "42501"
         ? "No tienes permisos de administrador para guardar perfumes."
-        : error.message,
+        : error.code === "23505" &&
+            error.message.includes("perfumes_brand_id_slug_key")
+          ? "Ya existe un perfume con ese nombre dentro de la misma marca."
+          : error.message,
     )
   }
 }

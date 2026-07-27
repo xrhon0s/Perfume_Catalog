@@ -25,6 +25,15 @@ const catalogRow: CatalogPerfumeRow = {
 }
 
 describe("mapCatalogRow", () => {
+  it("usa siempre el UUID de Supabase como identificador editable", () => {
+    expect(
+      mapCatalogRow({
+        ...catalogRow,
+        legacy_id: "lattafa-yara-candy",
+      }).id,
+    ).toBe("6d9635f1-22f9-4414-b30a-42af96c1ca22")
+  })
+
   it("convierte el inventario primario devuelto por Supabase", () => {
     expect(mapCatalogRow(catalogRow).inventory).toEqual({
       id: "2d72382b-cb29-46b8-9527-85e2a9834ab3",

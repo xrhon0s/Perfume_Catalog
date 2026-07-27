@@ -4,7 +4,7 @@ import type { CatalogPerfumeRow, PerfumeInput } from "./perfumeTypes"
 
 export function mapCatalogRow(row: CatalogPerfumeRow): Perfume {
   return {
-    id: row.legacy_id ?? row.id,
+    id: row.id,
     name: row.name,
     brand: row.brand,
     image: row.image ?? undefined,

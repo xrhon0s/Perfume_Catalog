@@ -1,5 +1,9 @@
 import { beforeEach, describe, expect, it, vi } from "vitest"
-import { deletePerfume, savePerfume } from "./perfumeRepository"
+import {
+  deletePerfume,
+  listAdminPerfumes,
+  savePerfume,
+} from "./perfumeRepository"
 
 const mocks = vi.hoisted(() => ({
   from: vi.fn(),
@@ -65,6 +69,44 @@ describe("perfumeRepository", () => {
     expect(eq).toHaveBeenCalledWith("id", id)
   })
 
+  it("entrega UUIDs al panel incluso para perfumes migrados", async () => {
+    const order = vi.fn(async () => ({
+      data: [
+        {
+          id: "6d9635f1-22f9-4414-b30a-42af96c1ca22",
+          legacy_id: "lattafa-yara-candy",
+          name: "Yara Candy",
+          brand: "Lattafa",
+          image: null,
+          image_path: null,
+          family: "Gourmand",
+          concentration: "EDP",
+          gender: "Femenino",
+          year: 2024,
+          description: null,
+          tags: [],
+          notes: {},
+          is_active: true,
+          inventory_item_id: null,
+          sku: null,
+          size_ml: null,
+          sale_price: null,
+          stock_quantity: null,
+        },
+      ],
+      error: null,
+    }))
+    const firstOrder = vi.fn(() => ({ order }))
+    const select = vi.fn(() => ({ order: firstOrder }))
+    mocks.from.mockReturnValue({ select })
+
+    const perfumes = await listAdminPerfumes()
+
+    expect(perfumes[0]?.id).toBe(
+      "6d9635f1-22f9-4414-b30a-42af96c1ca22",
+    )
+  })
+
   it("guarda la presentación principal y ajusta sus existencias", async () => {
     mocks.rpc.mockResolvedValue({ error: null })
 
@@ -94,6 +136,30 @@ describe("perfumeRepository", () => {
         requested_sale_price: 189900,
         requested_stock_quantity: 7,
       }),
+    )
+  })
+
+  it("explica claramente cuando nombre y marca ya existen", async () => {
+    mocks.rpc.mockResolvedValue({
+      error: {
+        code: "23505",
+        message:
+          'duplicate key value violates unique constraint "perfumes_brand_id_slug_key"',
+      },
+    })
+
+    await expect(
+      savePerfume({
+        name: "Yara Candy",
+        brand: "Lattafa",
+        inventory: {
+          sizeMl: 100,
+          salePrice: 189900,
+          stockQuantity: 7,
+        },
+      }),
+    ).rejects.toThrow(
+      "Ya existe un perfume con ese nombre dentro de la misma marca.",
     )
   })
 
