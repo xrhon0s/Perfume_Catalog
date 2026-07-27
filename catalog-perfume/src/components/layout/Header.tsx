@@ -7,6 +7,7 @@ import {
   X,
 } from "lucide-react"
 import logo from "../../assets/eter_wordmark_white.webp"
+import WhatsAppContactButton from "../../features/cart/WhatsAppContactButton"
 import { useFiltersStore } from "../../store/filterStore"
 import { useUIStore } from "../../store/uiStore"
 import { useCartStore } from "../../store/cartStore"
@@ -73,6 +74,7 @@ export default function Header() {
           </a>
 
           <div className="flex items-center gap-2 md:hidden">
+            <WhatsAppContactButton className="grid h-10 w-10" />
             <button
               aria-label="Abrir carrito"
               className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
@@ -135,20 +137,23 @@ export default function Header() {
           ) : null}
         </div>
 
-        <button
-          aria-label="Abrir carrito"
-          className="relative hidden h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10 md:grid lg:hidden"
-          title="Carrito"
-          type="button"
-          onClick={openCart}
-        >
-          <ShoppingBag aria-hidden="true" size={18} />
-          {cartQuantity > 0 ? (
-            <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
-              {cartQuantity}
-            </span>
-          ) : null}
-        </button>
+        <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+          <WhatsAppContactButton className="grid h-11 w-11" />
+          <button
+            aria-label="Abrir carrito"
+            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+            title="Carrito"
+            type="button"
+            onClick={openCart}
+          >
+            <ShoppingBag aria-hidden="true" size={18} />
+            {cartQuantity > 0 ? (
+              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                {cartQuantity}
+              </span>
+            ) : null}
+          </button>
+        </div>
 
         <div className="hidden shrink-0 items-center gap-2 lg:flex">
           <div className="flex h-11 items-center rounded-md border border-white/10 bg-white/[0.04]">
@@ -212,6 +217,7 @@ export default function Header() {
               </span>
             ) : null}
           </button>
+          <WhatsAppContactButton className="grid h-11 w-11" />
           <button
             aria-label="Abrir carrito"
             className="relative grid h-11 w-11 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"

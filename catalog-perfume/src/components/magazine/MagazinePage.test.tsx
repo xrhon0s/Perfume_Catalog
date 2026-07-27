@@ -46,6 +46,7 @@ describe("MagazinePage", () => {
       screen.getByText("Floral · EDP · Unisex · 2024 · 100 ml"),
     ).toBeVisible()
     expect(screen.getByText(/189.900/)).toBeVisible()
+    expect(screen.getByText("Precio al detal")).toBeVisible()
     expect(screen.getByText("7 disponibles")).toBeVisible()
 
     fireEvent.click(screen.getByRole("button", { name: "Ver detalles" }))

@@ -44,9 +44,14 @@ export default function MagazinePage({
   const cartItem = perfume ? perfumeToCartItem(perfume) : null
 
   const priceSummary = inventory ? (
-    <p className="whitespace-nowrap text-lg font-semibold">
-      {formatCatalogPrice(inventory.salePrice)}
-    </p>
+    <div className="whitespace-nowrap">
+      <p className="text-lg font-semibold">
+        {formatCatalogPrice(inventory.salePrice)}
+      </p>
+      <p className="mt-0.5 text-[10px] font-medium text-white/50">
+        Precio al detal
+      </p>
+    </div>
   ) : null
 
   const purchaseActions =
