@@ -82,4 +82,15 @@ describe("PerfumeFlipbook pagination", () => {
     expect(shell).toHaveAttribute("data-auto-size", "false")
     expect(shell).toHaveClass("h-full", "w-full")
   })
+
+  it("monta únicamente las fichas cercanas a la hoja visible", () => {
+    render(
+      <PerfumeFlipbook items={perfumes} onViewPerfume={() => undefined} />,
+    )
+
+    expect(screen.getByText("Perfume 1")).toBeVisible()
+    expect(screen.getByText("Perfume 5")).toBeVisible()
+    expect(screen.queryByText("Perfume 6")).not.toBeInTheDocument()
+    expect(screen.queryByText("Perfume 60")).not.toBeInTheDocument()
+  })
 })

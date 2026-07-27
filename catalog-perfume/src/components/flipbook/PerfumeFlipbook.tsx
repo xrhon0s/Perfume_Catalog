@@ -1,4 +1,12 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react"
+import {
+  createContext,
+  useContext,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+} from "react"
 import HTMLFlipBook from "react-pageflip"
 import { ChevronLeft, ChevronRight } from "lucide-react"
 import type { Perfume } from "../../data/types"
@@ -30,6 +38,46 @@ type FlipEvent = {
   data: number
 }
 
+const ActiveLeafContext = createContext(0)
+const RENDER_RADIUS = 4
+
+function getInitialPageWidth() {
+  if (typeof window === "undefined" || window.innerWidth < 640) return 320
+
+  const availableHeight = Math.max(420, window.innerHeight - 76)
+  return Math.min(
+    1400,
+    Math.max(320, Math.round((window.innerWidth * 400) / availableHeight)),
+  )
+}
+
+function DeferredMagazinePage({
+  index,
+  perfume,
+  side,
+  onView,
+}: {
+  index: number
+  perfume: Perfume | null
+  side: "left" | "right"
+  onView: (perfume: Perfume) => void
+}) {
+  const activeLeaf = useContext(ActiveLeafContext)
+  const shouldRender = Math.abs(index - activeLeaf) <= RENDER_RADIUS
+
+  if (!shouldRender) return null
+
+  return perfume ? (
+    <MagazinePage
+      side={side}
+      perfume={perfume}
+      onView={() => onView(perfume)}
+    />
+  ) : (
+    <MagazinePage side={side} />
+  )
+}
+
 export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   const hostRef = useRef<HTMLDivElement | null>(null)
   const bookRef = useRef<FlipBookRef | null>(null)
@@ -38,7 +86,8 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
   const jumpToPageRequest = useUIStore((s) => s.jumpToPageRequest)
   const consumeJumpToPage = useUIStore((s) => s.consumeJumpToPage)
   const [pageIndex, setPageIndex] = useState(0)
-  const [pageWidth, setPageWidth] = useState(730)
+  const [renderPageIndex, setRenderPageIndex] = useState(0)
+  const [pageWidth, setPageWidth] = useState(getInitialPageWidth)
 
   const pages = useMemo(() => {
     return items.length % 2 === 0
@@ -63,8 +112,19 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
       items.length,
     )
 
-    api.turnToPage(target)
-    consumeJumpToPage()
+    let turnFrame = 0
+    const prepareFrame = window.requestAnimationFrame(() => {
+      setRenderPageIndex(target)
+      turnFrame = window.requestAnimationFrame(() => {
+        api.turnToPage(target)
+        consumeJumpToPage()
+      })
+    })
+
+    return () => {
+      window.cancelAnimationFrame(prepareFrame)
+      window.cancelAnimationFrame(turnFrame)
+    }
   }, [jumpToPageRequest, consumeJumpToPage, items.length])
 
   useEffect(() => {
@@ -100,9 +160,11 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
       if (width < 640 || height <= 0) return
 
       const nextPageWidth = Math.round((width * 400) / height)
-      setPageWidth((current) =>
-        current === nextPageWidth ? current : nextPageWidth,
-      )
+      setPageWidth((current) => {
+        const relativeDifference =
+          Math.abs(current - nextPageWidth) / Math.max(current, 1)
+        return relativeDifference < 0.05 ? current : nextPageWidth
+      })
     })
 
     observer.observe(host)
@@ -154,58 +216,59 @@ export default function PerfumeFlipbook({ items, onViewPerfume }: Props) {
         </button>
       </nav>
 
-      <div className="flex h-full w-full items-center justify-center">
-        <HTMLFlipBook
-          key={pageWidth}
-          ref={bookRef}
-          className="h-full w-full shadow-2xl"
-          style={{}}
-          width={pageWidth}
-          height={800}
-          startPage={pageIndex}
-          size="stretch"
-          minWidth={320}
-          maxWidth={1400}
-          minHeight={420}
-          maxHeight={900}
-          drawShadow={true}
-          flippingTime={360}
-          usePortrait={true}
-          startZIndex={0}
-          autoSize={false}
-          maxShadowOpacity={0.28}
-          showCover={false}
-          mobileScrollSupport={true}
-          clickEventForward={true}
-          useMouseEvents={true}
-          swipeDistance={30}
-          onFlip={(e: FlipEvent) => {
-            setPageIndex(e.data)
-            setPageIndexGlobal(getCatalogPageIndex(e.data))
-          }}
-          showPageCorners={false}
-          disableFlipByClick={false}
-        >
-          {pages.map((p, idx) => (
-            <div
-              key={idx}
-              className="absolute h-full w-full overflow-hidden bg-white"
-            >
-              <div className="relative h-full w-full">
-                {p ? (
-                  <MagazinePage
-                    side={idx % 2 === 0 ? "left" : "right"}
+      <ActiveLeafContext.Provider value={renderPageIndex}>
+        <div className="flex h-full w-full items-center justify-center">
+          <HTMLFlipBook
+            key={pageWidth}
+            ref={bookRef}
+            className="h-full w-full shadow-2xl"
+            style={{}}
+            width={pageWidth}
+            height={800}
+            startPage={pageIndex}
+            size="stretch"
+            minWidth={320}
+            maxWidth={1400}
+            minHeight={420}
+            maxHeight={900}
+            drawShadow={true}
+            flippingTime={360}
+            usePortrait={true}
+            startZIndex={0}
+            autoSize={false}
+            maxShadowOpacity={0.28}
+            showCover={false}
+            mobileScrollSupport={true}
+            clickEventForward={true}
+            useMouseEvents={true}
+            swipeDistance={30}
+            renderOnlyPageLengthChange={true}
+            onFlip={(e: FlipEvent) => {
+              setPageIndex(e.data)
+              setRenderPageIndex(e.data)
+              setPageIndexGlobal(getCatalogPageIndex(e.data))
+            }}
+            showPageCorners={false}
+            disableFlipByClick={false}
+          >
+            {pages.map((p, idx) => (
+              <div
+                key={idx}
+                className="absolute h-full w-full overflow-hidden bg-white"
+              >
+                <div className="relative h-full w-full">
+                  <DeferredMagazinePage
+                    index={idx}
                     perfume={p}
-                    onView={() => onViewPerfume(p)}
+                    side={idx % 2 === 0 ? "left" : "right"}
+                    onView={onViewPerfume}
                   />
-                ) : (
-                  <MagazinePage side={idx % 2 === 0 ? "left" : "right"} />
-                )}
+                </div>
               </div>
-            </div>
-          ))}
-        </HTMLFlipBook>
-      </div>
+            ))}
+          </HTMLFlipBook>
+        </div>
+      </ActiveLeafContext.Provider>
     </div>
   )
 }

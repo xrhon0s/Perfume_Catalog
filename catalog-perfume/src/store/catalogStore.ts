@@ -24,21 +24,34 @@ type CatalogState = {
   deletePerfumeImage: (path: string) => Promise<void>
 }
 
+let publicCatalogLoad: Promise<void> | null = null
+
 export const useCatalogStore = create<CatalogState>((set, get) => ({
   perfumes: [],
   isLoading: false,
   error: null,
 
-  loadPerfumes: async () => {
+  loadPerfumes: () => {
+    if (publicCatalogLoad) return publicCatalogLoad
+
     set({ isLoading: true, error: null })
-    try {
-      set({ perfumes: await listPerfumes(), isLoading: false })
-    } catch (error) {
-      set({
-        error: error instanceof Error ? error.message : "No se pudo cargar el catálogo.",
-        isLoading: false,
-      })
-    }
+    publicCatalogLoad = (async () => {
+      try {
+        set({ perfumes: await listPerfumes(), isLoading: false })
+      } catch (error) {
+        set({
+          error:
+            error instanceof Error
+              ? error.message
+              : "No se pudo cargar el catálogo.",
+          isLoading: false,
+        })
+      } finally {
+        publicCatalogLoad = null
+      }
+    })()
+
+    return publicCatalogLoad
   },
 
   loadAdminPerfumes: async () => {
