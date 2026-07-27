@@ -12,6 +12,7 @@ import PerfumeTable from "../features/admin/components/PerfumeTable"
 import OrdersPanel from "../features/admin/components/OrdersPanel"
 import {
   emptyPerfumeForm,
+  findExistingPerfume,
   formToPerfumeInput,
   perfumeToForm,
   type PerfumeFormState,
@@ -235,6 +236,17 @@ export default function Admin() {
       setNotice({
         tone: "error",
         message: "Revisa el formulario antes de guardar.",
+      })
+      return
+    }
+
+    const existingPerfume = findExistingPerfume(perfumes, form)
+    if (existingPerfume) {
+      setForm((current) => ({ ...current, id: existingPerfume.id }))
+      setNotice({
+        tone: "info",
+        message:
+          "Este perfume ya existía. El formulario cambió a modo edición; revisa los datos y vuelve a guardar.",
       })
       return
     }

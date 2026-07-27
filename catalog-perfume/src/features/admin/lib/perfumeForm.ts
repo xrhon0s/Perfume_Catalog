@@ -1,5 +1,6 @@
 import type { Perfume } from "../../../data/types"
 import type { PerfumeInput } from "../../../services/perfumeRepository"
+import { toSlug } from "../../../shared/utils/text"
 
 export type PerfumeFormState = {
   id: string
@@ -112,4 +113,19 @@ export function formToPerfumeInput(form: PerfumeFormState): PerfumeInput {
     },
     isActive: form.isActive,
   }
+}
+
+export function findExistingPerfume(
+  perfumes: Perfume[],
+  form: PerfumeFormState,
+) {
+  if (form.id || !form.name.trim() || !form.brand.trim()) return undefined
+
+  const nameSlug = toSlug(form.name)
+  const brandSlug = toSlug(form.brand)
+
+  return perfumes.find(
+    (perfume) =>
+      toSlug(perfume.name) === nameSlug && toSlug(perfume.brand) === brandSlug,
+  )
 }
