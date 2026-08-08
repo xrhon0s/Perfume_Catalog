@@ -2,3 +2,61 @@
 @tailwind components;
 @tailwind utilities;
 
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background: #dfe2dc;
+  color: #171914;
+  font-family: Inter, ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+}
+
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 2px solid #a43b56;
+  outline-offset: 2px;
+}
+
+.stf__item {
+  background: #faf9f5;
+  overflow: hidden;
+  will-change: transform, clip-path;
+}
+
+.stf__item > div {
+  background: #faf9f5;
+  transform: translateZ(0);
+}
+
+.catalog-flipbook-surface {
+  --catalog-info-height: 15rem;
+  background: linear-gradient(
+    to bottom,
+    #fff 0,
+    #fff calc(100% - var(--catalog-info-height)),
+    #171914 calc(100% - var(--catalog-info-height)),
+    #171914 100%
+  );
+}
+
+@media (min-width: 640px) {
+  .catalog-flipbook-surface {
+    --catalog-info-height: 8rem;
+  }
+}

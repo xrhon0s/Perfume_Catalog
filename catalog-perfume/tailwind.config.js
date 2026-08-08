@@ -2,7 +2,17 @@
 export default {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        sans: ['Inter', 'ui-sans-serif', 'system-ui', 'sans-serif'],
+        display: [
+          '"Iowan Old Style"',
+          'Baskerville',
+          '"Times New Roman"',
+          'serif',
+        ],
+      },
+    },
   },
   plugins: [],
 }

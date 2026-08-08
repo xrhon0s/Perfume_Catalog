@@ -17,11 +17,20 @@ export type Concentration = "EDT" | "EDP" | "Parfum" | "Extrait"
 
 export type Gender = "Masculino" | "Femenino" | "Unisex"
 
+export type PerfumeInventory = {
+  id?: string
+  sku?: string
+  sizeMl?: number
+  salePrice?: number
+  stockQuantity: number
+}
+
 export type Perfume = {
   id: string
   name: string
-  brand: string // antes: perfumerie
+  brand: string
   image?: string
+  imagePath?: string
 
   family?: OlfactiveFamily
   concentration?: Concentration
@@ -36,4 +45,6 @@ export type Perfume = {
 
   description?: string
   tags?: string[] // para IA o búsqueda rápida
+  isActive?: boolean
+  inventory?: PerfumeInventory
 }

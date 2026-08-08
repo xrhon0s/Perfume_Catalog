@@ -1,242 +1,239 @@
 import { useMemo, useRef, useState } from "react"
-import { useUIStore } from "../../store/uiStore"
-import logo from "../../assets/eter_no_bg_white.png"
+import {
+  ArrowRight,
+  Search,
+  ShoppingBag,
+  SlidersHorizontal,
+  X,
+} from "lucide-react"
+import logo from "../../assets/eter_wordmark_white.webp"
+import WhatsAppContactButton from "../../features/cart/WhatsAppContactButton"
 import { useFiltersStore } from "../../store/filterStore"
+import { useUIStore } from "../../store/uiStore"
+import { useCartStore } from "../../store/cartStore"
 
-const Header = () => {
-  const toggleFilters = useUIStore((s) => s.toggleFilters)
+export default function Header() {
+  const toggleFilters = useUIStore((state) => state.toggleFilters)
+  const pageIndex = useUIStore((state) => state.pageIndex)
+  const totalPages = useUIStore((state) => state.totalPages)
+  const requestJumpToPage = useUIStore((state) => state.requestJumpToPage)
+  const query = useFiltersStore((state) => state.query)
+  const setQuery = useFiltersStore((state) => state.setQuery)
+  const brands = useFiltersStore((state) => state.brands)
+  const families = useFiltersStore((state) => state.families)
+  const [pageInput, setPageInput] = useState("")
+  const cartItems = useCartStore((state) => state.items)
+  const openCart = useCartStore((state) => state.open)
+  const searchInputRef = useRef<HTMLInputElement | null>(null)
+  const hasPages = totalPages > 0
+  const cartQuantity = cartItems.reduce(
+    (total, item) => total + item.quantity,
+    0,
+  )
 
-const pageIndex = useUIStore((s) => s.pageIndex)
-const totalPages = useUIStore((s) => s.totalPages)
-const requestJumpToPage = useUIStore((s) => s.requestJumpToPage)
-
-const [pageInput, setPageInput] = useState("")
-
-
-  const query = useFiltersStore((s) => s.query)
-  const setQuery = useFiltersStore((s) => s.setQuery)
-  const perfumeries = useFiltersStore((s) => s.brands)
-
-  const inputRef = useRef<HTMLInputElement | null>(null)
-
-  const activeFiltersCount = useMemo(() => {
-    const q = query.trim().length > 0 ? 1 : 0
-    return perfumeries.length + q
-  }, [perfumeries.length, query])
+  const activeFiltersCount = useMemo(
+    () => brands.length + families.length,
+    [brands.length, families.length],
+  )
+  const parsedPage = Number(pageInput)
+  const canJump =
+    hasPages &&
+    pageInput.trim() !== "" &&
+    Number.isInteger(parsedPage) &&
+    parsedPage >= 1 &&
+    parsedPage <= totalPages
 
   const goToPage = () => {
-  if (!totalPages) return
+    if (!canJump) return
 
-  const n = Number(pageInput)
-  if (!Number.isFinite(n)) return
-
-  // el usuario escribe 1..totalPages
-  const targetIndex = n - 1
-
-  // clamp para que no se salga
-  const safeIndex = Math.max(0, Math.min(targetIndex, totalPages - 1))
-
-  requestJumpToPage(safeIndex)
-  setPageInput("") // opcional: limpia el input
-}
-
+    requestJumpToPage(parsedPage - 1)
+    setPageInput("")
+  }
 
   return (
-    <header className="sticky top-0 z-[60] w-full border-b border-white/10 bg-gradient-to-b from-slate-950/80 to-slate-950/50 backdrop-blur-md">
-      <div className="mx-auto w-full max-w-7xl px-3 py-2 md:px-4 md:py-0">
-        {/* =========================
-            MOBILE (<= md)
-            Fila 1: Marca + Botón filtros
-            Fila 2: Buscador
-           ========================= */}
-        <div className="md:hidden">
-          {/* Fila 1 */}
-          <div className="flex items-center justify-between gap-3">
-            {/* Marca */}
-            <div className="flex items-center gap-3 md:gap-4">
-              <img src={logo} alt="Éter" className="h-12 w-auto object-contain" />
+    <header className="relative z-[60] shrink-0 border-b border-white/10 bg-[#161814] text-white shadow-[0_1px_0_rgba(0,0,0,0.25)]">
+      <div className="flex w-full flex-col gap-3 px-4 py-3 md:h-[76px] md:flex-row md:items-center md:gap-5 md:px-7 md:py-0 xl:px-12 2xl:px-20">
+        <div className="flex min-w-0 items-center justify-between gap-4 md:w-[220px] md:shrink-0 xl:w-[280px]">
+          <a
+            aria-label="Éter, catálogo de perfumes"
+            className="flex min-w-0 items-center gap-4"
+            href="#/"
+          >
+            <img
+              alt="Éter"
+              className="h-auto w-[104px] shrink-0 md:w-[112px]"
+              src={logo}
+            />
+            <span
+              aria-hidden="true"
+              className="hidden h-6 w-px bg-white/15 xl:block"
+            />
+            <span className="hidden truncate text-xs font-medium text-white/50 xl:block">
+              Catálogo olfativo
+            </span>
+          </a>
 
-              {/* Textos: los dejamos, pero discretos para móvil */}
-              <div className="flex flex-col leading-none">
-                <span className="text-sm font-semibold text-white/90">
-                  Catálogo de Perfumes
-                </span>
-                <span className="text-[11px] text-white/50">
-                  Explora y filtra tu aroma ideal
-                </span>
-              </div>
-            </div>
-
-            {/* Filtros */}
+          <div className="flex items-center gap-2 md:hidden">
+            <WhatsAppContactButton className="grid h-10 w-10" />
             <button
-              onClick={toggleFilters}
-              className="relative shrink-0 rounded-2xl bg-white/8 px-4 py-2 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 active:scale-[0.98] transition"
+              aria-label="Abrir carrito"
+              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+              title="Carrito"
+              type="button"
+              onClick={openCart}
             >
-              Filtros
-              {activeFiltersCount > 0 && (
-                <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs font-bold text-slate-900">
+              <ShoppingBag aria-hidden="true" size={18} />
+              {cartQuantity > 0 ? (
+                <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                  {cartQuantity}
+                </span>
+              ) : null}
+            </button>
+            <button
+              aria-label="Abrir filtros"
+              className="relative grid h-10 w-10 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+              title="Filtros"
+              type="button"
+              onClick={toggleFilters}
+            >
+              <SlidersHorizontal aria-hidden="true" size={18} />
+              {activeFiltersCount > 0 ? (
+                <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
                   {activeFiltersCount}
                 </span>
-              )}
+              ) : null}
             </button>
-          </div>
-
-          {/* Fila 2 (buscador) */}
-          <div className="mt-3">
-            <div className="relative w-full">
-              <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/60">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="18"
-                  height="18"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                >
-                  <circle cx="11" cy="11" r="8" />
-                  <path d="m21 21-4.3-4.3" />
-                </svg>
-              </span>
-
-              <input
-                ref={inputRef}
-                type="text"
-                placeholder="Buscar perfumes, perfumerías..."
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                className="w-full rounded-2xl bg-white/10 px-10 py-2.5 text-sm text-white placeholder:text-white/50 outline-none ring-1 ring-white/10 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
-              />
-
-              {query.trim().length > 0 && (
-                <button
-                  type="button"
-                  onClick={() => {
-                    setQuery("")
-                    requestAnimationFrame(() => inputRef.current?.focus())
-                  }}
-                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-3 py-2 text-white/70 hover:bg-white/10 hover:text-white"
-                  aria-label="Limpiar búsqueda"
-                  title="Limpiar"
-                >
-                  ✕
-                </button>
-              )}
-            </div>
           </div>
         </div>
 
-      {/* =========================
-    DESKTOP (md+)
-    Izq: Marca | Centro: Buscador | Der: Páginas + Ir + Filtros
-   ========================= */}
-<div className="hidden md:grid md:h-16 md:grid-cols-[340px_1fr_auto] md:items-center md:gap-4">
-  {/* IZQUIERDA: Marca (más a la izquierda) */}
-  <div className="flex items-center gap-4">
-    <img src={logo} alt="Éter" className="h-12 w-auto object-contain" />
+        <div className="relative min-w-0 flex-1">
+          <Search
+            aria-hidden="true"
+            className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-white/40"
+            size={18}
+          />
+          <input
+            ref={searchInputRef}
+            aria-label="Buscar en el catálogo"
+            className="h-11 w-full rounded-md border border-white/10 bg-white/[0.07] px-11 pr-10 text-sm text-white outline-none transition placeholder:text-white/35 focus:border-white/35 focus:bg-white/10"
+            placeholder="Perfume, marca, familia o nota"
+            type="search"
+            value={query}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+          {query ? (
+            <button
+              aria-label="Limpiar búsqueda"
+              className="absolute right-1.5 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded-md text-white/50 transition hover:bg-white/10 hover:text-white"
+              title="Limpiar búsqueda"
+              type="button"
+              onClick={() => {
+                setQuery("")
+                requestAnimationFrame(() => searchInputRef.current?.focus())
+              }}
+            >
+              <X aria-hidden="true" size={16} />
+            </button>
+          ) : null}
+        </div>
 
-    <div className="flex flex-col leading-none">
-      <span className="text-lg font-semibold text-white/90">
-        Catálogo de Perfumes
-      </span>
-      <span className="text-xs text-white/50">
-        Explora y filtra tu aroma ideal
-      </span>
-    </div>
-  </div>
+        <div className="hidden shrink-0 items-center gap-2 md:flex lg:hidden">
+          <WhatsAppContactButton className="grid h-11 w-11" />
+          <button
+            aria-label="Abrir carrito"
+            className="relative grid h-11 w-11 shrink-0 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+            title="Carrito"
+            type="button"
+            onClick={openCart}
+          >
+            <ShoppingBag aria-hidden="true" size={18} />
+            {cartQuantity > 0 ? (
+              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                {cartQuantity}
+              </span>
+            ) : null}
+          </button>
+        </div>
 
-  {/* CENTRO: Buscador (centrado de verdad) */}
-  <div className="flex justify-center">
-    <div className="relative w-full max-w-xl">
-      <span className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-white/60">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="18"
-          height="18"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        >
-          <circle cx="11" cy="11" r="8" />
-          <path d="m21 21-4.3-4.3" />
-        </svg>
-      </span>
+        <div className="hidden shrink-0 items-center gap-2 lg:flex">
+          <div className="flex h-11 items-center rounded-md border border-white/10 bg-white/[0.04]">
+            <span className="whitespace-nowrap px-3 text-xs text-white/55">
+              {hasPages ? (
+                <>
+                  Página{" "}
+                  <strong className="font-semibold text-white">
+                    {pageIndex + 1}
+                  </strong>{" "}
+                  de {totalPages}
+                </>
+              ) : (
+                "Sin páginas"
+              )}
+            </span>
+            <span className="h-5 w-px bg-white/10" />
+            <input
+              aria-label="Número de página"
+              className="h-9 w-[68px] bg-transparent px-2 text-center text-sm text-white outline-none placeholder:text-white/35 disabled:opacity-40"
+              disabled={!hasPages}
+              inputMode="numeric"
+              placeholder="Ir a..."
+              value={pageInput}
+              onChange={(event) => {
+                if (/^\d*$/.test(event.target.value)) {
+                  setPageInput(event.target.value)
+                }
+              }}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") goToPage()
+              }}
+            />
+            <button
+              aria-label="Ir a la página"
+              className="mr-1 grid h-8 w-8 place-items-center rounded-md bg-white text-[#161814] transition hover:bg-[#e5e7e2] disabled:cursor-not-allowed disabled:opacity-35"
+              disabled={!canJump}
+              title="Ir a la página"
+              type="button"
+              onClick={goToPage}
+            >
+              <ArrowRight aria-hidden="true" size={16} />
+            </button>
+          </div>
 
-      <input
-        ref={inputRef}
-        type="text"
-        placeholder="Buscar perfumes, perfumerías..."
-        value={query}
-        onChange={(e) => setQuery(e.target.value)}
-        className="w-full rounded-2xl bg-white/10 px-10 py-2.5 text-sm text-white placeholder:text-white/50 outline-none ring-1 ring-white/10 focus:bg-white/15 focus:ring-2 focus:ring-white/30"
-      />
-
-      {query.trim().length > 0 && (
-        <button
-          type="button"
-          onClick={() => {
-            setQuery("")
-            requestAnimationFrame(() => inputRef.current?.focus())
-          }}
-          className="absolute right-2 top-1/2 -translate-y-1/2 rounded-xl px-3 py-2 text-white/70 hover:bg-white/10 hover:text-white"
-          aria-label="Limpiar búsqueda"
-          title="Limpiar"
-        >
-          ✕
-        </button>
-      )}
-    </div>
-  </div>
-
-  {/* DERECHA: Páginas + Ir + Filtros */}
-  <div className="flex items-center justify-end gap-3">
-    {/* Páginas */}
-    <div className="hidden lg:flex items-center gap-2 rounded-2xl bg-white/5 px-3 py-2 ring-1 ring-white/10">
-      <span className="text-xs text-white/70">
-        Pág. <b className="text-white/90">{pageIndex + 1}</b> / {totalPages}
-      </span>
-
-      <input
-        value={pageInput}
-        onChange={(e) => setPageInput(e.target.value)}
-        onKeyDown={(e) => {
-          if (e.key === "Enter") goToPage()
-        }}
-        placeholder="Ir a..."
-        className="w-20 rounded-xl bg-white/10 px-3 py-1.5 text-sm text-white placeholder:text-white/40 outline-none ring-1 ring-white/10 focus:ring-2 focus:ring-white/30"
-      />
-
-      <button
-        onClick={goToPage}
-        className="rounded-xl bg-white/10 px-3 py-1.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 active:scale-[0.98] transition"
-      >
-        Ir
-      </button>
-    </div>
-
-    {/* Filtros */}
-    <button
-      onClick={toggleFilters}
-      className="relative rounded-2xl bg-white/8 px-4 py-2.5 text-sm font-semibold text-white ring-1 ring-white/10 hover:bg-white/15 active:scale-[0.98] transition"
-    >
-      Filtros
-      {activeFiltersCount > 0 && (
-        <span className="ml-2 inline-flex h-5 min-w-5 items-center justify-center rounded-full bg-white px-1 text-xs font-bold text-slate-900">
-          {activeFiltersCount}
-        </span>
-      )}
-    </button>
-  </div>
-</div>
-
+          <button
+            className={[
+              "relative flex h-11 items-center gap-2 rounded-md border px-3.5 text-sm font-semibold transition",
+              activeFiltersCount > 0
+                ? "border-white bg-white text-[#161814]"
+                : "border-white/15 text-white hover:bg-white/10",
+            ].join(" ")}
+            type="button"
+            onClick={toggleFilters}
+          >
+            <SlidersHorizontal aria-hidden="true" size={17} />
+            <span>Filtros</span>
+            {activeFiltersCount > 0 ? (
+              <span className="grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                {activeFiltersCount}
+              </span>
+            ) : null}
+          </button>
+          <WhatsAppContactButton className="grid h-11 w-11" />
+          <button
+            aria-label="Abrir carrito"
+            className="relative grid h-11 w-11 place-items-center rounded-md border border-white/15 text-white transition hover:bg-white/10"
+            title="Carrito"
+            type="button"
+            onClick={openCart}
+          >
+            <ShoppingBag aria-hidden="true" size={18} />
+            {cartQuantity > 0 ? (
+              <span className="absolute -right-1.5 -top-1.5 grid h-5 min-w-5 place-items-center rounded-full bg-[#a43b56] px-1 text-[10px] font-bold text-white">
+                {cartQuantity}
+              </span>
+            ) : null}
+          </button>
+        </div>
       </div>
     </header>
   )
 }
-
-export default Header

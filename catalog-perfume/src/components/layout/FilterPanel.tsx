@@ -1,15 +1,67 @@
+import { useEffect, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
 import { useUIStore } from "../../store/uiStore"
 import PerfumeriesFilter from "../filters/brandsFilter"
 import { useFiltersStore } from "../../store/filterStore"
 import FamiliesFilter from "../filters/familiesFilter"
+import { useCatalogStore } from "../../store/catalogStore"
 
 
 const FilterPanel = () => {
   const isOpen = useUIStore((state) => state.isFilterOpen)
   const closeFilters = useUIStore((state) => state.closeFilters)
-
+  const perfumes = useCatalogStore((s) => s.perfumes)
+  const query = useFiltersStore((s) => s.query)
+  const selectedBrands = useFiltersStore((s) => s.brands)
+  const selectedFamilies = useFiltersStore((s) => s.families)
   const clearFilters = useFiltersStore((s) => s.clearFilters)
+  const activeFiltersCount =
+    selectedBrands.length + selectedFamilies.length + (query.trim() ? 1 : 0)
+  const resultCount = useMemo(() => {
+    const normalizedQuery = query.trim().toLowerCase()
+
+    return perfumes.filter((perfume) => {
+      const matchesBrand =
+        selectedBrands.length === 0 || selectedBrands.includes(perfume.brand)
+      const matchesFamily =
+        selectedFamilies.length === 0 ||
+        (perfume.family ? selectedFamilies.includes(perfume.family) : false)
+      const searchableText = [
+        perfume.name,
+        perfume.brand,
+        perfume.family,
+        perfume.concentration,
+        perfume.gender,
+        perfume.description,
+        perfume.inventory?.sku,
+        perfume.inventory?.sizeMl,
+        ...(perfume.tags ?? []),
+        ...(perfume.notes?.top ?? []),
+        ...(perfume.notes?.heart ?? []),
+        ...(perfume.notes?.base ?? []),
+      ]
+        .filter(Boolean)
+        .join(" ")
+        .toLowerCase()
+
+      return (
+        matchesBrand &&
+        matchesFamily &&
+        (!normalizedQuery || searchableText.includes(normalizedQuery))
+      )
+    }).length
+  }, [perfumes, query, selectedBrands, selectedFamilies])
+
+  useEffect(() => {
+    if (!isOpen) return
+
+    const previousOverflow = document.body.style.overflow
+    document.body.style.overflow = "hidden"
+
+    return () => {
+      document.body.style.overflow = previousOverflow
+    }
+  }, [isOpen])
 
   return (
     <AnimatePresence>
@@ -26,7 +78,7 @@ const FilterPanel = () => {
 
           {/* Panel */}
           <motion.aside
-            className="fixed top-0 right-0 z-[90] h-full w-[360px] bg-white shadow-2xl"
+            className="fixed right-0 top-0 z-[90] flex h-full w-full max-w-[390px] flex-col bg-white shadow-2xl"
             initial={{ x: "100%" }}
             animate={{ x: 0 }}
             exit={{ x: "100%" }}
@@ -37,49 +89,61 @@ const FilterPanel = () => {
             <div className="flex items-center justify-between border-b px-6 py-4">
               <div>
                 <h2 className="text-lg font-semibold">Filtros</h2>
-                <p className="text-xs text-gray-500">Refina tu búsqueda</p>
+                <p className="text-xs text-gray-500">
+                  {activeFiltersCount > 0
+                    ? `${activeFiltersCount} activos`
+                    : "Sin filtros activos"}
+                </p>
               </div>
 
               <button
                 onClick={closeFilters}
-                className="rounded-lg px-3 py-2 text-sm text-gray-600 hover:bg-gray-100"
+                className="rounded-lg px-3 py-2 text-sm font-medium text-gray-600 hover:bg-gray-100"
               >
-                Cerrar ✕
+                Cerrar
               </button>
             </div>
 
             {/* Body */}
-            <div className="p-6 space-y-6">
+            <div className="flex-1 space-y-8 overflow-y-auto p-6">
               <section>
-                <h3 className="text-sm font-semibold text-gray-800 mb-3">
-                  Perfumería
+                <h3 className="mb-3 text-sm font-semibold text-gray-800">
+                  Marca
                 </h3>
-                <div className="rounded-xl border p-4">
+                <div className="max-h-72 overflow-y-auto border-y py-4">
                   <PerfumeriesFilter />
                 </div>
               </section>
 
               <section>
-                <h3 className="text-sm font-semibold text-gray-800 mb-3">
+                <h3 className="mb-3 text-sm font-semibold text-gray-800">
                   Familia olfativa
                 </h3>
-                <div className="rounded-xl border p-4">
+                <div className="border-y py-4">
                   <FamiliesFilter />
                 </div>
               </section>
-
-
-              <button
-                onClick={clearFilters}
-                className="w-full rounded-xl bg-gray-100 px-4 py-3 text-sm font-semibold text-black hover:bg-gray-200"
-              >
-                Limpiar filtros
-              </button>
             </div>
 
-            {/* Footer opcional */}
-            <div className="absolute bottom-0 left-0 right-0 border-t px-6 py-4 text-xs text-gray-500">
-              Tip: usa el buscador para encontrar rápido.
+            <div className="border-t px-6 py-4">
+              <p className="mb-3 text-sm text-gray-600">
+                {resultCount} perfumes encontrados
+              </p>
+              <div className="grid grid-cols-2 gap-3">
+                <button
+                  onClick={clearFilters}
+                  disabled={activeFiltersCount === 0}
+                  className="rounded-lg bg-gray-100 px-4 py-3 text-sm font-semibold text-black hover:bg-gray-200 disabled:cursor-not-allowed disabled:text-gray-400"
+                >
+                  Limpiar
+                </button>
+                <button
+                  onClick={closeFilters}
+                  className="rounded-lg bg-slate-950 px-4 py-3 text-sm font-semibold text-white hover:bg-slate-800"
+                >
+                  Ver resultados
+                </button>
+              </div>
             </div>
           </motion.aside>
         </>

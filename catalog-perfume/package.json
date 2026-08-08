@@ -6,17 +6,32 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "check": "npm run lint && npm run test && npm run validate:data && npm run build",
     "lint": "eslint .",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "backup:supabase": "node scripts/backup-supabase.mjs",
+    "migrate:catalog": "node scripts/migrate-catalog-to-supabase.mjs",
+    "seed:catalog": "node scripts/export-catalog-seed.mjs",
+    "validate:data": "node scripts/validate-catalog.mjs",
     "preview": "vite preview"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.107.0",
+    "formidable": "^3.5.4",
     "framer-motion": "^12.24.10",
+    "lucide-react": "^1.26.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-pageflip": "^2.0.3",
+    "sharp": "^0.35.3",
     "zustand": "^5.0.9"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",
+    "@testing-library/jest-dom": "^7.0.0",
+    "@testing-library/react": "^16.3.2",
+    "@types/formidable": "^3.5.1",
     "@types/node": "^24.10.1",
     "@types/react": "^19.2.5",
     "@types/react-dom": "^19.2.3",
@@ -26,11 +41,13 @@
     "eslint-plugin-react-hooks": "^7.0.1",
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0",
+    "jsdom": "^29.1.1",
     "postcss": "^8.5.6",
     "tailwindcss": "^3.4.19",
     "typescript": "~5.9.3",
     "typescript-eslint": "^8.46.4",
-    "vite": "npm:rolldown-vite@7.2.5"
+    "vite": "npm:rolldown-vite@7.2.5",
+    "vitest": "^4.1.10"
   },
   "overrides": {
     "vite": "npm:rolldown-vite@7.2.5"
