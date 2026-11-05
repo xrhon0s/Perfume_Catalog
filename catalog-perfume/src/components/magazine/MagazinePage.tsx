@@ -121,13 +121,15 @@ export default function MagazinePage({
   return (
     <div className="relative h-full w-full overflow-hidden bg-white">
       {hasImage ? (
-        <img
-          alt={perfume ? `${perfume.name} de ${perfume.brand}` : ""}
-          className="absolute inset-0 h-full w-full object-cover pb-[15rem] sm:pb-[8rem]"
-          loading="lazy"
-          src={imageUrl}
-          onError={() => setFailedImageUrl(imageUrl)}
-        />
+        <div className="absolute inset-x-0 bottom-[15rem] top-0 bg-white sm:bottom-[8rem]">
+          <img
+            alt={perfume ? `${perfume.name} de ${perfume.brand}` : ""}
+            className="h-full w-full object-contain object-center"
+            loading="lazy"
+            src={imageUrl}
+            onError={() => setFailedImageUrl(imageUrl)}
+          />
+        </div>
       ) : perfume ? (
         <div className="absolute inset-x-0 bottom-[15rem] top-0 grid place-items-center bg-[#f5f5f2] text-slate-950 sm:bottom-[8rem]">
           <div className="absolute inset-x-8 top-8 flex items-center justify-between border-t border-slate-950/15 pt-4 text-[10px] font-semibold uppercase text-slate-500">
