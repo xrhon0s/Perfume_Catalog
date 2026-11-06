@@ -85,4 +85,14 @@ describe("MagazinePage", () => {
     ).not.toBeInTheDocument()
     expect(view.getByText("Éter")).toBeVisible()
   })
+
+  it("muestra el producto completo sin recortarlo para llenar la página", () => {
+    render(<MagazinePage side="left" perfume={perfume} />)
+
+    expect(
+      screen.getByRole("img", {
+        name: "Perfume de prueba de Casa de prueba",
+      }),
+    ).toHaveClass("object-contain", "object-center")
+  })
 })
