@@ -5,8 +5,10 @@ import {
   ImageOff,
   LoaderCircle,
   Pencil,
+  RotateCcw,
   Search,
   Trash2,
+  X,
 } from "lucide-react"
 import type { Perfume } from "../../../data/types"
 import {
@@ -26,6 +28,7 @@ type PerfumeTableProps = {
   deletingId: string | null
   onSearchChange: (value: string) => void
   onStatusFilterChange: (value: StatusFilter) => void
+  onClearFilters: () => void
   onEdit: (perfume: Perfume) => void
   onDelete: (id: string) => void
 }
@@ -105,6 +108,7 @@ export default function PerfumeTable({
   deletingId,
   onSearchChange,
   onStatusFilterChange,
+  onClearFilters,
   onEdit,
   onDelete,
 }: PerfumeTableProps) {
@@ -121,6 +125,17 @@ export default function PerfumeTable({
   const changeStatus = (value: StatusFilter) => {
     setPage(1)
     onStatusFilterChange(value)
+  }
+  const hasActiveFilters = search.trim() !== "" || statusFilter !== "active"
+
+  const clearSearch = () => {
+    setPage(1)
+    onSearchChange("")
+  }
+
+  const clearFilters = () => {
+    setPage(1)
+    onClearFilters()
   }
 
   return (
@@ -165,7 +180,7 @@ export default function PerfumeTable({
               />
               <span className="sr-only">Buscar perfumes</span>
               <input
-                className="h-10 w-full rounded-md border border-slate-200 bg-white pl-9 pr-3 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#8f334d] focus:ring-2 focus:ring-[#8f334d]/10"
+                className="h-10 w-full rounded-md border border-slate-200 bg-white pl-9 pr-10 text-sm outline-none transition placeholder:text-slate-400 focus:border-[#8f334d] focus:ring-2 focus:ring-[#8f334d]/10"
                 placeholder="Nombre, marca o SKU"
                 value={search}
                 onChange={(event) => {
@@ -173,7 +188,28 @@ export default function PerfumeTable({
                   onSearchChange(event.target.value)
                 }}
               />
+              {search ? (
+                <button
+                  aria-label="Vaciar búsqueda"
+                  className="absolute right-1 top-1/2 grid h-8 w-8 -translate-y-1/2 place-items-center rounded text-slate-400 transition hover:bg-slate-100 hover:text-slate-700"
+                  title="Vaciar búsqueda"
+                  type="button"
+                  onClick={clearSearch}
+                >
+                  <X aria-hidden="true" size={16} />
+                </button>
+              ) : null}
             </label>
+            <button
+              aria-label="Restablecer filtros"
+              className="grid h-10 w-10 shrink-0 place-items-center rounded-md border border-slate-200 text-slate-500 transition hover:bg-slate-50 hover:text-slate-900 disabled:cursor-not-allowed disabled:opacity-35"
+              disabled={!hasActiveFilters}
+              title="Restablecer filtros"
+              type="button"
+              onClick={clearFilters}
+            >
+              <RotateCcw aria-hidden="true" size={16} />
+            </button>
           </div>
         </div>
 

@@ -565,6 +565,10 @@ export default function Admin() {
           deletingId={deletingId}
           onSearchChange={setSearch}
           onStatusFilterChange={setStatusFilter}
+          onClearFilters={() => {
+            setSearch("")
+            setStatusFilter("active")
+          }}
           onEdit={(perfume) => {
             setForm(perfumeToForm(perfume))
             setUploadStats(null)
